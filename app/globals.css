@@ -1,0 +1,392 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap');
+
+/* Korean Font - 여기어때 잘난체 2 */
+@font-face {
+  font-family: 'YeogiOttaeJalnanGothic';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/JalnanGothic.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Engram WO5 Font - Placeholder or Fallback until actual files are added */
+/* 
+@font-face {
+  font-family: 'Engram WO5';
+  src: url('/fonts/EngramWO5-Regular.woff2') format('woff2'),
+       url('/fonts/EngramWO5-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Engram WO5';
+  src: url('/fonts/EngramWO5-Bold.woff2') format('woff2'),
+       url('/fonts/EngramWO5-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+/* Hello Seoul Font */
+@font-face {
+  font-family: 'Hello Seoul';
+  src: url('/fonts/HelloSeoul.woff2') format('woff2'),
+       url('/fonts/HelloSeoul.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Grift Black Font */
+@font-face {
+  font-family: 'Grift Black';
+  src: url('https://fonts.cdnfonts.com/s/100200/GriftBlack.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Header banner animation (moved from styled-jsx to avoid build crash) */
+@keyframes scroll-banner {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.animate-scroll-banner {
+  animation: scroll-banner 30s linear infinite;
+  will-change: transform;
+}
+.group:hover .animate-scroll-banner {
+  animation-play-state: paused;
+}
+.banner-text {
+  letter-spacing: 0.5px;
+}
+.banner-item {
+  margin-right: 5px;
+}
+
+/* Cart icon bump animation (moved from styled-jsx to avoid build crash) */
+@keyframes cart-bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.18) rotate(-8deg); }
+  70% { transform: scale(1.05) rotate(6deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+.animate-cart-bump {
+  display: inline-flex;
+  animation: cart-bump 0.6s ease-out;
+  will-change: transform;
+}
+
+/* Toast progress animation (moved from styled-jsx to avoid build crash) */
+@keyframes toastProgress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+.animate-toast-progress {
+  animation: toastProgress 2s linear forwards;
+  will-change: transform;
+}
+
+:root {
+  --white: #fff;
+  --black: #000;
+  --primary: #92D0AA;
+  --secondary: #636363;
+  --ternary: rgba(99, 99, 99, 0.5);
+  --accent: #92D0AA; /* Primary Green */
+  --accent-strong: #F1EB9C; /* PANTONE 600 C - Yellow */
+  --accent-pink: #FCEAE0; /* Pink */
+  --gray: #f2f2f2;
+  --accent-light: rgba(146, 208, 170, 0.1); /* Light version of primary green */
+  --border: rgba(99, 99, 99, 0.3);
+  --primary-font: "Engram WO5", system-ui, sans-serif;
+  --secondary-font: "Engram WO5", system-ui, sans-serif;
+  --korean-font: "YeogiOttaeJalnanGothic", sans-serif;
+  --hello-seoul-font: "Hello Seoul", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  color: var(--secondary);
+  font-family: var(--primary-font);
+  font-size: 16px;
+  line-height: 1.5em;
+  font-weight: 400;
+}
+
+/* Korean text styling */
+.korean-text,
+[lang="ko"],
+.korean {
+  font-family: var(--korean-font);
+}
+
+body {
+  color: var(--secondary);
+  background: var(--white);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Custom utility classes */
+.cs_primary_color {
+  color: var(--primary);
+}
+
+.cs_secondary_color {
+  color: var(--secondary);
+}
+
+.cs_accent_color {
+  color: var(--accent);
+}
+
+.cs_accent_strong_color {
+  color: var(--accent-strong);
+}
+
+.cs_white_color {
+  color: var(--white);
+}
+
+.cs_light {
+  font-weight: 300;
+}
+
+.cs_normal {
+  font-weight: 400;
+}
+
+.cs_medium {
+  font-weight: 500;
+}
+
+.cs_semibold {
+  font-weight: 600;
+}
+
+.cs_bold {
+  font-weight: 700;
+}
+
+.cs_primary_font {
+  font-family: var(--primary-font);
+}
+
+.cs_secondary_font {
+  font-family: var(--secondary-font);
+}
+
+.cs_fs_100 {
+  font-size: 100px;
+}
+
+.cs_fs_54 {
+  font-size: 54px;
+}
+
+.cs_fs_36 {
+  font-size: 36px;
+}
+
+.cs_fs_24 {
+  font-size: 24px;
+}
+
+.cs_fs_18 {
+  font-size: 18px;
+}
+
+.cs_fs_16 {
+  font-size: 16px;
+}
+
+.cs_fs_14 {
+  font-size: 14px;
+}
+
+.cs_fs_10 {
+  font-size: 10px;
+}
+
+.cs_radius_30 {
+  border-radius: 30px;
+}
+
+.cs_radius_20 {
+  border-radius: 20px;
+}
+
+.cs_radius_16 {
+  border-radius: 16px;
+}
+
+.cs_radius_12 {
+  border-radius: 12px;
+}
+
+.cs_radius_10 {
+  border-radius: 10px;
+}
+
+.cs_radius_6 {
+  border-radius: 6px;
+}
+
+.cs_radius_5 {
+  border-radius: 5px;
+}
+
+.cs_white_bg {
+  background-color: var(--white);
+}
+
+.cs_accent_bg {
+  background-color: var(--accent);
+}
+
+.cs_accent_strong_bg {
+  background-color: var(--accent-strong);
+}
+
+.cs_accent_light_bg {
+  background-color: var(--accent-light);
+}
+
+.cs_gray_bg {
+  background-color: var(--gray);
+}
+
+.cs_primary_bg {
+  background-color: var(--primary);
+}
+
+.cs_center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cs_mp_0 {
+  margin: 0;
+  padding: 0;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.position-relative {
+  position: relative;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+/* Responsive utilities */
+@media (max-width: 1024px) {
+  .cs_height_lg_80 {
+    height: 80px;
+  }
+  
+  .cs_height_lg_70 {
+    height: 70px;
+  }
+  
+  .cs_height_lg_65 {
+    height: 65px;
+  }
+  
+  .cs_height_lg_50 {
+    height: 50px;
+  }
+  
+  .cs_height_lg_40 {
+    height: 40px;
+  }
+  
+  .cs_height_lg_30 {
+    height: 30px;
+  }
+  
+  .cs_height_lg_20 {
+    height: 20px;
+  }
+  
+  .cs_height_lg_10 {
+    height: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cs_mobile_hide {
+    display: none;
+  }
+  
+  .cs_mobile_show {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  .cs_mobile_hide {
+    display: block;
+  }
+  
+  .cs_mobile_show {
+    display: none;
+  }
+}

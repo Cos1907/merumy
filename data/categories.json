@@ -1,0 +1,118 @@
+{
+  "Cilt Bakımı": {
+    "name": "Cilt Bakımı",
+    "subcategories": [
+      "Maske",
+      "Tonik",
+      "Temizleyici",
+      "Krem",
+      "Duş Filtresi",
+      "Cilt Bakım Serumu",
+      "Balm",
+      "El Kremi",
+      "Vücut Losyonu",
+      "Ayak Kremi",
+      "Şampuan",
+      "Güneş Kremi",
+      "Peeling",
+      "Kirpik Bakım Serumu",
+      "Set",
+      "Göz Kremi",
+      "Yüz Spreyi",
+      "Cilt Bakım Ampulü",
+      "Yüz Losyonu",
+      "Esans",
+      "Dudak Kremi",
+      "Dudak Peelingi",
+      "Dudak Yağı",
+      "Masaj Aleti",
+      "Serum"
+    ],
+    "productCount": 509
+  },
+  "Saç Bakımı": {
+    "name": "Saç Bakımı",
+    "subcategories": [
+      "Duş Filtresi",
+      "Şampuan",
+      "Saç Kremi",
+      "Saç Spreyi",
+      "Saç Maskesi",
+      "Saç Toniği",
+      "Saç Yağı",
+      "Saç Bakım Serumu"
+    ],
+    "productCount": 26
+  },
+  "Renkli Kozmetik": {
+    "name": "Renkli Kozmetik",
+    "subcategories": [
+      "Ruj",
+      "Kaş Kalemi",
+      "Eyeliner",
+      "Cushion Fondöten",
+      "Tint",
+      "Dudak Yağı",
+      "Toz Allık",
+      "Concealer",
+      "Rimel",
+      "BB Krem",
+      "Mat Fondöten",
+      "Kontür Paleti",
+      "Jel Allık",
+      "Balm",
+      "Stick Allık",
+      "Lip Gloss",
+      "Krem Allık",
+      "Fondöten",
+      "Makyaj Bazı",
+      "Allık",
+      "Far Paleti",
+      "Highlighter"
+    ],
+    "productCount": 210
+  },
+  "Vücut Bakımı": {
+    "name": "Vücut Bakımı",
+    "subcategories": [
+      "Peeling",
+      "El Kremi",
+      "Vücut Spreyi"
+    ],
+    "productCount": 7
+  },
+  "Cilt Bakım": {
+    "name": "Cilt Bakım",
+    "subcategories": [
+      "Cilt Bakım Serumu",
+      "Krem",
+      "Cilt Bakım Ampulü",
+      "Göz Kremi",
+      "Set",
+      "Maske",
+      "Güneş Kremi"
+    ],
+    "productCount": 18
+  },
+  "Bebek-Çocuk": {
+    "name": "Bebek-Çocuk",
+    "subcategories": [
+      "Bebek Yağı",
+      "Krem",
+      "Yüz Losyonu",
+      "Vücut Losyonu",
+      "Temizleyici",
+      "Şampuan",
+      "Set",
+      "Güneş Kremi"
+    ],
+    "productCount": 12
+  },
+  "Aksesuar": {
+    "name": "Aksesuar",
+    "subcategories": [
+      "Kılıf"
+    ],
+    "productCount": 1
+  }
+}

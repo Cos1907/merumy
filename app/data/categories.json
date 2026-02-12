@@ -1,0 +1,38 @@
+{
+  "cilt-bakimi": {
+    "name": "Cilt Bakımı",
+    "slug": "cilt-bakimi",
+    "subcategories": [],
+    "productCount": 0
+  },
+  "sac-bakimi": {
+    "name": "Saç Bakımı",
+    "slug": "sac-bakimi",
+    "subcategories": [],
+    "productCount": 0
+  },
+  "makyaj": {
+    "name": "Makyaj",
+    "slug": "makyaj",
+    "subcategories": [],
+    "productCount": 0
+  },
+  "kisisel-bakim": {
+    "name": "Kişisel Bakım",
+    "slug": "kisisel-bakim",
+    "subcategories": [],
+    "productCount": 0
+  },
+  "mask-bar": {
+    "name": "Mask Bar",
+    "slug": "mask-bar",
+    "subcategories": [],
+    "productCount": 0
+  },
+  "bebek-ve-cocuk-bakimi": {
+    "name": "Bebek ve Çocuk Bakımı",
+    "slug": "bebek-ve-cocuk-bakimi",
+    "subcategories": [],
+    "productCount": 0
+  }
+}
