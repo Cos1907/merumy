@@ -11,29 +11,29 @@ import { useCart } from '../context/CartContext'
 // Ürün verileri - products.json ile senkronize
 const products = {
   black: {
-    id: '00001',
-    slug: '00001-age-r-booster-pro-black',
+    id: '8800256114482',
+    slug: '88002-age-r-booster-pro-black-4-farkli-modlu-kore-cam-cilt-bakim-cihazi',
     name: 'Medicube AGE-R Booster Pro Black',
     price: 16499,
     originalPrice: 32998,
     image: '/siyah/siyah-cihaz01.jpg',
     images: ['/siyah/siyah-cihaz01.jpg', '/siyah/siyah-cihaz-02.jpg', '/siyah/siyah-cihaz-03.jpg'],
     color: 'Siyah',
-    barcode: '8800256114481',
+    barcode: '8800256114482',
     brand: 'Medicube',
     category: 'Cihaz',
     inStock: true
   },
   pink: {
-    id: '00002',
-    slug: '00002-age-r-booster-pro-pink',
+    id: '8800256114481',
+    slug: '88002-age-r-booster-pro-pink-4-farkli-modlu-kore-cam-cilt-bakim-cihazi',
     name: 'Medicube AGE-R Booster Pro Pink',
     price: 16999,
     originalPrice: 33998,
     image: '/pembe/pembe-cihaz.jpg',
     images: ['/pembe/pembe-cihaz.jpg'],
     color: 'Pembe',
-    barcode: '8800256114482',
+    barcode: '8800256114481',
     brand: 'Medicube',
     category: 'Cihaz',
     inStock: true

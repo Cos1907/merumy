@@ -4,58 +4,26 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
 
-// SABİT SLIDER VERİLERİ - Bu veriler hiçbir koşulda değişmez
-// State Leakage'ı önlemek için component dışında sabit olarak tanımlandı
 interface HeroSlide {
-  id: string
+  id: number | string
   desktopImage: string
   mobileImage: string
   link: string | null
+  slideOrder?: number
 }
 
-// Desktop ve Mobil görüntüler - Sıralama aynı kalıyor (1-6)
-const HERO_SLIDES: readonly HeroSlide[] = [
-  { 
-    id: 'slide-1', 
-    desktopImage: '/herosection/herosection01.jpg', 
-    mobileImage: '/mobilsliderlar/slider1.jpg',
-    link: '/booster-pro' 
-  },
-  { 
-    id: 'slide-2', 
-    desktopImage: '/herosection/herosection02.jpg', 
-    mobileImage: '/mobilsliderlar/slider2.jpg',
-    link: '/product/00004-retinol-shot-tightening-serum-cilt-elastikiyetini-destekleyen-ve-sikiligin' 
-  },
-  { 
-    id: 'slide-3', 
-    desktopImage: '/herosection/herosection03.jpg', 
-    mobileImage: '/mobilsliderlar/slider3.jpg',
-    link: '/shop' 
-  },
-  { 
-    id: 'slide-4', 
-    desktopImage: '/herosection/herosection04.jpg', 
-    mobileImage: '/mobilsliderlar/slider4.jpg',
-    link: '/product/00003-retinal-shot-tightening-booster-krem-15ml' 
-  },
-  { 
-    id: 'slide-5', 
-    desktopImage: '/herosection/herosection06.jpg', 
-    mobileImage: '/mobilsliderlar/slider5.jpg',
-    link: '/product/00002-age-r-booster-pro-pink' 
-  },
-  { 
-    id: 'slide-6', 
-    desktopImage: '/herosection/herosection07.jpg', 
-    mobileImage: '/mobilsliderlar/slider6.jpg',
-    link: '/shop' 
-  }
+// Static fallback slides (used until API responds or on API error)
+const FALLBACK_SLIDES: HeroSlide[] = [
+  { id: 'slide-1', desktopImage: '/herosection/herosection01.jpg', mobileImage: '/mobilsliderlar/slider1.jpg', link: '/booster-pro' },
+  { id: 'slide-2', desktopImage: '/herosection/herosection02.jpg', mobileImage: '/mobilsliderlar/slider2.jpg', link: '/product/00004-retinol-shot-tightening-serum-cilt-elastikiyetini-destekleyen-ve-sikiligin' },
+  { id: 'slide-3', desktopImage: '/herosection/herosection03.jpg', mobileImage: '/mobilsliderlar/slider3.jpg', link: '/shop' },
+  { id: 'slide-4', desktopImage: '/herosection/herosection04.jpg', mobileImage: '/mobilsliderlar/slider4.jpg', link: '/product/00003-retinal-shot-tightening-booster-krem-15ml' },
+  { id: 'slide-5', desktopImage: '/herosection/herosection06.jpg', mobileImage: '/mobilsliderlar/slider5.jpg', link: '/product/00002-age-r-booster-pro-pink' },
+  { id: 'slide-6', desktopImage: '/herosection/herosection07.jpg', mobileImage: '/mobilsliderlar/slider6.jpg', link: '/shop' },
 ]
 
-const TOTAL_SLIDES = HERO_SLIDES.length
-
 export default function Hero() {
+  const [slides, setSlides] = useState<HeroSlide[]>(FALLBACK_SLIDES)
   const [currentSlide, setCurrentSlide] = useState(0)
   const [headerHeight, setHeaderHeight] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
@@ -66,6 +34,19 @@ export default function Hero() {
   // Minimum swipe distance (in px)
   const minSwipeDistance = 50
 
+  // Fetch live slides from API (no-cache to always get fresh data)
+  useEffect(() => {
+    fetch(`/api/hero?t=${Date.now()}`, {
+      cache: 'no-store',
+      headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' },
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (data.slides && data.slides.length > 0) setSlides(data.slides)
+      })
+      .catch(() => {}) // Keep fallback on error
+  }, [])
+
   useEffect(() => {
     // Calculate header height and detect mobile
     const handleResize = () => {
@@ -74,23 +55,19 @@ export default function Hero() {
       
       const headerContainer = document.querySelector('.fixed.top-0.left-0.right-0.z-50')
       if (headerContainer) {
-        // Mobilde header yüksekliğini tam olarak al, boşluk bırakma
         setHeaderHeight(isMobileDevice ? headerContainer.clientHeight : headerContainer.clientHeight)
       } else {
-        // Fallback: mobil için daha küçük header yüksekliği
         setHeaderHeight(isMobileDevice ? 80 : 120)
       }
     }
 
-    // Initial calculation - hemen çalıştır
     handleResize()
-    // Tekrar çalıştır (DOM tam yüklendiğinde)
     setTimeout(handleResize, 50)
     window.addEventListener('resize', handleResize)
 
     // Auto-rotate slides every 5 seconds
     intervalRef.current = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % TOTAL_SLIDES)
+      setCurrentSlide((prev) => (prev + 1) % slides.length)
     }, 5000)
 
     return () => {
@@ -99,7 +76,8 @@ export default function Hero() {
         clearInterval(intervalRef.current)
       }
     }
-  }, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slides.length])
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index)
@@ -108,7 +86,7 @@ export default function Hero() {
       clearInterval(intervalRef.current)
     }
     intervalRef.current = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % TOTAL_SLIDES)
+      setCurrentSlide((prev) => (prev + 1) % slides.length)
     }, 5000)
   }
 
@@ -129,10 +107,10 @@ export default function Hero() {
     const isRightSwipe = distance < -minSwipeDistance
     
     if (isLeftSwipe) {
-      goToSlide((currentSlide + 1) % TOTAL_SLIDES)
+      goToSlide((currentSlide + 1) % slides.length)
     }
     if (isRightSwipe) {
-      goToSlide((currentSlide - 1 + TOTAL_SLIDES) % TOTAL_SLIDES)
+      goToSlide((currentSlide - 1 + slides.length) % slides.length)
     }
   }
 
@@ -140,15 +118,14 @@ export default function Hero() {
     <section className="relative w-full overflow-hidden" style={{ marginTop: `${headerHeight}px` }}>
       {/* Desktop Version */}
       <div
-        className="relative mx-auto hidden md:block"
+        className="relative w-full hidden md:block"
         style={{
           width: '100%',
-          maxWidth: '1600px',
           aspectRatio: '1600 / 700',
         }}
       >
         {/* Desktop Carousel Container */}
-        {HERO_SLIDES.map((slide, index) => (
+        {slides.map((slide, index) => (
           <div
             key={`desktop-${slide.id}`}
             className={`absolute inset-0 flex items-center justify-center transition-opacity duration-700 ease-in-out ${
@@ -163,8 +140,8 @@ export default function Hero() {
                   fill
                   priority={index === 0}
                   quality={100}
-                  className="object-contain"
-                  sizes="(max-width: 1600px) 100vw, 1600px"
+                  className="object-cover"
+                  sizes="100vw"
                   unoptimized={false}
                 />
               </Link>
@@ -175,8 +152,8 @@ export default function Hero() {
                 fill
                 priority={index === 0}
                 quality={100}
-                className="object-contain"
-                sizes="(max-width: 1600px) 100vw, 1600px"
+                className="object-cover"
+                sizes="100vw"
                 unoptimized={false}
               />
             )}
@@ -185,7 +162,7 @@ export default function Hero() {
 
         {/* Desktop Navigation Dots */}
         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-30 flex space-x-2">
-          {HERO_SLIDES.map((slide, index) => (
+          {slides.map((slide, index) => (
             <button
               key={`desktop-dot-${slide.id}`}
               onClick={() => goToSlide(index)}
@@ -201,7 +178,7 @@ export default function Hero() {
 
         {/* Desktop Navigation Arrows */}
         <button
-          onClick={() => goToSlide((currentSlide - 1 + TOTAL_SLIDES) % TOTAL_SLIDES)}
+          onClick={() => goToSlide((currentSlide - 1 + slides.length) % slides.length)}
           className="absolute left-4 top-1/2 transform -translate-y-1/2 z-30 bg-white/80 hover:bg-white rounded-full p-3 transition-all duration-300 shadow-lg"
           aria-label="Previous slide"
         >
@@ -215,7 +192,7 @@ export default function Hero() {
           </svg>
         </button>
         <button
-          onClick={() => goToSlide((currentSlide + 1) % TOTAL_SLIDES)}
+          onClick={() => goToSlide((currentSlide + 1) % slides.length)}
           className="absolute right-4 top-1/2 transform -translate-y-1/2 z-30 bg-white/80 hover:bg-white rounded-full p-3 transition-all duration-300 shadow-lg"
           aria-label="Next slide"
         >
@@ -238,7 +215,7 @@ export default function Hero() {
         onTouchEnd={onTouchEnd}
       >
         {/* Mobile Carousel Container - Görseller orijinal boyutlarında */}
-        {HERO_SLIDES.map((slide, index) => (
+        {slides.map((slide, index) => (
           <div
             key={`mobile-${slide.id}`}
             className={`w-full transition-opacity duration-500 ease-in-out ${
@@ -253,6 +230,8 @@ export default function Hero() {
                   alt={`Hero Slide ${index + 1}`}
                   className="w-full h-auto block"
                   style={{ display: 'block' }}
+                  fetchPriority={index === 0 ? 'high' : 'auto'}
+                  loading={index === 0 ? 'eager' : 'lazy'}
                 />
               </Link>
             ) : (
@@ -261,6 +240,8 @@ export default function Hero() {
                 alt={`Hero Slide ${index + 1}`}
                 className="w-full h-auto block"
                 style={{ display: 'block' }}
+                fetchPriority={index === 0 ? 'high' : 'auto'}
+                loading={index === 0 ? 'eager' : 'lazy'}
               />
             )}
           </div>
@@ -268,7 +249,7 @@ export default function Hero() {
 
         {/* Mobile Navigation Dots */}
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30 flex space-x-2">
-          {HERO_SLIDES.map((slide, index) => (
+          {slides.map((slide, index) => (
             <button
               key={`mobile-dot-${slide.id}`}
               onClick={() => goToSlide(index)}
@@ -284,7 +265,7 @@ export default function Hero() {
 
         {/* Mobile Navigation Arrows - Smaller and more subtle */}
         <button
-          onClick={() => goToSlide((currentSlide - 1 + TOTAL_SLIDES) % TOTAL_SLIDES)}
+          onClick={() => goToSlide((currentSlide - 1 + slides.length) % slides.length)}
           className="absolute left-2 top-1/2 transform -translate-y-1/2 z-30 bg-white/60 active:bg-white rounded-full p-1.5 transition-all duration-200 shadow-md"
           aria-label="Previous slide"
         >
@@ -298,7 +279,7 @@ export default function Hero() {
           </svg>
         </button>
         <button
-          onClick={() => goToSlide((currentSlide + 1) % TOTAL_SLIDES)}
+          onClick={() => goToSlide((currentSlide + 1) % slides.length)}
           className="absolute right-2 top-1/2 transform -translate-y-1/2 z-30 bg-white/60 active:bg-white rounded-full p-1.5 transition-all duration-200 shadow-md"
           aria-label="Next slide"
         >

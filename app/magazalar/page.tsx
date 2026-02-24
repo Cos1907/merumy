@@ -34,7 +34,7 @@ const stores: Store[] = [
     name: 'Mall of İstanbul',
     address: 'Ziya Gökalp, Süleyman Demirel Blv No:7, 34490 Başakşehir/İstanbul',
     image: '/magazalar/mallofistanbul.jpg',
-    isComingSoon: true,
+    isComingSoon: false,
     phone: '+90 501 061 50 09',
     hours: '10:00 - 22:00',
     mapLink: 'https://www.google.com/maps/place//data=!4m2!3m1!1s0x14caa59939b08cf5:0x51dbb16a702cb15a?sa=X&ved=1t:8290&ictx=111'

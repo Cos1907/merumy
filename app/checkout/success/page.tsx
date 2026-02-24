@@ -6,6 +6,11 @@ import Link from 'next/link'
 import { CheckCircle, Package, Truck, Home, ShoppingBag, MapPin, User, CreditCard } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 
+// Binlik ayırıcı ile fiyat formatla (1200 → 1.200)
+function formatPrice(n: number): string {
+  return n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
 function SuccessContent() {
   const searchParams = useSearchParams()
   const orderId = searchParams?.get('orderId') || ''
@@ -220,7 +225,7 @@ function SuccessContent() {
                         <p className="text-sm font-medium text-gray-800 line-clamp-2">{item?.product?.name || 'Ürün'}</p>
                         <p className="text-xs text-gray-500">{item?.quantity || 1} adet</p>
                       </div>
-                      <span className="font-semibold text-sm">₺{((item?.product?.price || 0) * (item?.quantity || 1)).toFixed(2)}</span>
+                      <span className="font-semibold text-sm">₺{formatPrice((item?.product?.price || 0) * (item?.quantity || 1))}</span>
                     </div>
                   ))}
                 </div>
@@ -239,19 +244,19 @@ function SuccessContent() {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between text-gray-600">
                   <span>Ara Toplam</span>
-                  <span>₺{(orderData?.total || 0).toFixed(2)}</span>
+                  <span>₺{formatPrice(orderData?.total || 0)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Kargo</span>
                   {shippingCost === 0 ? (
                     <span className="text-green-600 font-medium">Ücretsiz</span>
                   ) : (
-                    <span>₺{shippingCost.toFixed(2)}</span>
+                    <span>₺{formatPrice(shippingCost)}</span>
                   )}
                 </div>
                 <div className="flex justify-between pt-3 border-t border-gray-100">
                   <span className="font-semibold text-gray-900">Toplam Ödenen</span>
-                  <span className="font-bold text-accent text-lg">₺{finalTotal.toFixed(2)}</span>
+                  <span className="font-bold text-accent text-lg">₺{formatPrice(finalTotal)}</span>
                 </div>
               </div>
             </div>

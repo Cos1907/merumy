@@ -37,7 +37,8 @@ export function getProductBySlug(slug: string): Product | undefined {
   return products.find(p => p.slug === slug || p.id === slug)
 }
 
-export function getProductsByCategory(category: string): Product[] {
+export function getProductsByCategory(category: string | null | undefined): Product[] {
+  if (!category) return []
   const lowerCategory = category.toLowerCase()
   return products.filter(p => p.category?.toLowerCase() === lowerCategory)
 }
@@ -89,16 +90,18 @@ export function getProductsBySubcategory(category: string, subcategory: string):
 }
 
 export function searchProducts(query: string): Product[] {
+  if (!query) return []
   const lowerQuery = query.toLowerCase()
   return products.filter(p => 
-    p.name.toLowerCase().includes(lowerQuery) ||
-    p.brand.toLowerCase().includes(lowerQuery) ||
-    p.category.toLowerCase().includes(lowerQuery) ||
-    p.description.toLowerCase().includes(lowerQuery)
+    (p.name?.toLowerCase() || '').includes(lowerQuery) ||
+    (p.brand?.toLowerCase() || '').includes(lowerQuery) ||
+    (p.category?.toLowerCase() || '').includes(lowerQuery) ||
+    (p.description?.toLowerCase() || '').includes(lowerQuery)
   )
 }
 
-function normalizeText(input: string) {
+function normalizeText(input: string | null | undefined): string {
+  if (!input) return ''
   return input
     .toLowerCase()
     .trim()

@@ -112,11 +112,69 @@ export function removeLine(cartKey: string, productId: string) {
 }
 
 type Promo =
-  | { code: string; type: 'percent'; percent: number; oneTime: true }
+  | { code: string; type: 'percent'; percent: number; oneTime: true; minAmount?: number }
+  | { code: string; type: 'amount'; amount: number; oneTime: true; minAmount?: number }
 
-// Tek kullanımlık kuponlar - kod: {percent, used}
-const ONE_TIME_PROMOS: Record<string, { percent: number; used: boolean }> = {
-  'LGQGPM3D': { percent: 20, used: false }
+// Tek kullanımlık kuponlar
+// percent: yüzdelik indirim, amount: sabit tutar indirim (TL), minAmount: alt limit
+const ONE_TIME_PROMOS: Record<string, { type: 'percent' | 'amount'; value: number; minAmount?: number }> = {
+  // %20 indirim kodu
+  'LGQGPM3D': { type: 'percent', value: 20 },
+  
+  // %10 indirim kodu
+  'JZPITJGM': { type: 'percent', value: 10 },
+  
+  // 1000 TL sabit indirim kodları (5000 TL alt limit)
+  '3HJM1D3E': { type: 'amount', value: 1000, minAmount: 5000 },
+  'DGZPEO5V': { type: 'amount', value: 1000, minAmount: 5000 },
+  'CFHYLKGY': { type: 'amount', value: 1000, minAmount: 5000 },
+  'YL7A90MW': { type: 'amount', value: 1000, minAmount: 5000 },
+  'GXE8OH2Q': { type: 'amount', value: 1000, minAmount: 5000 },
+  '18KAB4H7': { type: 'amount', value: 1000, minAmount: 5000 },
+  'PL5VJ9M7': { type: 'amount', value: 1000, minAmount: 5000 },
+  '6YIG4SVZ': { type: 'amount', value: 1000, minAmount: 5000 },
+  '3C6FM50B': { type: 'amount', value: 1000, minAmount: 5000 },
+  '8AENQUBX': { type: 'amount', value: 1000, minAmount: 5000 },
+  'ORXJIWTI': { type: 'amount', value: 1000, minAmount: 5000 },
+  'O2DTQYHP': { type: 'amount', value: 1000, minAmount: 5000 },
+  'ONFIEHDX': { type: 'amount', value: 1000, minAmount: 5000 },
+  'H8BQCHBF': { type: 'amount', value: 1000, minAmount: 5000 },
+  'KYTLIYTG': { type: 'amount', value: 1000, minAmount: 5000 },
+  'LR2C3ZNK': { type: 'amount', value: 1000, minAmount: 5000 },
+  'BDKWWXF4': { type: 'amount', value: 1000, minAmount: 5000 },
+  'FLK2CHO7': { type: 'amount', value: 1000, minAmount: 5000 },
+  'HJ1I7K2T': { type: 'amount', value: 1000, minAmount: 5000 },
+  '4PSWWDMD': { type: 'amount', value: 1000, minAmount: 5000 },
+  'NRZGCWR2': { type: 'amount', value: 1000, minAmount: 5000 },
+  'QVFOJXIN': { type: 'amount', value: 1000, minAmount: 5000 },
+  'JVKUNU3U': { type: 'amount', value: 1000, minAmount: 5000 },
+  'FSEFICVI': { type: 'amount', value: 1000, minAmount: 5000 },
+  'AYSO0FPK': { type: 'amount', value: 1000, minAmount: 5000 },
+  'S8XGHBEK': { type: 'amount', value: 1000, minAmount: 5000 },
+  'Z6K8IBGH': { type: 'amount', value: 1000, minAmount: 5000 },
+  'W2OZY4MD': { type: 'amount', value: 1000, minAmount: 5000 },
+  'Z9I5TPWK': { type: 'amount', value: 1000, minAmount: 5000 },
+  'O6POP5TC': { type: 'amount', value: 1000, minAmount: 5000 },
+  'UGCX3QXK': { type: 'amount', value: 1000, minAmount: 5000 },
+  'CIOVRSZY': { type: 'amount', value: 1000, minAmount: 5000 },
+  'LTF3P9W9': { type: 'amount', value: 1000, minAmount: 5000 },
+  'QCIQPM8G': { type: 'amount', value: 1000, minAmount: 5000 },
+  'RELOU5DD': { type: 'amount', value: 1000, minAmount: 5000 },
+  'ZNMLCJ74': { type: 'amount', value: 1000, minAmount: 5000 },
+  'OQVIOQK8': { type: 'amount', value: 1000, minAmount: 5000 },
+  '3SCG954I': { type: 'amount', value: 1000, minAmount: 5000 },
+  'YKKO2JLQ': { type: 'amount', value: 1000, minAmount: 5000 },
+  'I5LDQ4VA': { type: 'amount', value: 1000, minAmount: 5000 },
+  '6VW4GHEM': { type: 'amount', value: 1000, minAmount: 5000 },
+  'H8SCLZTW': { type: 'amount', value: 1000, minAmount: 5000 },
+  'DBUNML7E': { type: 'amount', value: 1000, minAmount: 5000 },
+  'M3R5AQSI': { type: 'amount', value: 1000, minAmount: 5000 },
+  'ZCGT819B': { type: 'amount', value: 1000, minAmount: 5000 },
+  'O7I4KRTC': { type: 'amount', value: 1000, minAmount: 5000 },
+  '8TY268ML': { type: 'amount', value: 1000, minAmount: 5000 },
+  '5UZW4UPB': { type: 'amount', value: 1000, minAmount: 5000 },
+  'BLB4K31C': { type: 'amount', value: 1000, minAmount: 5000 },
+  'GSWP45FF': { type: 'amount', value: 1000, minAmount: 5000 },
 }
 
 // Kullanılmış tek kullanımlık kuponları dosyadan oku
@@ -160,9 +218,14 @@ function normalizePromo(code: string): Promo | null {
   const c = code.trim().toUpperCase()
   
   // Tek kullanımlık kupon kontrolü
-  if (ONE_TIME_PROMOS[c]) {
+  const promo = ONE_TIME_PROMOS[c]
+  if (promo) {
     if (isPromoUsed(c)) return null // Zaten kullanılmış
-    return { code: c, type: 'percent', percent: ONE_TIME_PROMOS[c].percent, oneTime: true }
+    if (promo.type === 'percent') {
+      return { code: c, type: 'percent', percent: promo.value, oneTime: true, minAmount: promo.minAmount }
+    } else {
+      return { code: c, type: 'amount', amount: promo.value, oneTime: true, minAmount: promo.minAmount }
+    }
   }
   
   return null
@@ -233,14 +296,37 @@ export function hydrateCart(cart: Cart) {
 
   const promo = cart.promoCode ? normalizePromo(cart.promoCode) : null
   let promoDiscount = 0
+  let promoMinAmount = promo?.minAmount || 0
+  let promoMinNotMet = false
+  
   if (promo) {
-    promoDiscount = Math.round((subtotal * promo.percent) / 100)
-    promoDiscount = Math.max(0, Math.min(promoDiscount, subtotal))
+    // Alt limit kontrolü
+    if (promo.minAmount && subtotal < promo.minAmount) {
+      promoMinNotMet = true
+      promoDiscount = 0 // Alt limit karşılanmadığında indirim uygulanmaz
+    } else {
+      if (promo.type === 'percent') {
+        promoDiscount = Math.round((subtotal * promo.percent) / 100)
+      } else if (promo.type === 'amount') {
+        promoDiscount = promo.amount
+      }
+      promoDiscount = Math.max(0, Math.min(promoDiscount, subtotal))
+    }
   }
   const total = Math.max(0, subtotal - promoDiscount)
   const count = detailed.reduce((sum, i) => sum + i.quantity, 0)
 
-  return { items: detailed, subtotal, discountFromOriginal, promoCode: promo?.code || null, promoDiscount, total, count }
+  return { 
+    items: detailed, 
+    subtotal, 
+    discountFromOriginal, 
+    promoCode: promo?.code || null, 
+    promoDiscount, 
+    promoMinAmount,
+    promoMinNotMet,
+    total, 
+    count 
+  }
 }
 
 

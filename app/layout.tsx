@@ -6,6 +6,7 @@ import { CartProvider } from './context/CartContext'
 import CartToast from './components/CartToast'
 import CookieConsent from './components/CookieConsent'
 import PageTransition from './components/PageTransition'
+import DelayNoticePopup from './components/DelayNoticePopup'
 
 export const metadata: Metadata = {
   title: 'Merumy - Kore Güzellik Ürünleri',
@@ -26,6 +27,10 @@ export default function RootLayout({
               <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
               <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
               <link rel="manifest" href="/site.webmanifest" />
+              {/* Preload kritik görseller */}
+              <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" />
+              <link rel="preload" href="/herosection/herosection01.jpg" as="image" type="image/jpeg" media="(min-width: 768px)" />
+              <link rel="preload" href="/mobilsliderlar/slider1.jpg" as="image" type="image/jpeg" media="(max-width: 767px)" />
               <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
               <link rel="preconnect" href="https://fonts.googleapis.com" />
               <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -51,6 +56,7 @@ export default function RootLayout({
           <CartToast />
           {children}
           <CookieConsent />
+          <DelayNoticePopup />
         </CartProvider>
       </body>
     </html>

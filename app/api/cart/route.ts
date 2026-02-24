@@ -13,6 +13,48 @@ import {
   setPromo,
   setQuantity,
 } from '../../lib/cart/store'
+import { query } from '../../lib/db'
+
+// Override cart item prices with live DB prices so admin updates reflect immediately
+async function applyLivePrices(payload: any): Promise<any> {
+  try {
+    if (!payload.items || payload.items.length === 0) return payload
+    const barcodes = payload.items.map((i: any) => String(i.product.id))
+    const livePrices = await query<any[]>(
+      `SELECT barcode, price, compare_price as originalPrice, stock_status as stockStatus, stock
+       FROM products WHERE barcode IN (${barcodes.map(() => '?').join(',')})`,
+      barcodes
+    )
+    const priceMap = new Map(livePrices.map((p: any) => [String(p.barcode), p]))
+    const updatedItems = payload.items.map((item: any) => {
+      const live = priceMap.get(String(item.product.id))
+      if (!live) return item
+      return {
+        ...item,
+        product: {
+          ...item.product,
+          price: live.price,
+          originalPrice: (live.originalPrice && live.originalPrice > 0)
+            ? live.originalPrice
+            : item.product.originalPrice,
+          inStock: live.stockStatus !== 'out_of_stock',
+          stock: live.stock,
+        },
+      }
+    })
+    const subtotal = updatedItems.reduce((sum: number, i: any) => sum + i.product.price * i.quantity, 0)
+    const discountFromOriginal = updatedItems.reduce((sum: number, i: any) => {
+      const op = i.product.originalPrice && i.product.originalPrice > i.product.price
+        ? i.product.originalPrice : i.product.price
+      return sum + (op - i.product.price) * i.quantity
+    }, 0)
+    const total = Math.max(0, subtotal - (payload.promoDiscount || 0))
+    return { ...payload, items: updatedItems, subtotal, discountFromOriginal, total }
+  } catch (e) {
+    console.error('Error applying live prices to cart:', e)
+    return payload
+  }
+}
 
 function getOrCreateCartId() {
   const existing = cookies().get(CART_COOKIE_NAME)?.value
@@ -24,7 +66,7 @@ export async function GET() {
   const { cartId, created } = getOrCreateCartId()
   const cartKey = getCartKey(cartId)
   const cart = readCart(cartKey)
-  const payload = hydrateCart(cart)
+  const payload = await applyLivePrices(hydrateCart(cart))
 
   const res = NextResponse.json({ ...payload, cartId }, { status: 200 })
   // Always set the cookie (not just when created) to ensure it persists
@@ -79,7 +121,7 @@ export async function POST(req: Request) {
   }
 
   const cart = readCart(cartKey)
-  const payload = hydrateCart(cart)
+  const payload = await applyLivePrices(hydrateCart(cart))
   const res = NextResponse.json({ ...payload, cartId }, { status: 200 })
   // Always set the cookie to ensure it persists
   res.cookies.set({

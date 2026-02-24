@@ -9,6 +9,11 @@ import { useCart } from '../context/CartContext'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
+// Binlik ayırıcı ile fiyat formatla (1200 → 1.200)
+function formatPrice(n: number): string {
+  return n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
 const TURKEY_PROVINCES = [
   'Adana', 'Adıyaman', 'Afyonkarahisar', 'Ağrı', 'Amasya', 'Ankara', 'Antalya', 'Artvin', 'Aydın', 'Balıkesir',
   'Bilecik', 'Bingöl', 'Bitlis', 'Bolu', 'Burdur', 'Bursa', 'Çanakkale', 'Çankırı', 'Çorum', 'Denizli',
@@ -718,7 +723,7 @@ export default function CheckoutPage() {
                       <div className="flex-1 min-w-0">
                         <h3 className="font-medium text-gray-800 line-clamp-2 text-sm">{item.product.name}</h3>
                         <p className="text-gray-500 text-sm mt-1">{item.quantity} adet</p>
-                        <p className="font-semibold text-accent mt-1">₺{(item.product.price * item.quantity).toFixed(2)}</p>
+                        <p className="font-semibold text-accent mt-1">₺{formatPrice(item.product.price * item.quantity)}</p>
                       </div>
                     </div>
                   ))}
@@ -728,16 +733,16 @@ export default function CheckoutPage() {
                 <div className="space-y-3 border-t border-gray-100 pt-4 mb-6">
                   <div className="flex justify-between text-gray-600">
                     <span>Ürünler</span>
-                    <span>₺{(testProduct ? checkoutTotal : (cartSubtotal + discountFromOriginal)).toFixed(2)}</span>
+                    <span>₺{formatPrice(testProduct ? checkoutTotal : (cartSubtotal + discountFromOriginal))}</span>
                   </div>
                   <div className="flex justify-between text-gray-600">
                     <span>İndirim Kazancınız</span>
-                    <span className="text-[#d9534f]">-₺{(testProduct ? 0 : discountFromOriginal).toFixed(2)}</span>
+                    <span className="text-[#d9534f]">-₺{formatPrice(testProduct ? 0 : discountFromOriginal)}</span>
                   </div>
                   {promoDiscount > 0 && !testProduct && (
                     <div className="flex justify-between text-gray-600">
                       <span>Promosyon İndirimi</span>
-                      <span className="text-[#d9534f]">-₺{promoDiscount.toFixed(2)}</span>
+                      <span className="text-[#d9534f]">-₺{formatPrice(promoDiscount)}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-gray-600">
@@ -750,7 +755,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex justify-between text-lg font-bold text-gray-800 pt-3 border-t border-gray-100">
                     <span>Toplam</span>
-                    <span className="text-accent">₺{(checkoutTotal + (checkoutTotal >= 1000 ? 0 : 80)).toFixed(2)}</span>
+                    <span className="text-accent">₺{formatPrice(checkoutTotal + (checkoutTotal >= 1000 ? 0 : 80))}</span>
                   </div>
                 </div>
 

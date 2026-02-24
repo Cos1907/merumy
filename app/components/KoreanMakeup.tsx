@@ -1,24 +1,12 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { getMakeupProducts } from '../lib/products'
-import { useCart } from '../context/CartContext'
-
-function encodeImagePath(path: string): string {
-  if (!path) return ''
-  // Split by / to handle each segment
-  return path.split('/').map(part => {
-    // If part contains #, we need to encode it, but encodeURIComponent encodes everything.
-    // However, for file system paths served via HTTP, we generally want standard URL encoding.
-    return encodeURIComponent(part)
-  }).join('/')
-}
+import ProductCardModern from './ProductCardModern'
 
 export default function KoreanMakeup() {
-  const { addToCart } = useCart()
   const [products, setProducts] = useState(() => getMakeupProducts(12))
   
   // Sayfa yenilendiğinde farklı ürünler göster
@@ -54,7 +42,7 @@ export default function KoreanMakeup() {
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
-      const cardWidth = scrollContainerRef.current.clientWidth / 4 // Scroll one card width roughly
+      const cardWidth = scrollContainerRef.current.clientWidth / 4
       const scrollAmount = scrollContainerRef.current.scrollLeft - cardWidth
       scrollContainerRef.current.scrollTo({
         left: Math.max(0, scrollAmount),
@@ -76,127 +64,67 @@ export default function KoreanMakeup() {
   }
 
   return (
-    <section className="py-12 bg-white">
-      <div className="container mx-auto px-4">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <h2 
-            className="text-3xl font-bold font-grift uppercase"
-            style={{ color: '#92D0AA' }}
-          >
+    <section className="py-6 md:py-12 bg-white">
+      <div className="container mx-auto px-2 md:px-4">
+        {/* Header - Mobil için optimize edildi */}
+        <div className="flex items-center justify-between mb-4 md:mb-8">
+          <h2 className="text-lg md:text-3xl font-bold font-grift uppercase" style={{ color: '#92D0AA' }}>
             KOREAN MAKE UP
           </h2>
           <Link 
             href="/shop/makyaj"
-            className="bg-[#92D0AA] text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-[#7ab594] transition-colors uppercase"
+            className="px-3 py-1.5 md:px-6 md:py-2 rounded-lg font-bold text-xs md:text-sm transition-colors uppercase"
+            style={{ 
+              backgroundColor: '#92D0AA', 
+              color: 'white' 
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#7bb896'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#92D0AA'
+            }}
           >
             TÜMÜNÜ GÖR
           </Link>
         </div>
 
-        {/* Carousel Container */}
+        {/* Product Slider */}
         <div className="relative group">
-          {/* Left Arrow */}
+          {/* Gradient Overlays - Sol ve Sağ fade efekti */}
+          <div className="hidden md:block absolute left-0 top-0 bottom-4 w-24 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
+          <div className="hidden md:block absolute right-0 top-0 bottom-4 w-24 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
+          
+          {/* Navigation Arrows - Mobil için gizle, desktop için göster */}
           <button
             onClick={scrollLeft}
-            disabled={!canScrollLeft}
-            className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 rounded-full flex items-center justify-center transition-all ${
-              canScrollLeft 
-                ? 'bg-[#92D0AA] hover:bg-[#7ab594] text-white shadow-lg cursor-pointer opacity-100' 
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-0'
-            }`}
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-20 w-12 h-12 rounded-full items-center justify-center transition-all bg-[#92D0AA] hover:bg-[#7ab594] text-white shadow-lg cursor-pointer"
           >
             <ChevronLeft className="w-8 h-8" />
           </button>
 
-          {/* Products List */}
-          <div 
-            ref={scrollContainerRef}
-            className="flex gap-6 overflow-x-auto scroll-smooth pb-4"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            {products.map((product) => (
-              <Link 
-                key={product.id} 
-                href={`/product/${product.slug}`}
-                className="flex-shrink-0 w-[calc(25%-18px)] min-w-[250px] group/card"
-              >
-                <div className="flex flex-col h-full">
-                  {/* Product Image Box */}
-                  <div 
-                    className="aspect-[3/4] bg-[#e5e5e5] rounded-[20px] overflow-hidden mb-4 relative"
-                    style={{ border: '1px solid #e5e5e5' }}
-                  >
-                    {product.image && product.image !== '/images/product-placeholder.png' ? (
-                      <Image
-                        src={encodeImagePath(product.image)}
-                        alt={product.name}
-                        fill
-                        className="object-cover group-hover/card:scale-105 transition-transform duration-300"
-                        sizes="(max-width: 768px) 100vw, 25vw"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                         Product Image
-                      </div>
-                    )}
-
-                    <button
-                      type="button"
-                      className="absolute inset-x-4 bottom-4 opacity-0 group-hover/card:opacity-100 transition-opacity duration-200 rounded-xl py-3 text-white font-bold uppercase text-sm"
-                      style={{ backgroundColor: '#92D0AA' }}
-                      onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        addToCart(product, 1)
-                      }}
-                    >
-                      Sepete Ekle
-                    </button>
-                  </div>
-
-                  {/* Product Info */}
-                  <div className="text-center">
-                    <h3 
-                      className="text-xl font-bold mb-2 font-grift uppercase line-clamp-1"
-                      style={{ color: '#92D0AA' }}
-                    >
-                      {product.name}
-                    </h3>
-                    <div className="flex items-center justify-center gap-2 text-sm">
-                      {product.originalPrice && product.originalPrice > product.price ? (
-                        <>
-                          <span className="text-gray-400 line-through">
-                            ₺{product.originalPrice.toFixed(2)}
-                          </span>
-                          <span className="text-red-500 font-semibold">
-                            / ₺{product.price.toFixed(2)}
-                          </span>
-                        </>
-                      ) : (
-                        <span className="text-gray-600">
-                          ₺{product.price.toFixed(2)}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          {/* Right Arrow */}
           <button
             onClick={scrollRight}
-            disabled={!canScrollRight}
-            className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 rounded-full flex items-center justify-center transition-all ${
-              canScrollRight 
-                ? 'bg-[#92D0AA] hover:bg-[#7ab594] text-white shadow-lg cursor-pointer opacity-100' 
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-0'
-            }`}
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-20 w-12 h-12 rounded-full items-center justify-center transition-all bg-[#92D0AA] hover:bg-[#7ab594] text-white shadow-lg cursor-pointer"
           >
             <ChevronRight className="w-8 h-8" />
           </button>
+
+          {/* Product Cards Container - Tüm cihazlar için optimize edildi */}
+          <div 
+            ref={scrollContainerRef}
+            className="flex gap-2 md:gap-4 lg:gap-5 overflow-x-auto scroll-smooth pb-4 -mx-2 px-2 md:mx-0 md:px-0"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
+          >
+            {products.map((product) => (
+              <div 
+                key={product.id} 
+                className="flex-shrink-0 w-[130px] sm:w-[180px] md:w-[220px] lg:w-[260px] xl:w-[280px] 2xl:w-[300px]"
+              >
+                <ProductCardModern product={product} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

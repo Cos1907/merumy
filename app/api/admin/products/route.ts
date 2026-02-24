@@ -1,6 +1,45 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query, execute, queryOne } from '../../../lib/db';
 import { cookies } from 'next/headers';
+import * as fs from 'fs';
+import * as path from 'path';
+
+// Sync a single product update to the JSON data file
+function syncProductToJson(productId: string | number, updates: Record<string, any>) {
+  try {
+    const jsonPaths = [
+      path.join(process.cwd(), 'app', 'data', 'products.json'),
+      path.join(process.cwd(), 'data', 'products.json'),
+    ];
+    for (const jsonPath of jsonPaths) {
+      if (fs.existsSync(jsonPath)) {
+        const raw = fs.readFileSync(jsonPath, 'utf-8');
+        const productsArray: any[] = JSON.parse(raw);
+        const idx = productsArray.findIndex(
+          (p: any) => String(p.id) === String(productId) || String(p.barcode) === String(updates.barcode || productId)
+        );
+        if (idx !== -1) {
+          if (updates.name !== undefined) productsArray[idx].name = updates.name;
+          if (updates.description !== undefined) productsArray[idx].description = updates.description;
+          if (updates.price !== undefined) productsArray[idx].price = Number(updates.price);
+          if (updates.comparePrice !== undefined) productsArray[idx].originalPrice = updates.comparePrice ? Number(updates.comparePrice) : null;
+          if (updates.stock !== undefined) {
+            productsArray[idx].stock = Number(updates.stock);
+            productsArray[idx].inStock = Number(updates.stock) > 0 && updates.isActive !== false && updates.stockStatus !== 'out_of_stock';
+          }
+          if (updates.isActive !== undefined) productsArray[idx].inStock = updates.isActive && productsArray[idx].stock > 0;
+          if (updates.barcode !== undefined) productsArray[idx].barcode = updates.barcode;
+          if (updates.brand !== undefined) productsArray[idx].brand = updates.brand;
+          if (updates.category !== undefined) productsArray[idx].category = updates.category;
+          if (updates.image !== undefined) productsArray[idx].image = updates.image;
+          fs.writeFileSync(jsonPath, JSON.stringify(productsArray, null, 2), 'utf-8');
+        }
+      }
+    }
+  } catch (err) {
+    console.error('Error syncing product to JSON:', err);
+  }
+}
 
 // Session check helper
 async function checkAdminSession(): Promise<boolean> {
@@ -246,6 +285,10 @@ export async function PUT(request: NextRequest) {
         await execute('INSERT INTO product_images (product_id, image_url, is_primary) VALUES (?, ?, TRUE)', [id, image]);
       }
     }
+    
+    // Sync changes to JSON data file for live frontend updates
+    syncProductToJson(id, { name, description, price, comparePrice, stock, brand, category, barcode, isActive, image,
+      stockStatus: stock <= 0 ? 'out_of_stock' : (stock <= 5 ? 'low_stock' : 'in_stock') });
     
     return NextResponse.json({ success: true });
   } catch (error) {

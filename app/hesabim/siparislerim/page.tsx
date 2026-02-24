@@ -7,6 +7,11 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import { User, Package, MapPin, LogOut, ChevronRight, ShoppingBag, Clock, CheckCircle, Truck, XCircle } from 'lucide-react'
 
+// Binlik ayırıcı ile fiyat formatla (1200 → 1.200)
+function formatPrice(n: number): string {
+  return n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
 interface Order {
   id: string
   orderId: string
@@ -218,7 +223,7 @@ export default function SiparislerimPage() {
                             )}
                           </div>
                           <div className="flex items-center space-x-4">
-                            <span className="font-bold text-accent">₺{order.total.toFixed(2)}</span>
+                            <span className="font-bold text-accent">₺{formatPrice(order.total)}</span>
                           </div>
                         </div>
                       </div>

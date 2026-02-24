@@ -15,7 +15,8 @@
     "images": [
       "/SIZED BARCODE/8800256114482.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8800256114481",
@@ -33,7 +34,8 @@
     "images": [
       "/SIZED BARCODE/8800256114481.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8809700320812",
@@ -51,7 +53,8 @@
     "images": [
       "/SIZED BARCODE/8809700320812.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8809875907412",
@@ -69,7 +72,8 @@
     "images": [
       "/SIZED BARCODE/8809875907412.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8800250591974",
@@ -87,7 +91,8 @@
     "images": [
       "/SIZED BARCODE/8800250591974.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8809875900215",
@@ -105,7 +110,8 @@
     "images": [
       "/SIZED BARCODE/8809875900215.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809875904343",
@@ -123,7 +129,8 @@
     "images": [
       "/SIZED BARCODE/8809875904343.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809738605226",
@@ -141,7 +148,8 @@
     "images": [
       "/SIZED BARCODE/8809738605226.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8809783324905",
@@ -159,7 +167,8 @@
     "images": [
       "/SIZED BARCODE/8809783324905.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809563067794",
@@ -177,7 +186,8 @@
     "images": [
       "/SIZED BARCODE/8809563067794.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809990268047",
@@ -195,7 +205,8 @@
     "images": [
       "/SIZED BARCODE/8809990268047.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809783324904",
@@ -207,13 +218,14 @@
     "originalPrice": 1036,
     "brand": "Frankly",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809783324904.jpg",
     "images": [
       "/SIZED BARCODE/8809783324904.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809635232754",
@@ -231,7 +243,8 @@
     "images": [
       "/SIZED BARCODE/8809635232754.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809875906774",
@@ -249,7 +262,8 @@
     "images": [
       "/SIZED BARCODE/8809875906774.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809875907320",
@@ -267,7 +281,8 @@
     "images": [
       "/SIZED BARCODE/8809875907320.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809534173196",
@@ -285,7 +300,8 @@
     "images": [
       "/SIZED BARCODE/8809534173196.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809527484919",
@@ -303,7 +319,8 @@
     "images": [
       "/SIZED BARCODE/8809527484919.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809534173197",
@@ -321,7 +338,8 @@
     "images": [
       "/SIZED BARCODE/8809534173197.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809527484920",
@@ -339,7 +357,8 @@
     "images": [
       "/SIZED BARCODE/8809527484920.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809954943911",
@@ -357,7 +376,8 @@
     "images": [
       "/SIZED BARCODE/8809954943911.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809954945908",
@@ -375,7 +395,8 @@
     "images": [
       "/SIZED BARCODE/8809954945908.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8800250591905",
@@ -393,7 +414,8 @@
     "images": [
       "/SIZED BARCODE/8800250591905.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800289474910",
@@ -405,13 +427,14 @@
     "originalPrice": 1260,
     "brand": "Medicube",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8800289474910.jpg",
     "images": [
       "/SIZED BARCODE/8800289474910.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256114382",
@@ -429,7 +452,8 @@
     "images": [
       "/SIZED BARCODE/8800256114382.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256112227",
@@ -447,7 +471,8 @@
     "images": [
       "/SIZED BARCODE/8800256112227.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256108053",
@@ -465,7 +490,8 @@
     "images": [
       "/SIZED BARCODE/8800256108053.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8800240573188",
@@ -483,7 +509,8 @@
     "images": [
       "/SIZED BARCODE/8800240573188.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809982769866",
@@ -501,7 +528,8 @@
     "images": [
       "/SIZED BARCODE/8809982769866.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256113217",
@@ -519,7 +547,8 @@
     "images": [
       "/SIZED BARCODE/8800256113217.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800289470165",
@@ -537,7 +566,8 @@
     "images": [
       "/SIZED BARCODE/8800289470165.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8800256115532",
@@ -555,7 +585,8 @@
     "images": [
       "/SIZED BARCODE/8800256115532.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256115167",
@@ -573,7 +604,8 @@
     "images": [
       "/SIZED BARCODE/8800256115167.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800240567354",
@@ -591,7 +623,8 @@
     "images": [
       "/SIZED BARCODE/8800240567354.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256114566",
@@ -609,7 +642,8 @@
     "images": [
       "/SIZED BARCODE/8800256114566.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809960356033",
@@ -627,7 +661,8 @@
     "images": [
       "/SIZED BARCODE/8809960356033.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809936585894",
@@ -645,7 +680,8 @@
     "images": [
       "/SIZED BARCODE/8809936585894.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800240576608",
@@ -663,7 +699,8 @@
     "images": [
       "/SIZED BARCODE/8800240576608.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800240579838",
@@ -681,7 +718,8 @@
     "images": [
       "/SIZED BARCODE/8800240579838.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800240576585",
@@ -699,7 +737,8 @@
     "images": [
       "/SIZED BARCODE/8800240576585.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809960356620",
@@ -717,7 +756,8 @@
     "images": [
       "/SIZED BARCODE/8809960356620.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800240566944",
@@ -735,7 +775,8 @@
     "images": [
       "/SIZED BARCODE/8800240566944.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256113057",
@@ -753,7 +794,8 @@
     "images": [
       "/SIZED BARCODE/8800256113057.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256109661",
@@ -771,7 +813,8 @@
     "images": [
       "/SIZED BARCODE/8800256109661.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256112074",
@@ -789,7 +832,8 @@
     "images": [
       "/SIZED BARCODE/8800256112074.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256112142",
@@ -807,7 +851,8 @@
     "images": [
       "/SIZED BARCODE/8800256112142.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256119141",
@@ -825,7 +870,8 @@
     "images": [
       "/SIZED BARCODE/8800256119141.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256114658",
@@ -843,7 +889,8 @@
     "images": [
       "/SIZED BARCODE/8800256114658.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800289474859",
@@ -861,7 +908,8 @@
     "images": [
       "/SIZED BARCODE/8800289474859.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809981334928",
@@ -879,7 +927,8 @@
     "images": [
       "/SIZED BARCODE/8809981334928.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256115556",
@@ -897,7 +946,8 @@
     "images": [
       "/SIZED BARCODE/8800256115556.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809982768524",
@@ -915,7 +965,8 @@
     "images": [
       "/SIZED BARCODE/8809982768524.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800289470455",
@@ -933,7 +984,8 @@
     "images": [
       "/SIZED BARCODE/8800289470455.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256113101",
@@ -951,7 +1003,8 @@
     "images": [
       "/SIZED BARCODE/8800256113101.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800289473159",
@@ -969,7 +1022,8 @@
     "images": [
       "/SIZED BARCODE/8800289473159.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256115365",
@@ -987,7 +1041,8 @@
     "images": [
       "/SIZED BARCODE/8800256115365.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8800256119042",
@@ -999,13 +1054,14 @@
     "originalPrice": 991,
     "brand": "Medicube",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8800256119042.jpg",
     "images": [
       "/SIZED BARCODE/8800256119042.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256119219",
@@ -1023,7 +1079,8 @@
     "images": [
       "/SIZED BARCODE/8800256119219.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809936587119",
@@ -1041,7 +1098,8 @@
     "images": [
       "/SIZED BARCODE/8809936587119.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809921779093",
@@ -1059,7 +1117,8 @@
     "images": [
       "/SIZED BARCODE/8809921779093.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256112487",
@@ -1077,7 +1136,8 @@
     "images": [
       "/SIZED BARCODE/8800256112487.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256114313",
@@ -1095,7 +1155,8 @@
     "images": [
       "/SIZED BARCODE/8800256114313.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256114351",
@@ -1113,7 +1174,8 @@
     "images": [
       "/SIZED BARCODE/8800256114351.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256114320",
@@ -1131,7 +1193,8 @@
     "images": [
       "/SIZED BARCODE/8800256114320.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256119134",
@@ -1149,7 +1212,8 @@
     "images": [
       "/SIZED BARCODE/8800256119134.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256114610",
@@ -1167,7 +1231,8 @@
     "images": [
       "/SIZED BARCODE/8800256114610.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256119226",
@@ -1185,7 +1250,8 @@
     "images": [
       "/SIZED BARCODE/8800256119226.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809982769828",
@@ -1203,7 +1269,8 @@
     "images": [
       "/SIZED BARCODE/8809982769828.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809517414315",
@@ -1221,7 +1288,8 @@
     "images": [
       "/SIZED BARCODE/8809517414315.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256114283",
@@ -1239,7 +1307,8 @@
     "images": [
       "/SIZED BARCODE/8800256114283.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809982769903",
@@ -1257,7 +1326,8 @@
     "images": [
       "/SIZED BARCODE/8809982769903.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809517411741",
@@ -1275,7 +1345,8 @@
     "images": [
       "/SIZED BARCODE/8809517411741.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809982769941",
@@ -1293,7 +1364,8 @@
     "images": [
       "/SIZED BARCODE/8809982769941.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256112159",
@@ -1311,7 +1383,8 @@
     "images": [
       "/SIZED BARCODE/8800256112159.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8800256112234",
@@ -1329,7 +1402,8 @@
     "images": [
       "/SIZED BARCODE/8800256112234.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809982769897",
@@ -1347,7 +1421,8 @@
     "images": [
       "/SIZED BARCODE/8809982769897.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256119660",
@@ -1365,7 +1440,8 @@
     "images": [
       "/SIZED BARCODE/8800256119660.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809960356767",
@@ -1383,7 +1459,8 @@
     "images": [
       "/SIZED BARCODE/8809960356767.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800240569969",
@@ -1401,7 +1478,8 @@
     "images": [
       "/SIZED BARCODE/8800240569969.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256119332",
@@ -1419,7 +1497,8 @@
     "images": [
       "/SIZED BARCODE/8800256119332.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256109852",
@@ -1437,7 +1516,8 @@
     "images": [
       "/SIZED BARCODE/8800256109852.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256114979",
@@ -1449,13 +1529,14 @@
     "originalPrice": 1200,
     "brand": "Medicube",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8800256114979.jpg",
     "images": [
       "/SIZED BARCODE/8800256114979.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256115174",
@@ -1473,7 +1554,8 @@
     "images": [
       "/SIZED BARCODE/8800256115174.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256108046",
@@ -1491,7 +1573,8 @@
     "images": [
       "/SIZED BARCODE/8800256108046.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8800240567347",
@@ -1509,7 +1592,8 @@
     "images": [
       "/SIZED BARCODE/8800240567347.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800240575298",
@@ -1527,7 +1611,8 @@
     "images": [
       "/SIZED BARCODE/8800240575298.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928135601",
@@ -1545,7 +1630,8 @@
     "images": [
       "/SIZED BARCODE/8809928135601.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928135618",
@@ -1563,7 +1649,8 @@
     "images": [
       "/SIZED BARCODE/8809928135618.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809679696480",
@@ -1581,7 +1668,8 @@
     "images": [
       "/SIZED BARCODE/8809679696480.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928136073",
@@ -1599,7 +1687,8 @@
     "images": [
       "/SIZED BARCODE/8809928136073.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809679691098",
@@ -1617,7 +1706,8 @@
     "images": [
       "/SIZED BARCODE/8809679691098.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928132013",
@@ -1635,7 +1725,8 @@
     "images": [
       "/SIZED BARCODE/8809928132013.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928132006",
@@ -1653,7 +1744,8 @@
     "images": [
       "/SIZED BARCODE/8809928132006.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928134352",
@@ -1671,7 +1763,8 @@
     "images": [
       "/SIZED BARCODE/8809928134352.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928134857",
@@ -1689,7 +1782,8 @@
     "images": [
       "/SIZED BARCODE/8809928134857.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928133867",
@@ -1707,7 +1801,8 @@
     "images": [
       "/SIZED BARCODE/8809928133867.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928134888",
@@ -1725,7 +1820,8 @@
     "images": [
       "/SIZED BARCODE/8809928134888.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809679696468",
@@ -1743,7 +1839,8 @@
     "images": [
       "/SIZED BARCODE/8809679696468.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928136738",
@@ -1761,7 +1858,8 @@
     "images": [
       "/SIZED BARCODE/8809928136738.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928136769",
@@ -1779,7 +1877,8 @@
     "images": [
       "/SIZED BARCODE/8809928136769.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809416470009",
@@ -1797,7 +1896,8 @@
     "images": [
       "/SIZED BARCODE/8809416470009.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8809416470511",
@@ -1815,7 +1915,8 @@
     "images": [
       "/SIZED BARCODE/8809416470511.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809598455375",
@@ -1833,7 +1934,8 @@
     "images": [
       "/SIZED BARCODE/8809598455375.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809598454354",
@@ -1851,7 +1953,8 @@
     "images": [
       "/SIZED BARCODE/8809598454354.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809416470030",
@@ -1869,7 +1972,8 @@
     "images": [
       "/SIZED BARCODE/8809416470030.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809598455412",
@@ -1887,7 +1991,8 @@
     "images": [
       "/SIZED BARCODE/8809598455412.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809416470047",
@@ -1905,7 +2010,8 @@
     "images": [
       "/SIZED BARCODE/8809416470047.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809416470054",
@@ -1923,7 +2029,8 @@
     "images": [
       "/SIZED BARCODE/8809416470054.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809598454309",
@@ -1941,7 +2048,8 @@
     "images": [
       "/SIZED BARCODE/8809598454309.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809598455566",
@@ -1959,7 +2067,8 @@
     "images": [
       "/SIZED BARCODE/8809598455566.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809598455801",
@@ -1977,7 +2086,8 @@
     "images": [
       "/SIZED BARCODE/8809598455801.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809598454323",
@@ -1995,7 +2105,8 @@
     "images": [
       "/SIZED BARCODE/8809598454323.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809598454316",
@@ -2013,7 +2124,8 @@
     "images": [
       "/SIZED BARCODE/8809598454316.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809598455726",
@@ -2031,7 +2143,8 @@
     "images": [
       "/SIZED BARCODE/8809598455726.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809598455658",
@@ -2043,13 +2156,14 @@
     "originalPrice": 2399,
     "brand": "Cosrx",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809598455658.jpg",
     "images": [
       "/SIZED BARCODE/8809598455658.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809416470559",
@@ -2067,7 +2181,8 @@
     "images": [
       "/SIZED BARCODE/8809416470559.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800250591906",
@@ -2085,7 +2200,8 @@
     "images": [
       "/SIZED BARCODE/8800250591906.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8800250591907",
@@ -2103,7 +2219,8 @@
     "images": [
       "/SIZED BARCODE/8800250591907.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800250591908",
@@ -2121,7 +2238,8 @@
     "images": [
       "/SIZED BARCODE/8800250591908.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800250591909",
@@ -2139,7 +2257,8 @@
     "images": [
       "/SIZED BARCODE/8800250591909.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663757328",
@@ -2157,7 +2276,8 @@
     "images": [
       "/SIZED BARCODE/8809663757328.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663751593",
@@ -2175,7 +2295,8 @@
     "images": [
       "/SIZED BARCODE/8809663751593.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663751661",
@@ -2193,7 +2314,8 @@
     "images": [
       "/SIZED BARCODE/8809663751661.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663751500",
@@ -2211,7 +2333,8 @@
     "images": [
       "/SIZED BARCODE/8809663751500.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663754594",
@@ -2229,7 +2352,8 @@
     "images": [
       "/SIZED BARCODE/8809663754594.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663756314",
@@ -2247,7 +2371,8 @@
     "images": [
       "/SIZED BARCODE/8809663756314.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663755560",
@@ -2265,7 +2390,8 @@
     "images": [
       "/SIZED BARCODE/8809663755560.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663755546",
@@ -2283,7 +2409,8 @@
     "images": [
       "/SIZED BARCODE/8809663755546.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663756703",
@@ -2301,7 +2428,8 @@
     "images": [
       "/SIZED BARCODE/8809663756703.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663754006",
@@ -2319,7 +2447,8 @@
     "images": [
       "/SIZED BARCODE/8809663754006.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809689370211",
@@ -2337,7 +2466,8 @@
     "images": [
       "/SIZED BARCODE/8809689370211.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663753504",
@@ -2355,7 +2485,8 @@
     "images": [
       "/SIZED BARCODE/8809663753504.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663751654",
@@ -2373,7 +2504,8 @@
     "images": [
       "/SIZED BARCODE/8809663751654.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663751647",
@@ -2391,7 +2523,8 @@
     "images": [
       "/SIZED BARCODE/8809663751647.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663751739",
@@ -2409,7 +2542,8 @@
     "images": [
       "/SIZED BARCODE/8809663751739.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663751708",
@@ -2427,7 +2561,8 @@
     "images": [
       "/SIZED BARCODE/8809663751708.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663753153",
@@ -2445,7 +2580,8 @@
     "images": [
       "/SIZED BARCODE/8809663753153.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809743540321",
@@ -2463,7 +2599,8 @@
     "images": [
       "/SIZED BARCODE/8809743540321.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809579273134",
@@ -2475,13 +2612,14 @@
     "originalPrice": 2040,
     "brand": "Mizon",
     "category": "Mask Bar",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809579273134.jpg",
     "images": [
       "/SIZED BARCODE/8809579273134.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809587521807",
@@ -2499,7 +2637,8 @@
     "images": [
       "/SIZED BARCODE/8809587521807.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663752590",
@@ -2517,7 +2656,8 @@
     "images": [
       "/SIZED BARCODE/8809663752590.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809738601860",
@@ -2535,7 +2675,8 @@
     "images": [
       "/SIZED BARCODE/8809738601860.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663752347",
@@ -2553,7 +2694,8 @@
     "images": [
       "/SIZED BARCODE/8809663752347.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663752392",
@@ -2571,7 +2713,8 @@
     "images": [
       "/SIZED BARCODE/8809663752392.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663752262",
@@ -2589,7 +2732,8 @@
     "images": [
       "/SIZED BARCODE/8809663752262.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663752255",
@@ -2607,7 +2751,8 @@
     "images": [
       "/SIZED BARCODE/8809663752255.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663752316",
@@ -2625,7 +2770,8 @@
     "images": [
       "/SIZED BARCODE/8809663752316.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809663752330",
@@ -2643,7 +2789,8 @@
     "images": [
       "/SIZED BARCODE/8809663752330.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284501",
@@ -2661,7 +2808,8 @@
     "images": [
       "/SIZED BARCODE/8809672284501.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284631",
@@ -2679,7 +2827,8 @@
     "images": [
       "/SIZED BARCODE/8809672284631.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284488",
@@ -2697,7 +2846,8 @@
     "images": [
       "/SIZED BARCODE/8809672284488.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672282637",
@@ -2709,13 +2859,14 @@
     "originalPrice": 80,
     "brand": "Leaders",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809672282637.jpg",
     "images": [
       "/SIZED BARCODE/8809672282637.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672282644",
@@ -2733,7 +2884,8 @@
     "images": [
       "/SIZED BARCODE/8809672282644.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672282620",
@@ -2751,7 +2903,8 @@
     "images": [
       "/SIZED BARCODE/8809672282620.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672283696",
@@ -2769,7 +2922,8 @@
     "images": [
       "/SIZED BARCODE/8809672283696.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672283924",
@@ -2781,13 +2935,14 @@
     "originalPrice": 92,
     "brand": "Leaders",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809672283924.jpg",
     "images": [
       "/SIZED BARCODE/8809672283924.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672283697",
@@ -2805,7 +2960,8 @@
     "images": [
       "/SIZED BARCODE/8809672283697.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672283698",
@@ -2823,7 +2979,8 @@
     "images": [
       "/SIZED BARCODE/8809672283698.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809483318754",
@@ -2841,7 +2998,8 @@
     "images": [
       "/SIZED BARCODE/8809483318754.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809483318914",
@@ -2859,7 +3017,8 @@
     "images": [
       "/SIZED BARCODE/8809483318914.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672282897",
@@ -2877,7 +3036,8 @@
     "images": [
       "/SIZED BARCODE/8809672282897.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284570",
@@ -2895,7 +3055,8 @@
     "images": [
       "/SIZED BARCODE/8809672284570.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672283917",
@@ -2913,7 +3074,8 @@
     "images": [
       "/SIZED BARCODE/8809672283917.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672283979",
@@ -2931,7 +3093,8 @@
     "images": [
       "/SIZED BARCODE/8809672283979.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672283981",
@@ -2949,7 +3112,8 @@
     "images": [
       "/SIZED BARCODE/8809672283981.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672283982",
@@ -2965,7 +3129,8 @@
     "inStock": true,
     "image": "/placeholder.jpg",
     "images": [],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672283610",
@@ -2983,7 +3148,8 @@
     "images": [
       "/SIZED BARCODE/8809672283610.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672282699",
@@ -3001,7 +3167,8 @@
     "images": [
       "/SIZED BARCODE/8809672282699.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672283611",
@@ -3013,13 +3180,14 @@
     "originalPrice": 80,
     "brand": "Leaders",
     "category": "Mask Bar",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809672283611.jpg",
     "images": [
       "/SIZED BARCODE/8809672283611.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284105",
@@ -3031,13 +3199,14 @@
     "originalPrice": 80,
     "brand": "Leaders",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809672284105.jpg",
     "images": [
       "/SIZED BARCODE/8809672284105.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672282712",
@@ -3055,7 +3224,8 @@
     "images": [
       "/SIZED BARCODE/8809672282712.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672282705",
@@ -3073,7 +3243,8 @@
     "images": [
       "/SIZED BARCODE/8809672282705.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672281517",
@@ -3091,7 +3262,8 @@
     "images": [
       "/SIZED BARCODE/8809672281517.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672281518",
@@ -3109,7 +3281,8 @@
     "images": [
       "/SIZED BARCODE/8809672281518.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672281519",
@@ -3127,7 +3300,8 @@
     "images": [
       "/SIZED BARCODE/8809672281519.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672281520",
@@ -3145,7 +3319,8 @@
     "images": [
       "/SIZED BARCODE/8809672281520.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284525",
@@ -3163,7 +3338,8 @@
     "images": [
       "/SIZED BARCODE/8809672284525.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672281869",
@@ -3175,13 +3351,14 @@
     "originalPrice": 80,
     "brand": "Leaders",
     "category": "Mask Bar",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809672281869.jpg",
     "images": [
       "/SIZED BARCODE/8809672281869.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284327",
@@ -3199,7 +3376,8 @@
     "images": [
       "/SIZED BARCODE/8809672284327.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284099",
@@ -3217,7 +3395,8 @@
     "images": [
       "/SIZED BARCODE/8809672284099.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284100",
@@ -3235,7 +3414,8 @@
     "images": [
       "/SIZED BARCODE/8809672284100.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284101",
@@ -3253,7 +3433,8 @@
     "images": [
       "/SIZED BARCODE/8809672284101.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284102",
@@ -3271,7 +3452,8 @@
     "images": [
       "/SIZED BARCODE/8809672284102.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284103",
@@ -3289,7 +3471,8 @@
     "images": [
       "/SIZED BARCODE/8809672284103.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284471",
@@ -3301,13 +3484,14 @@
     "originalPrice": 80,
     "brand": "Leaders",
     "category": "Mask Bar",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809672284471.jpg",
     "images": [
       "/SIZED BARCODE/8809672284471.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284440",
@@ -3325,7 +3509,8 @@
     "images": [
       "/SIZED BARCODE/8809672284440.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672280589",
@@ -3343,7 +3528,8 @@
     "images": [
       "/SIZED BARCODE/8809672280589.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672283672",
@@ -3361,7 +3547,8 @@
     "images": [
       "/SIZED BARCODE/8809672283672.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672282804",
@@ -3379,7 +3566,8 @@
     "images": [
       "/SIZED BARCODE/8809672282804.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284587",
@@ -3397,7 +3585,8 @@
     "images": [
       "/SIZED BARCODE/8809672284587.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284464",
@@ -3409,13 +3598,14 @@
     "originalPrice": 80,
     "brand": "Leaders",
     "category": "Mask Bar",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809672284464.jpg",
     "images": [
       "/SIZED BARCODE/8809672284464.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284617",
@@ -3433,7 +3623,8 @@
     "images": [
       "/SIZED BARCODE/8809672284617.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284457",
@@ -3445,13 +3636,14 @@
     "originalPrice": 80,
     "brand": "Leaders",
     "category": "Mask Bar",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809672284457.jpg",
     "images": [
       "/SIZED BARCODE/8809672284457.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284549",
@@ -3469,7 +3661,8 @@
     "images": [
       "/SIZED BARCODE/8809672284549.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809242199303",
@@ -3481,13 +3674,14 @@
     "originalPrice": 80,
     "brand": "Leaders",
     "category": "Mask Bar",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809242199303.jpg",
     "images": [
       "/SIZED BARCODE/8809242199303.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809242199327",
@@ -3505,7 +3699,8 @@
     "images": [
       "/SIZED BARCODE/8809242199327.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809242199328",
@@ -3523,7 +3718,8 @@
     "images": [
       "/SIZED BARCODE/8809242199328.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809242199329",
@@ -3541,7 +3737,8 @@
     "images": [
       "/SIZED BARCODE/8809242199329.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809242199330",
@@ -3559,7 +3756,8 @@
     "images": [
       "/SIZED BARCODE/8809242199330.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672285263",
@@ -3571,13 +3769,14 @@
     "originalPrice": 80,
     "brand": "Leaders",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809672285263.jpg",
     "images": [
       "/SIZED BARCODE/8809672285263.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672285264",
@@ -3595,7 +3794,8 @@
     "images": [
       "/SIZED BARCODE/8809672285264.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672283699",
@@ -3613,7 +3813,8 @@
     "images": [
       "/SIZED BARCODE/8809672283699.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672283918",
@@ -3631,7 +3832,8 @@
     "images": [
       "/SIZED BARCODE/8809672283918.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672282477",
@@ -3649,7 +3851,8 @@
     "images": [
       "/SIZED BARCODE/8809672282477.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672282460",
@@ -3667,7 +3870,8 @@
     "images": [
       "/SIZED BARCODE/8809672282460.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672282491",
@@ -3685,7 +3889,8 @@
     "images": [
       "/SIZED BARCODE/8809672282491.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672283566",
@@ -3703,7 +3908,8 @@
     "images": [
       "/SIZED BARCODE/8809672283566.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672285249",
@@ -3715,13 +3921,14 @@
     "originalPrice": 80,
     "brand": "Leaders",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809672285249.jpg",
     "images": [
       "/SIZED BARCODE/8809672285249.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809672284211",
@@ -3739,7 +3946,8 @@
     "images": [
       "/SIZED BARCODE/8809672284211.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968206606",
@@ -3757,7 +3965,8 @@
     "images": [
       "/SIZED BARCODE/8809968206606.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968206607",
@@ -3775,7 +3984,8 @@
     "images": [
       "/SIZED BARCODE/8809968206607.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968206608",
@@ -3793,7 +4003,8 @@
     "images": [
       "/SIZED BARCODE/8809968206608.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968206609",
@@ -3811,7 +4022,8 @@
     "images": [
       "/SIZED BARCODE/8809968206609.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968206610",
@@ -3829,7 +4041,8 @@
     "images": [
       "/SIZED BARCODE/8809968206610.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968206611",
@@ -3847,7 +4060,8 @@
     "images": [
       "/SIZED BARCODE/8809968206611.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809657121364",
@@ -3865,7 +4079,8 @@
     "images": [
       "/SIZED BARCODE/8809657121364.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809657121365",
@@ -3883,7 +4098,8 @@
     "images": [
       "/SIZED BARCODE/8809657121365.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809657122385",
@@ -3901,7 +4117,8 @@
     "images": [
       "/SIZED BARCODE/8809657122385.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809864754669",
@@ -3919,7 +4136,8 @@
     "images": [
       "/SIZED BARCODE/8809864754669.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809864754670",
@@ -3937,7 +4155,8 @@
     "images": [
       "/SIZED BARCODE/8809864754670.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809864754671",
@@ -3955,7 +4174,8 @@
     "images": [
       "/SIZED BARCODE/8809864754671.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809657129285",
@@ -3973,7 +4193,8 @@
     "images": [
       "/SIZED BARCODE/8809657129285.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809657129286",
@@ -3991,7 +4212,8 @@
     "images": [
       "/SIZED BARCODE/8809657129286.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968200840",
@@ -4009,7 +4231,8 @@
     "images": [
       "/SIZED BARCODE/8809968200840.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968200841",
@@ -4027,7 +4250,8 @@
     "images": [
       "/SIZED BARCODE/8809968200841.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968200842",
@@ -4045,7 +4269,8 @@
     "images": [
       "/SIZED BARCODE/8809968200842.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809657122484",
@@ -4063,7 +4288,8 @@
     "images": [
       "/SIZED BARCODE/8809657122484.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809657122491",
@@ -4081,7 +4307,8 @@
     "images": [
       "/SIZED BARCODE/8809657122491.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809657113734",
@@ -4099,7 +4326,8 @@
     "images": [
       "/SIZED BARCODE/8809657113734.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968205500",
@@ -4117,7 +4345,8 @@
     "images": [
       "/SIZED BARCODE/8809968205500.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968205501",
@@ -4135,7 +4364,8 @@
     "images": [
       "/SIZED BARCODE/8809968205501.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968205502",
@@ -4153,7 +4383,8 @@
     "images": [
       "/SIZED BARCODE/8809968205502.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968205503",
@@ -4171,7 +4402,8 @@
     "images": [
       "/SIZED BARCODE/8809968205503.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968205504",
@@ -4189,7 +4421,8 @@
     "images": [
       "/SIZED BARCODE/8809968205504.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968209171",
@@ -4207,7 +4440,8 @@
     "images": [
       "/SIZED BARCODE/8809968209171.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968209172",
@@ -4225,7 +4459,8 @@
     "images": [
       "/SIZED BARCODE/8809968209172.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968209173",
@@ -4243,7 +4478,8 @@
     "images": [
       "/SIZED BARCODE/8809968209173.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968206026",
@@ -4261,7 +4497,8 @@
     "images": [
       "/SIZED BARCODE/8809968206026.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809968206027",
@@ -4279,7 +4516,8 @@
     "images": [
       "/SIZED BARCODE/8809968206027.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809962540713",
@@ -4297,7 +4535,8 @@
     "images": [
       "/SIZED BARCODE/8809962540713.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809782551814",
@@ -4309,13 +4548,14 @@
     "originalPrice": 1210,
     "brand": "Round Lab",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809782551814.jpg",
     "images": [
       "/SIZED BARCODE/8809782551814.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809875904459",
@@ -4333,7 +4573,8 @@
     "images": [
       "/SIZED BARCODE/8809875904459.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809657115479",
@@ -4351,7 +4592,8 @@
     "images": [
       "/SIZED BARCODE/8809657115479.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809738599044",
@@ -4369,7 +4611,8 @@
     "images": [
       "/SIZED BARCODE/8809738599044.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809962542755",
@@ -4387,7 +4630,8 @@
     "images": [
       "/SIZED BARCODE/8809962542755.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809962541253",
@@ -4405,7 +4649,8 @@
     "images": [
       "/SIZED BARCODE/8809962541253.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809657114632",
@@ -4423,7 +4668,8 @@
     "images": [
       "/SIZED BARCODE/8809657114632.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809738600245",
@@ -4441,7 +4687,8 @@
     "images": [
       "/SIZED BARCODE/8809738600245.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809657114779",
@@ -4459,7 +4706,8 @@
     "images": [
       "/SIZED BARCODE/8809657114779.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809738604755",
@@ -4477,7 +4725,8 @@
     "images": [
       "/SIZED BARCODE/8809738604755.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809657129247",
@@ -4495,7 +4744,8 @@
     "images": [
       "/SIZED BARCODE/8809657129247.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809783321966",
@@ -4507,13 +4757,14 @@
     "originalPrice": 919,
     "brand": "Round Lab",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809783321966.jpg",
     "images": [
       "/SIZED BARCODE/8809783321966.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809738593110",
@@ -4531,7 +4782,8 @@
     "images": [
       "/SIZED BARCODE/8809738593110.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809962541284",
@@ -4549,7 +4801,8 @@
     "images": [
       "/SIZED BARCODE/8809962541284.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809962541031",
@@ -4567,7 +4820,8 @@
     "images": [
       "/SIZED BARCODE/8809962541031.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809962541048",
@@ -4585,7 +4839,8 @@
     "images": [
       "/SIZED BARCODE/8809962541048.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809962540805",
@@ -4603,7 +4858,8 @@
     "images": [
       "/SIZED BARCODE/8809962540805.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809614958057",
@@ -4621,7 +4877,8 @@
     "images": [
       "/SIZED BARCODE/8809614958057.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809962542489",
@@ -4639,7 +4896,8 @@
     "images": [
       "/SIZED BARCODE/8809962542489.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809782558523",
@@ -4657,7 +4915,8 @@
     "images": [
       "/SIZED BARCODE/8809782558523.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809614958712",
@@ -4675,7 +4934,8 @@
     "images": [
       "/SIZED BARCODE/8809614958712.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809638307701",
@@ -4693,7 +4953,8 @@
     "images": [
       "/SIZED BARCODE/8809638307701.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809864769977",
@@ -4711,7 +4972,8 @@
     "images": [
       "/SIZED BARCODE/8809864769977.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809738600214",
@@ -4729,7 +4991,8 @@
     "images": [
       "/SIZED BARCODE/8809738600214.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809738604762",
@@ -4747,7 +5010,8 @@
     "images": [
       "/SIZED BARCODE/8809738604762.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809962541246",
@@ -4765,7 +5029,8 @@
     "images": [
       "/SIZED BARCODE/8809962541246.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809962541239",
@@ -4783,7 +5048,8 @@
     "images": [
       "/SIZED BARCODE/8809962541239.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809962541222",
@@ -4801,7 +5067,8 @@
     "images": [
       "/SIZED BARCODE/8809962541222.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809738593080",
@@ -4819,7 +5086,8 @@
     "images": [
       "/SIZED BARCODE/8809738593080.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809973860572",
@@ -4837,7 +5105,8 @@
     "images": [
       "/SIZED BARCODE/88099738605721.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809962542403",
@@ -4855,7 +5124,8 @@
     "images": [
       "/SIZED BARCODE/8809962542403.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809962540690",
@@ -4873,7 +5143,8 @@
     "images": [
       "/SIZED BARCODE/8809962540690.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809962540652",
@@ -4891,7 +5162,8 @@
     "images": [
       "/SIZED BARCODE/8809962540652.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809875901120",
@@ -4909,7 +5181,8 @@
     "images": [
       "/SIZED BARCODE/8809875901120.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809657115387",
@@ -4927,7 +5200,8 @@
     "images": [
       "/SIZED BARCODE/8809657115387.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809657114731",
@@ -4945,7 +5219,8 @@
     "images": [
       "/SIZED BARCODE/8809657114731.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809728081504",
@@ -4963,7 +5238,8 @@
     "images": [
       "/SIZED BARCODE/8809728081504.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809728080927",
@@ -4981,7 +5257,8 @@
     "images": [
       "/SIZED BARCODE/8809728080927.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809728080064",
@@ -4993,13 +5270,14 @@
     "originalPrice": 918,
     "brand": "IUNIK",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809728080064.jpg",
     "images": [
       "/SIZED BARCODE/8809728080064.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809728081276",
@@ -5017,7 +5295,8 @@
     "images": [
       "/SIZED BARCODE/8809728081276.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809728080934",
@@ -5035,7 +5314,8 @@
     "images": [
       "/SIZED BARCODE/8809728080934.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809728080118",
@@ -5053,7 +5333,8 @@
     "images": [
       "/SIZED BARCODE/8809728080118.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809728080316",
@@ -5071,7 +5352,8 @@
     "images": [
       "/SIZED BARCODE/8809728080316.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809728080255",
@@ -5089,7 +5371,8 @@
     "images": [
       "/SIZED BARCODE/8809728080255.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809728080330",
@@ -5107,7 +5390,8 @@
     "images": [
       "/SIZED BARCODE/8809728080330.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809728080392",
@@ -5125,7 +5409,8 @@
     "images": [
       "/SIZED BARCODE/8809728080392.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809447255071",
@@ -5137,13 +5422,14 @@
     "originalPrice": 958,
     "brand": "Dr. Althea",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809447255071.jpg",
     "images": [
       "/SIZED BARCODE/8809447255071.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809447255620",
@@ -5161,7 +5447,8 @@
     "images": [
       "/SIZED BARCODE/8809447255620.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809447254395",
@@ -5179,7 +5466,8 @@
     "images": [
       "/SIZED BARCODE/8809447254395.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809447251394",
@@ -5197,7 +5485,8 @@
     "images": [
       "/SIZED BARCODE/8809447251394.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8809447255033",
@@ -5215,7 +5504,8 @@
     "images": [
       "/SIZED BARCODE/8809447255033.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809447253824",
@@ -5233,7 +5523,8 @@
     "images": [
       "/SIZED BARCODE/8809447253824.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806050299218",
@@ -5251,7 +5542,8 @@
     "images": [
       "/SIZED BARCODE/8806050299218.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809626564000",
@@ -5269,7 +5561,8 @@
     "images": [
       "/SIZED BARCODE/8809626564000.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809975194439",
@@ -5287,7 +5580,8 @@
     "images": [
       "/SIZED BARCODE/8809975194439.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809606850482",
@@ -5305,7 +5599,8 @@
     "images": [
       "/SIZED BARCODE/8809606850482.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809606850475",
@@ -5323,7 +5618,8 @@
     "images": [
       "/SIZED BARCODE/8809606850475.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809606850505",
@@ -5341,7 +5637,8 @@
     "images": [
       "/SIZED BARCODE/8809606850505.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809686388172",
@@ -5359,7 +5656,8 @@
     "images": [
       "/SIZED BARCODE/8809686388172.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809875906811",
@@ -5377,7 +5675,8 @@
     "images": [
       "/SIZED BARCODE/8809875906811.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809463993889",
@@ -5395,7 +5694,8 @@
     "images": [
       "/SIZED BARCODE/8809463993889.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809783324097",
@@ -5413,7 +5713,8 @@
     "images": [
       "/SIZED BARCODE/8809783324097.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809782559018",
@@ -5431,7 +5732,8 @@
     "images": [
       "/SIZED BARCODE/8809782559018.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809782559063",
@@ -5449,7 +5751,8 @@
     "images": [
       "/SIZED BARCODE/8809782559063.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809743546880",
@@ -5467,7 +5770,8 @@
     "images": [
       "/SIZED BARCODE/8809743546880.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809743546330",
@@ -5485,7 +5789,8 @@
     "images": [
       "/SIZED BARCODE/8809743546330.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809743544626",
@@ -5503,7 +5808,8 @@
     "images": [
       "/SIZED BARCODE/8809743544626.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809463993223",
@@ -5521,7 +5827,8 @@
     "images": [
       "/SIZED BARCODE/8809463993223.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809626562921",
@@ -5539,7 +5846,8 @@
     "images": [
       "/SIZED BARCODE/8809626562921.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809606852400",
@@ -5557,7 +5865,8 @@
     "images": [
       "/SIZED BARCODE/8809606852400.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809463992615",
@@ -5575,7 +5884,8 @@
     "images": [
       "/SIZED BARCODE/8809463992615.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809783321225",
@@ -5593,7 +5903,8 @@
     "images": [
       "/SIZED BARCODE/8809783321225.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809875907795",
@@ -5611,7 +5922,8 @@
     "images": [
       "/SIZED BARCODE/8809875907795.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809971489911",
@@ -5629,7 +5941,8 @@
     "images": [
       "/SIZED BARCODE/8809971489911.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809971484503",
@@ -5647,7 +5960,8 @@
     "images": [
       "/SIZED BARCODE/8809971484503.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809875907413",
@@ -5665,7 +5979,8 @@
     "images": [
       "/SIZED BARCODE/8809875907413.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809606850499",
@@ -5683,7 +5998,8 @@
     "images": [
       "/SIZED BARCODE/8809606850499.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809606850666",
@@ -5701,7 +6017,8 @@
     "images": [
       "/SIZED BARCODE/8809606850666.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806050298525",
@@ -5719,7 +6036,8 @@
     "images": [
       "/SIZED BARCODE/8806050298525.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8809971482318",
@@ -5737,7 +6055,8 @@
     "images": [
       "/SIZED BARCODE/8809971482318.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809686386185",
@@ -5755,7 +6074,8 @@
     "images": [
       "/SIZED BARCODE/8809686386185.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809954940477",
@@ -5773,7 +6093,8 @@
     "images": [
       "/SIZED BARCODE/8809954940477.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809954940132",
@@ -5791,7 +6112,8 @@
     "images": [
       "/SIZED BARCODE/8809954940132.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809743546323",
@@ -5809,7 +6131,8 @@
     "images": [
       "/SIZED BARCODE/8809743546323.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809971489690",
@@ -5827,7 +6150,8 @@
     "images": [
       "/SIZED BARCODE/8809971489690.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809971484510",
@@ -5845,7 +6169,8 @@
     "images": [
       "/SIZED BARCODE/8809971484510.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809937361466",
@@ -5863,7 +6188,8 @@
     "images": [
       "/SIZED BARCODE/8809937361466.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809937361473",
@@ -5881,7 +6207,8 @@
     "images": [
       "/SIZED BARCODE/8809937361473.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809891183807",
@@ -5899,7 +6226,8 @@
     "images": [
       "/SIZED BARCODE/8809891183807.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809937361206",
@@ -5917,7 +6245,8 @@
     "images": [
       "/SIZED BARCODE/8809937361206.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809937361190",
@@ -5935,7 +6264,8 @@
     "images": [
       "/SIZED BARCODE/8809937361190.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809937361572",
@@ -5953,7 +6283,8 @@
     "images": [
       "/SIZED BARCODE/8809937361572.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809937360629",
@@ -5971,7 +6302,8 @@
     "images": [
       "/SIZED BARCODE/8809937360629.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809891183678",
@@ -5989,7 +6321,8 @@
     "images": [
       "/SIZED BARCODE/8809891183678.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809891183685",
@@ -6007,7 +6340,8 @@
     "images": [
       "/SIZED BARCODE/8809891183685.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809937360834",
@@ -6025,7 +6359,8 @@
     "images": [
       "/SIZED BARCODE/8809937360834.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809937360483",
@@ -6043,7 +6378,8 @@
     "images": [
       "/SIZED BARCODE/8809937360483.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809937361008",
@@ -6061,7 +6397,8 @@
     "images": [
       "/SIZED BARCODE/8809937361008.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486367872",
@@ -6079,7 +6416,8 @@
     "images": [
       "/SIZED BARCODE/8809486367872.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486362181",
@@ -6097,7 +6435,8 @@
     "images": [
       "/SIZED BARCODE/8809486362181.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486368305",
@@ -6115,7 +6454,8 @@
     "images": [
       "/SIZED BARCODE/8809486368305.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486364345",
@@ -6133,7 +6473,8 @@
     "images": [
       "/SIZED BARCODE/8809486364345.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486368367",
@@ -6151,7 +6492,8 @@
     "images": [
       "/SIZED BARCODE/8809486368367.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486362327",
@@ -6169,7 +6511,8 @@
     "images": [
       "/SIZED BARCODE/8809486362327.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486365960",
@@ -6187,7 +6530,8 @@
     "images": [
       "/SIZED BARCODE/8809486365960.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486367797",
@@ -6205,7 +6549,8 @@
     "images": [
       "/SIZED BARCODE/8809486367797.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486367780",
@@ -6223,7 +6568,8 @@
     "images": [
       "/SIZED BARCODE/8809486367780.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486368343",
@@ -6241,7 +6587,8 @@
     "images": [
       "/SIZED BARCODE/8809486368343.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486367742",
@@ -6259,7 +6606,8 @@
     "images": [
       "/SIZED BARCODE/8809486367742.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486367216",
@@ -6277,7 +6625,8 @@
     "images": [
       "/SIZED BARCODE/8809486367216.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486367247",
@@ -6295,7 +6644,8 @@
     "images": [
       "/SIZED BARCODE/8809486367247.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486367223",
@@ -6313,7 +6663,8 @@
     "images": [
       "/SIZED BARCODE/8809486367223.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486367723",
@@ -6331,7 +6682,8 @@
     "images": [
       "/SIZED BARCODE/88094863677230.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8809486362051",
@@ -6349,7 +6701,8 @@
     "images": [
       "/SIZED BARCODE/8809486362051.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486363270",
@@ -6367,7 +6720,8 @@
     "images": [
       "/SIZED BARCODE/8809486363270.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486363195",
@@ -6385,7 +6739,8 @@
     "images": [
       "/SIZED BARCODE/8809486363195.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486361269",
@@ -6403,7 +6758,8 @@
     "images": [
       "/SIZED BARCODE/8809486361269.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486362587",
@@ -6421,7 +6777,8 @@
     "images": [
       "/SIZED BARCODE/8809486362587.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486361283",
@@ -6439,7 +6796,8 @@
     "images": [
       "/SIZED BARCODE/8809486361283.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486361276",
@@ -6457,7 +6815,8 @@
     "images": [
       "/SIZED BARCODE/8809486361276.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486366158",
@@ -6469,13 +6828,14 @@
     "originalPrice": 700,
     "brand": "Banobagi",
     "category": "Mask Bar",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809486366158.jpg",
     "images": [
       "/SIZED BARCODE/8809486366158.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486362068",
@@ -6493,7 +6853,8 @@
     "images": [
       "/SIZED BARCODE/8809486362068.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486367896",
@@ -6511,7 +6872,8 @@
     "images": [
       "/SIZED BARCODE/8809486367896.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486368817",
@@ -6529,7 +6891,8 @@
     "images": [
       "/SIZED BARCODE/8809486368817.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486367889",
@@ -6547,7 +6910,8 @@
     "images": [
       "/SIZED BARCODE/8809486367889.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486368824",
@@ -6565,7 +6929,8 @@
     "images": [
       "/SIZED BARCODE/8809486368824.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486364192",
@@ -6583,7 +6948,8 @@
     "images": [
       "/SIZED BARCODE/8809486364192.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486362921",
@@ -6601,7 +6967,8 @@
     "images": [
       "/SIZED BARCODE/8809486362921.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486362914",
@@ -6619,7 +6986,8 @@
     "images": [
       "/SIZED BARCODE/8809486362914.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486362938",
@@ -6637,7 +7005,8 @@
     "images": [
       "/SIZED BARCODE/8809486362938.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486364369",
@@ -6655,7 +7024,8 @@
     "images": [
       "/SIZED BARCODE/8809486364369.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486361566",
@@ -6673,7 +7043,8 @@
     "images": [
       "/SIZED BARCODE/8809486361566.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486362303",
@@ -6691,7 +7062,8 @@
     "images": [
       "/SIZED BARCODE/8809486362303.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486362310",
@@ -6709,7 +7081,8 @@
     "images": [
       "/SIZED BARCODE/8809486362310.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486361573",
@@ -6727,7 +7100,8 @@
     "images": [
       "/SIZED BARCODE/8809486361573.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486361580",
@@ -6745,7 +7119,8 @@
     "images": [
       "/SIZED BARCODE/8809486361580.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486362044",
@@ -6763,7 +7138,8 @@
     "images": [
       "/SIZED BARCODE/8809486362044.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486362006",
@@ -6781,7 +7157,8 @@
     "images": [
       "/SIZED BARCODE/8809486362006.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809562191179",
@@ -6799,7 +7176,8 @@
     "images": [
       "/SIZED BARCODE/8809562191179.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809562192268",
@@ -6811,13 +7189,14 @@
     "originalPrice": 1240,
     "brand": "Arencia",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809562192268.jpg",
     "images": [
       "/SIZED BARCODE/8809562192268.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809562192145",
@@ -6835,7 +7214,8 @@
     "images": [
       "/SIZED BARCODE/8809562192145.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809562192138",
@@ -6853,7 +7233,8 @@
     "images": [
       "/SIZED BARCODE/8809562192138.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809562191070",
@@ -6871,7 +7252,8 @@
     "images": [
       "/SIZED BARCODE/8809562191070.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809562191735",
@@ -6889,7 +7271,8 @@
     "images": [
       "/SIZED BARCODE/8809562191735.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809562190745",
@@ -6907,7 +7290,8 @@
     "images": [
       "/SIZED BARCODE/8809562190745.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809562191629",
@@ -6925,7 +7309,8 @@
     "images": [
       "/SIZED BARCODE/8809562191629.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809562190820",
@@ -6943,7 +7328,8 @@
     "images": [
       "/SIZED BARCODE/8809562190820.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809562191612",
@@ -6961,7 +7347,8 @@
     "images": [
       "/SIZED BARCODE/8809562191612.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809562191674",
@@ -6979,7 +7366,8 @@
     "images": [
       "/SIZED BARCODE/8809562191674.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809562191743",
@@ -6997,7 +7385,8 @@
     "images": [
       "/SIZED BARCODE/8809562191743.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809562191438",
@@ -7015,7 +7404,8 @@
     "images": [
       "/SIZED BARCODE/8809562191438.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809562190738",
@@ -7027,13 +7417,14 @@
     "originalPrice": 1180,
     "brand": "Arencia",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809562190738.jpg",
     "images": [
       "/SIZED BARCODE/8809562190738.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809562191971",
@@ -7051,7 +7442,8 @@
     "images": [
       "/SIZED BARCODE/8809562191971.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640734861",
@@ -7069,7 +7461,8 @@
     "images": [
       "/SIZED BARCODE/8809640734861.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640731570",
@@ -7087,7 +7480,8 @@
     "images": [
       "/SIZED BARCODE/8809640731570.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640737251",
@@ -7105,7 +7499,8 @@
     "images": [
       "/SIZED BARCODE/8809640737251.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640735813",
@@ -7123,7 +7518,8 @@
     "images": [
       "/SIZED BARCODE/8809640735813.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640738227",
@@ -7141,7 +7537,8 @@
     "images": [
       "/SIZED BARCODE/8809640738227.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640730276",
@@ -7159,7 +7556,8 @@
     "images": [
       "/SIZED BARCODE/8809640730276.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640738228",
@@ -7177,7 +7575,8 @@
     "images": [
       "/SIZED BARCODE/8809640738228.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640738135",
@@ -7195,7 +7594,8 @@
     "images": [
       "/SIZED BARCODE/8809640738135.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8809640737763",
@@ -7213,7 +7613,8 @@
     "images": [
       "/SIZED BARCODE/8809640737763.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640734021",
@@ -7231,7 +7632,8 @@
     "images": [
       "/SIZED BARCODE/8809640734021.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640734373",
@@ -7249,7 +7651,8 @@
     "images": [
       "/SIZED BARCODE/8809640734373.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640735608",
@@ -7267,7 +7670,8 @@
     "images": [
       "/SIZED BARCODE/8809640735608.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640736797",
@@ -7285,7 +7689,8 @@
     "images": [
       "/SIZED BARCODE/8809640736797.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640733628",
@@ -7303,7 +7708,8 @@
     "images": [
       "/SIZED BARCODE/8809640733628.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640731587",
@@ -7321,7 +7727,8 @@
     "images": [
       "/SIZED BARCODE/8809640731587.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640730290",
@@ -7339,7 +7746,8 @@
     "images": [
       "/SIZED BARCODE/8809640730290.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800307370095",
@@ -7357,7 +7765,8 @@
     "images": [
       "/SIZED BARCODE/8800307370095.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640736650",
@@ -7375,7 +7784,8 @@
     "images": [
       "/SIZED BARCODE/8809640736650.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640734519",
@@ -7393,7 +7803,8 @@
     "images": [
       "/SIZED BARCODE/8809640734519.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640731181",
@@ -7411,7 +7822,8 @@
     "images": [
       "/SIZED BARCODE/8809640731181.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640732188",
@@ -7429,7 +7841,8 @@
     "images": [
       "/SIZED BARCODE/8809640732188.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640731211",
@@ -7447,7 +7860,8 @@
     "images": [
       "/SIZED BARCODE/8809640731211.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640733055",
@@ -7465,7 +7879,8 @@
     "images": [
       "/SIZED BARCODE/8809640733055.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640732799",
@@ -7483,7 +7898,8 @@
     "images": [
       "/SIZED BARCODE/8809640732799.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640730696",
@@ -7501,7 +7917,8 @@
     "images": [
       "/SIZED BARCODE/8809640730696.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640730559",
@@ -7519,7 +7936,8 @@
     "images": [
       "/SIZED BARCODE/8809640730559.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640730283",
@@ -7537,7 +7955,8 @@
     "images": [
       "/SIZED BARCODE/8809640730283.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640733666",
@@ -7555,7 +7974,8 @@
     "images": [
       "/SIZED BARCODE/8809640733666.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640734281",
@@ -7573,7 +7993,8 @@
     "images": [
       "/SIZED BARCODE/8809640734281.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640735028",
@@ -7591,7 +8012,8 @@
     "images": [
       "/SIZED BARCODE/8809640735028.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640733185",
@@ -7609,7 +8031,8 @@
     "images": [
       "/SIZED BARCODE/8809640733185.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640733659",
@@ -7627,7 +8050,8 @@
     "images": [
       "/SIZED BARCODE/8809640733659.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640735561",
@@ -7645,7 +8069,8 @@
     "images": [
       "/SIZED BARCODE/8809640735561.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640733550",
@@ -7663,7 +8088,8 @@
     "images": [
       "/SIZED BARCODE/8809640733550.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640734342",
@@ -7681,7 +8107,8 @@
     "images": [
       "/SIZED BARCODE/8809640734342.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640734359",
@@ -7699,7 +8126,8 @@
     "images": [
       "/SIZED BARCODE/8809640734359.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640734595",
@@ -7717,7 +8145,8 @@
     "images": [
       "/SIZED BARCODE/8809640734595.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809640735455",
@@ -7735,7 +8164,8 @@
     "images": [
       "/SIZED BARCODE/8809640735455.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8681371471433",
@@ -7753,7 +8183,8 @@
     "images": [
       "/SIZED BARCODE/8681371471433.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809598150201",
@@ -7771,7 +8202,8 @@
     "images": [
       "/SIZED BARCODE/8809598150201.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809598150171",
@@ -7789,7 +8221,8 @@
     "images": [
       "/SIZED BARCODE/8809598150171.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809598150164",
@@ -7807,7 +8240,8 @@
     "images": [
       "/SIZED BARCODE/8809598150164.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809598150607",
@@ -7825,7 +8259,8 @@
     "images": [
       "/SIZED BARCODE/8809598150607.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809598150300",
@@ -7843,7 +8278,8 @@
     "images": [
       "/SIZED BARCODE/8809598150300.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809220800146",
@@ -7861,7 +8297,8 @@
     "images": [
       "/SIZED BARCODE/8809220800146.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809220800214",
@@ -7879,7 +8316,8 @@
     "images": [
       "/SIZED BARCODE/8809220800214.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809220800160",
@@ -7897,7 +8335,8 @@
     "images": [
       "/SIZED BARCODE/8809220800160.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809220800184",
@@ -7915,7 +8354,8 @@
     "images": [
       "/SIZED BARCODE/8809220800184.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809220800191",
@@ -7933,7 +8373,8 @@
     "images": [
       "/SIZED BARCODE/8809220800191.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809220800221",
@@ -7951,7 +8392,8 @@
     "images": [
       "/SIZED BARCODE/8809220800221.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809220800207",
@@ -7969,7 +8411,8 @@
     "images": [
       "/SIZED BARCODE/8809220800207.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809220806100",
@@ -7987,7 +8430,8 @@
     "images": [
       "/SIZED BARCODE/8809220806100.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809220805721",
@@ -8005,7 +8449,8 @@
     "images": [
       "/SIZED BARCODE/8809220805721.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809220807961",
@@ -8023,7 +8468,8 @@
     "images": [
       "/SIZED BARCODE/8809220807961.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809220808470",
@@ -8041,7 +8487,8 @@
     "images": [
       "/SIZED BARCODE/8809220808470.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809220806803",
@@ -8059,7 +8506,8 @@
     "images": [
       "/SIZED BARCODE/8809220806803.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809220808685",
@@ -8077,7 +8525,8 @@
     "images": [
       "/SIZED BARCODE/8809220808685.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809220804786",
@@ -8095,7 +8544,8 @@
     "images": [
       "/SIZED BARCODE/8809220804786.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809220804779",
@@ -8113,7 +8563,8 @@
     "images": [
       "/SIZED BARCODE/8809220804779.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809777440185",
@@ -8131,7 +8582,8 @@
     "images": [
       "/SIZED BARCODE/8809777440185.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809071367300",
@@ -8149,7 +8601,8 @@
     "images": [
       "/SIZED BARCODE/8809071367300.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928230009",
@@ -8167,7 +8620,8 @@
     "images": [
       "/SIZED BARCODE/8809928230009.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928230085",
@@ -8185,7 +8639,8 @@
     "images": [
       "/SIZED BARCODE/8809928230085.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928230108",
@@ -8203,7 +8658,8 @@
     "images": [
       "/SIZED BARCODE/8809928230108.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928230160",
@@ -8221,7 +8677,8 @@
     "images": [
       "/SIZED BARCODE/8809928230160.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928230184",
@@ -8239,7 +8696,8 @@
     "images": [
       "/SIZED BARCODE/8809928230184.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928230306",
@@ -8257,7 +8715,8 @@
     "images": [
       "/SIZED BARCODE/8809928230306.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928230382",
@@ -8275,7 +8734,8 @@
     "images": [
       "/SIZED BARCODE/8809928230382.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928230283",
@@ -8293,7 +8753,8 @@
     "images": [
       "/SIZED BARCODE/8809928230283.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928230290",
@@ -8311,7 +8772,8 @@
     "images": [
       "/SIZED BARCODE/8809928230290.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928230429",
@@ -8329,7 +8791,8 @@
     "images": [
       "/SIZED BARCODE/8809928230429.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680056",
@@ -8347,7 +8810,8 @@
     "images": [
       "/SIZED BARCODE/8809486680056.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680353",
@@ -8365,7 +8829,8 @@
     "images": [
       "/SIZED BARCODE/8809486680353.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680018",
@@ -8383,7 +8848,8 @@
     "images": [
       "/SIZED BARCODE/8809486680018.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680001",
@@ -8401,7 +8867,8 @@
     "images": [
       "/SIZED BARCODE/8809486680001.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680087",
@@ -8419,7 +8886,8 @@
     "images": [
       "/SIZED BARCODE/8809486680087.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680063",
@@ -8437,7 +8905,8 @@
     "images": [
       "/SIZED BARCODE/8809486680063.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680049",
@@ -8455,7 +8924,8 @@
     "images": [
       "/SIZED BARCODE/8809486680049.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680025",
@@ -8473,7 +8943,8 @@
     "images": [
       "/SIZED BARCODE/8809486680025.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680162",
@@ -8491,7 +8962,8 @@
     "images": [
       "/SIZED BARCODE/8809486680162.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681558",
@@ -8509,7 +8981,8 @@
     "images": [
       "/SIZED BARCODE/8809486681558.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681329",
@@ -8527,7 +9000,8 @@
     "images": [
       "/SIZED BARCODE/8809486681329.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681541",
@@ -8545,7 +9019,8 @@
     "images": [
       "/SIZED BARCODE/8809486681541.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680469",
@@ -8563,7 +9038,8 @@
     "images": [
       "/SIZED BARCODE/8809486680469.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681268",
@@ -8581,7 +9057,8 @@
     "images": [
       "/SIZED BARCODE/8809486681268.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681206",
@@ -8599,7 +9076,8 @@
     "images": [
       "/SIZED BARCODE/8809486681206.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680698",
@@ -8617,7 +9095,8 @@
     "images": [
       "/SIZED BARCODE/8809486680698.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680896",
@@ -8635,7 +9114,8 @@
     "images": [
       "/SIZED BARCODE/8809486680896.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681282",
@@ -8653,7 +9133,8 @@
     "images": [
       "/SIZED BARCODE/8809486681282.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681497",
@@ -8671,7 +9152,8 @@
     "images": [
       "/SIZED BARCODE/8809486681497.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681343",
@@ -8689,7 +9171,8 @@
     "images": [
       "/SIZED BARCODE/8809486681343.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680360",
@@ -8707,7 +9190,8 @@
     "images": [
       "/SIZED BARCODE/8809486680360.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681466",
@@ -8725,7 +9209,8 @@
     "images": [
       "/SIZED BARCODE/8809486681466.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681244",
@@ -8743,7 +9228,8 @@
     "images": [
       "/SIZED BARCODE/8809486681244.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486682999",
@@ -8761,7 +9247,8 @@
     "images": [
       "/SIZED BARCODE/8809486682999.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681961",
@@ -8779,7 +9266,8 @@
     "images": [
       "/SIZED BARCODE/8809486681961.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486682067",
@@ -8797,7 +9285,8 @@
     "images": [
       "/SIZED BARCODE/8809486682067.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681251",
@@ -8815,7 +9304,8 @@
     "images": [
       "/SIZED BARCODE/8809486681251.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681664",
@@ -8833,7 +9323,8 @@
     "images": [
       "/SIZED BARCODE/8809486681664.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486682609",
@@ -8851,7 +9342,8 @@
     "images": [
       "/SIZED BARCODE/8809486682609.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681480",
@@ -8869,7 +9361,8 @@
     "images": [
       "/SIZED BARCODE/_8809486681480-.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486682869",
@@ -8887,7 +9380,8 @@
     "images": [
       "/SIZED BARCODE/8809486682869.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681831",
@@ -8905,7 +9399,8 @@
     "images": [
       "/SIZED BARCODE/8809486681831.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486683934",
@@ -8923,7 +9418,8 @@
     "images": [
       "/SIZED BARCODE/8809486683934.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486683941",
@@ -8941,7 +9437,8 @@
     "images": [
       "/SIZED BARCODE/8809486683941.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486683958",
@@ -8959,7 +9456,8 @@
     "images": [
       "/SIZED BARCODE/8809486683958.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486684580",
@@ -8977,7 +9475,8 @@
     "images": [
       "/SIZED BARCODE/8809486684580.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486683729",
@@ -8995,7 +9494,8 @@
     "images": [
       "/SIZED BARCODE/8809486683729.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486683736",
@@ -9013,7 +9513,8 @@
     "images": [
       "/SIZED BARCODE/8809486683736.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486683712",
@@ -9031,7 +9532,8 @@
     "images": [
       "/SIZED BARCODE/8809486683712.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486684498",
@@ -9049,7 +9551,8 @@
     "images": [
       "/SIZED BARCODE/8809486684498.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680407",
@@ -9067,7 +9570,8 @@
     "images": [
       "/SIZED BARCODE/8809486680407.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681169",
@@ -9085,7 +9589,8 @@
     "images": [
       "/SIZED BARCODE/8809486681169.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680179",
@@ -9103,7 +9608,8 @@
     "images": [
       "/SIZED BARCODE/8809486680179.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681930",
@@ -9121,7 +9627,8 @@
     "images": [
       "/SIZED BARCODE/8809486681930.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680902",
@@ -9139,7 +9646,8 @@
     "images": [
       "/SIZED BARCODE/8809486680902.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486683828",
@@ -9157,7 +9665,8 @@
     "images": [
       "/SIZED BARCODE/8809486683828.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681473",
@@ -9175,7 +9684,8 @@
     "images": [
       "/SIZED BARCODE/8809486681473.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681657",
@@ -9193,7 +9703,8 @@
     "images": [
       "/SIZED BARCODE/8809486681657.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486682265",
@@ -9211,7 +9722,8 @@
     "images": [
       "/SIZED BARCODE/8809486682265.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486682272",
@@ -9229,7 +9741,8 @@
     "images": [
       "/SIZED BARCODE/_8809486682272-.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486682289",
@@ -9247,7 +9760,8 @@
     "images": [
       "/SIZED BARCODE/8809486682289.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681114",
@@ -9265,7 +9779,8 @@
     "images": [
       "/SIZED BARCODE/8809486681114.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681701",
@@ -9283,7 +9798,8 @@
     "images": [
       "/SIZED BARCODE/8809486681701.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680667",
@@ -9301,7 +9817,8 @@
     "images": [
       "/SIZED BARCODE/8809486680667.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680636",
@@ -9319,7 +9836,8 @@
     "images": [
       "/SIZED BARCODE/8809486680636.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486680650",
@@ -9337,7 +9855,8 @@
     "images": [
       "/SIZED BARCODE/8809486680650.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681978",
@@ -9355,7 +9874,8 @@
     "images": [
       "/SIZED BARCODE/8809486681978.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681862",
@@ -9373,7 +9893,8 @@
     "images": [
       "/SIZED BARCODE/_8809486681862-.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681626",
@@ -9391,7 +9912,8 @@
     "images": [
       "/SIZED BARCODE/8809486681626.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681633",
@@ -9409,7 +9931,8 @@
     "images": [
       "/SIZED BARCODE/8809486681633.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486681640",
@@ -9427,7 +9950,8 @@
     "images": [
       "/SIZED BARCODE/8809486681640.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809486683057",
@@ -9445,7 +9969,8 @@
     "images": [
       "/SIZED BARCODE/8809486683057.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487047896",
@@ -9457,13 +9982,14 @@
     "originalPrice": 510,
     "brand": "Nard",
     "category": "Kişisel Bakım",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487047896.jpg",
     "images": [
       "/SIZED BARCODE/8809487047896.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487044284",
@@ -9475,13 +10001,14 @@
     "originalPrice": 810,
     "brand": "Nard",
     "category": "Kişisel Bakım",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487044284.jpg",
     "images": [
       "/SIZED BARCODE/8809487044284.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487044062",
@@ -9493,13 +10020,14 @@
     "originalPrice": 900,
     "brand": "Nard",
     "category": "Kişisel Bakım",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487044062.jpg",
     "images": [
       "/SIZED BARCODE/8809487044062.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487047148",
@@ -9511,13 +10039,14 @@
     "originalPrice": 405,
     "brand": "Nard",
     "category": "Kişisel Bakım",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487047148.jpg",
     "images": [
       "/SIZED BARCODE/8809487047148.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851346570",
@@ -9529,13 +10058,14 @@
     "originalPrice": 600,
     "brand": "Nard",
     "category": "Kişisel Bakım",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851346570.jpg",
     "images": [
       "/SIZED BARCODE/8809851346570.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487045311",
@@ -9547,13 +10077,14 @@
     "originalPrice": 600,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487045311.jpg",
     "images": [
       "/SIZED BARCODE/8809487045311.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851346815",
@@ -9565,13 +10096,14 @@
     "originalPrice": 690,
     "brand": "Nard",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851346815.jpg",
     "images": [
       "/SIZED BARCODE/8809851346815.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487044239",
@@ -9583,13 +10115,14 @@
     "originalPrice": 525,
     "brand": "Nard",
     "category": "Kişisel Bakım",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487044239.jpg",
     "images": [
       "/SIZED BARCODE/8809487044239.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487043157",
@@ -9601,13 +10134,14 @@
     "originalPrice": 600,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487043157.jpg",
     "images": [
       "/SIZED BARCODE/8809487043157.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487045083",
@@ -9619,13 +10153,14 @@
     "originalPrice": 600,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487045083.jpg",
     "images": [
       "/SIZED BARCODE/8809487045083.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487044406",
@@ -9637,13 +10172,14 @@
     "originalPrice": 501,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487044406.jpg",
     "images": [
       "/SIZED BARCODE/8809487044406.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487043546",
@@ -9655,13 +10191,14 @@
     "originalPrice": 600,
     "brand": "Nard",
     "category": "Mask Bar",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487043546.jpg",
     "images": [
       "/SIZED BARCODE/8809487043546.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487046585",
@@ -9673,13 +10210,14 @@
     "originalPrice": 801,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487046585.jpg",
     "images": [
       "/SIZED BARCODE/8809487046585.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487046530",
@@ -9691,13 +10229,14 @@
     "originalPrice": 990,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487046530.jpg",
     "images": [
       "/SIZED BARCODE/8809487046530.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851343838",
@@ -9709,13 +10248,14 @@
     "originalPrice": 900,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851343838.jpg",
     "images": [
       "/SIZED BARCODE/8809851343838.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487043522",
@@ -9727,13 +10267,14 @@
     "originalPrice": 390,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487043522.jpg",
     "images": [
       "/SIZED BARCODE/8809487043522.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487042631",
@@ -9745,13 +10286,14 @@
     "originalPrice": 600,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487042631.jpg",
     "images": [
       "/SIZED BARCODE/8809487042631.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487042495",
@@ -9763,13 +10305,14 @@
     "originalPrice": 600,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487042495.jpg",
     "images": [
       "/SIZED BARCODE/8809487042495.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851348420",
@@ -9781,13 +10324,14 @@
     "originalPrice": 690,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851348420.jpg",
     "images": [
       "/SIZED BARCODE/8809851348420.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8809851348307",
@@ -9799,13 +10343,14 @@
     "originalPrice": 600,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851348307.jpg",
     "images": [
       "/SIZED BARCODE/8809851348307.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851348871",
@@ -9817,13 +10362,14 @@
     "originalPrice": 795,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851348871.jpg",
     "images": [
       "/SIZED BARCODE/8809851348871.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851348284",
@@ -9835,13 +10381,14 @@
     "originalPrice": 600,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851348284.jpg",
     "images": [
       "/SIZED BARCODE/8809851348284.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851348314",
@@ -9853,13 +10400,14 @@
     "originalPrice": 600,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851348314.jpg",
     "images": [
       "/SIZED BARCODE/8809851348314.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8809851347683",
@@ -9871,13 +10419,14 @@
     "originalPrice": 795,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851347683.jpg",
     "images": [
       "/SIZED BARCODE/8809851347683.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851340776",
@@ -9889,13 +10438,14 @@
     "originalPrice": 600,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851340776.jpg",
     "images": [
       "/SIZED BARCODE/8809851340776.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851341391",
@@ -9907,13 +10457,14 @@
     "originalPrice": 930,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851341391.jpg",
     "images": [
       "/SIZED BARCODE/8809851341391.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851347669",
@@ -9925,13 +10476,14 @@
     "originalPrice": 750,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851347669.jpg",
     "images": [
       "/SIZED BARCODE/8809851347669.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487049647",
@@ -9943,13 +10495,14 @@
     "originalPrice": 600,
     "brand": "Nard",
     "category": "Saç Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487049647.jpg",
     "images": [
       "/SIZED BARCODE/8809487049647.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487044079",
@@ -9961,13 +10514,14 @@
     "originalPrice": 690,
     "brand": "Nard",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487044079.jpg",
     "images": [
       "/SIZED BARCODE/8809487044079.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": true
   },
   {
     "id": "8809851344880",
@@ -9979,13 +10533,14 @@
     "originalPrice": 690,
     "brand": "Nard",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851344880.jpg",
     "images": [
       "/SIZED BARCODE/8809851344880.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851344903",
@@ -9997,13 +10552,14 @@
     "originalPrice": 600,
     "brand": "Nard",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851344903.jpg",
     "images": [
       "/SIZED BARCODE/8809851344903.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851342244",
@@ -10015,13 +10571,14 @@
     "originalPrice": 1185,
     "brand": "Nard",
     "category": "Mask Bar",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851342244.jpg",
     "images": [
       "/SIZED BARCODE/8809851342244.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851343555",
@@ -10033,13 +10590,14 @@
     "originalPrice": 990,
     "brand": "Nard",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851343555.jpg",
     "images": [
       "/SIZED BARCODE/8809851343555.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487046622",
@@ -10051,13 +10609,14 @@
     "originalPrice": 600,
     "brand": "Nard",
     "category": "Kişisel Bakım",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809487046622.jpg",
     "images": [
       "/SIZED BARCODE/8809487046622.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851345764",
@@ -10069,13 +10628,14 @@
     "originalPrice": 390,
     "brand": "Nard",
     "category": "Cilt Bakımı",
-    "stock": 100,
-    "inStock": true,
+    "stock": 0,
+    "inStock": false,
     "image": "/SIZED BARCODE/8809851345764.jpg",
     "images": [
       "/SIZED BARCODE/8809851345764.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851348437",
@@ -10093,7 +10653,8 @@
     "images": [
       "/SIZED BARCODE/8809851348437.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851349502",
@@ -10111,7 +10672,8 @@
     "images": [
       "/SIZED BARCODE/8809851349502.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487045120",
@@ -10129,7 +10691,8 @@
     "images": [
       "/SIZED BARCODE/8809487045120.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487045106",
@@ -10147,7 +10710,8 @@
     "images": [
       "/SIZED BARCODE/8809487045106.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851340684",
@@ -10165,7 +10729,8 @@
     "images": [
       "/SIZED BARCODE/8809851340684.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851340691",
@@ -10183,7 +10748,8 @@
     "images": [
       "/SIZED BARCODE/8809851340691.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851340707",
@@ -10201,7 +10767,8 @@
     "images": [
       "/SIZED BARCODE/8809851340707.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851340714",
@@ -10219,7 +10786,8 @@
     "images": [
       "/SIZED BARCODE/8809851340714.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851340721",
@@ -10237,7 +10805,8 @@
     "images": [
       "/SIZED BARCODE/8809851340721.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851340738",
@@ -10255,7 +10824,8 @@
     "images": [
       "/SIZED BARCODE/8809851340738.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851346587",
@@ -10273,7 +10843,8 @@
     "images": [
       "/SIZED BARCODE/8809851346587.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851346594",
@@ -10291,7 +10862,8 @@
     "images": [
       "/SIZED BARCODE/8809851346594.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851346600",
@@ -10309,7 +10881,8 @@
     "images": [
       "/SIZED BARCODE/8809851346600.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851347027",
@@ -10327,7 +10900,8 @@
     "images": [
       "/SIZED BARCODE/8809851347027.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851347034",
@@ -10345,7 +10919,8 @@
     "images": [
       "/SIZED BARCODE/8809851347034.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851347058",
@@ -10363,7 +10938,8 @@
     "images": [
       "/SIZED BARCODE/8809851347058.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851347065",
@@ -10381,7 +10957,8 @@
     "images": [
       "/SIZED BARCODE/8809851347065.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851347089",
@@ -10399,7 +10976,8 @@
     "images": [
       "/SIZED BARCODE/8809851347089.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851347096",
@@ -10417,7 +10995,8 @@
     "images": [
       "/SIZED BARCODE/8809851347096.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851346372",
@@ -10435,7 +11014,8 @@
     "images": [
       "/SIZED BARCODE/8809851346372.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851346396",
@@ -10453,7 +11033,8 @@
     "images": [
       "/SIZED BARCODE/8809851346396.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851346419",
@@ -10471,7 +11052,8 @@
     "images": [
       "/SIZED BARCODE/8809851346419.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851346259",
@@ -10489,7 +11071,8 @@
     "images": [
       "/SIZED BARCODE/8809851346259.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851346273",
@@ -10507,7 +11090,8 @@
     "images": [
       "/SIZED BARCODE/8809851346273.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487044444",
@@ -10525,7 +11109,8 @@
     "images": [
       "/SIZED BARCODE/8809487044444.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487042051",
@@ -10543,7 +11128,8 @@
     "images": [
       "/SIZED BARCODE/8809487042051.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809851342763",
@@ -10561,7 +11147,8 @@
     "images": [
       "/SIZED BARCODE/8809851342763.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487042167",
@@ -10579,7 +11166,8 @@
     "images": [
       "/SIZED BARCODE/8809487042167.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809487040972",
@@ -10597,7 +11185,8 @@
     "images": [
       "/SIZED BARCODE/8809487040972.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8803463006396",
@@ -10615,7 +11204,8 @@
     "images": [
       "/SIZED BARCODE/8803463006396.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8803463006143",
@@ -10633,7 +11223,8 @@
     "images": [
       "/SIZED BARCODE/8803463006143.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8803463007386",
@@ -10651,7 +11242,8 @@
     "images": [
       "/SIZED BARCODE/8803463007386.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809559624031",
@@ -10669,7 +11261,8 @@
     "images": [
       "/SIZED BARCODE/8809559624031.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8803463007416",
@@ -10687,7 +11280,8 @@
     "images": [
       "/SIZED BARCODE/8803463007416.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8803463007379",
@@ -10705,7 +11299,8 @@
     "images": [
       "/SIZED BARCODE/8803463007379.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8803463007362",
@@ -10723,7 +11318,8 @@
     "images": [
       "/SIZED BARCODE/8803463007362.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8803463007409",
@@ -10741,7 +11337,8 @@
     "images": [
       "/SIZED BARCODE/8803463007409.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164159682",
@@ -10759,7 +11356,8 @@
     "images": [
       "/SIZED BARCODE/8806164159682.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164130902",
@@ -10777,7 +11375,8 @@
     "images": [
       "/SIZED BARCODE/8806164130902.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164172179",
@@ -10795,7 +11394,8 @@
     "images": [
       "/SIZED BARCODE/8806164172179.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164174234",
@@ -10813,7 +11413,8 @@
     "images": [
       "/SIZED BARCODE/8806164174234.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164134092",
@@ -10831,7 +11432,8 @@
     "images": [
       "/SIZED BARCODE/8806164134092.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164132456",
@@ -10849,7 +11451,8 @@
     "images": [
       "/SIZED BARCODE/8806164132456.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164132470",
@@ -10867,7 +11470,8 @@
     "images": [
       "/SIZED BARCODE/8806164132470.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164152225",
@@ -10885,7 +11489,8 @@
     "images": [
       "/SIZED BARCODE/8806164152225.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164169797",
@@ -10903,7 +11508,8 @@
     "images": [
       "/SIZED BARCODE/8806164169797.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164132449",
@@ -10921,7 +11527,8 @@
     "images": [
       "/SIZED BARCODE/8806164132449.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164155561",
@@ -10939,7 +11546,8 @@
     "images": [
       "/SIZED BARCODE/8806164155561.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164132463",
@@ -10957,7 +11565,8 @@
     "images": [
       "/SIZED BARCODE/8806164132463.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164147375",
@@ -10975,7 +11584,8 @@
     "images": [
       "/SIZED BARCODE/8806164147375.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164155554",
@@ -10993,7 +11603,8 @@
     "images": [
       "/SIZED BARCODE/8806164155554.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164130919",
@@ -11011,7 +11622,8 @@
     "images": [
       "/SIZED BARCODE/8806164130919.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164166970",
@@ -11029,7 +11641,8 @@
     "images": [
       "/SIZED BARCODE/8806164166970.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164174227",
@@ -11047,7 +11660,8 @@
     "images": [
       "/SIZED BARCODE/8806164174227.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164159675",
@@ -11065,7 +11679,8 @@
     "images": [
       "/SIZED BARCODE/8806164159675.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164172186",
@@ -11083,7 +11698,8 @@
     "images": [
       "/SIZED BARCODE/8806164172186.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164159705",
@@ -11101,7 +11717,8 @@
     "images": [
       "/SIZED BARCODE/8806164159705.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164107997",
@@ -11119,7 +11736,8 @@
     "images": [
       "/SIZED BARCODE/8806164107997.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164136782",
@@ -11137,7 +11755,8 @@
     "images": [
       "/SIZED BARCODE/8806164136782.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164136799",
@@ -11155,7 +11774,8 @@
     "images": [
       "/SIZED BARCODE/8806164136799.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164166512",
@@ -11173,7 +11793,8 @@
     "images": [
       "/SIZED BARCODE/8806164166512.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164165270",
@@ -11191,7 +11812,8 @@
     "images": [
       "/SIZED BARCODE/8806164165270.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164136683",
@@ -11209,7 +11831,8 @@
     "images": [
       "/SIZED BARCODE/8806164136683.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164136706",
@@ -11227,7 +11850,8 @@
     "images": [
       "/SIZED BARCODE/8806164136706.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164136676",
@@ -11245,7 +11869,8 @@
     "images": [
       "/SIZED BARCODE/8806164136676.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164136690",
@@ -11263,7 +11888,8 @@
     "images": [
       "/SIZED BARCODE/8806164136690.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164154830",
@@ -11281,7 +11907,8 @@
     "images": [
       "/SIZED BARCODE/8806164154830.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164161715",
@@ -11299,7 +11926,8 @@
     "images": [
       "/SIZED BARCODE/8806164161715.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164154816",
@@ -11317,7 +11945,8 @@
     "images": [
       "/SIZED BARCODE/8806164154816.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164154823",
@@ -11335,7 +11964,8 @@
     "images": [
       "/SIZED BARCODE/8806164154823.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164151273",
@@ -11353,7 +11983,8 @@
     "images": [
       "/SIZED BARCODE/8806164151273.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164146415",
@@ -11371,7 +12002,8 @@
     "images": [
       "/SIZED BARCODE/8806164146415.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164151297",
@@ -11389,7 +12021,8 @@
     "images": [
       "/SIZED BARCODE/8806164151297.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164151266",
@@ -11407,7 +12040,8 @@
     "images": [
       "/SIZED BARCODE/8806164151266.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164146439",
@@ -11425,7 +12059,8 @@
     "images": [
       "/SIZED BARCODE/8806164146439.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164146408",
@@ -11443,7 +12078,8 @@
     "images": [
       "/SIZED BARCODE/8806164146408.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164154717",
@@ -11461,7 +12097,8 @@
     "images": [
       "/SIZED BARCODE/8806164154717.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164172377",
@@ -11479,7 +12116,8 @@
     "images": [
       "/SIZED BARCODE/8806164172377.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164176986",
@@ -11497,7 +12135,8 @@
     "images": [
       "/SIZED BARCODE/8806164176986.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164177129",
@@ -11515,7 +12154,8 @@
     "images": [
       "/SIZED BARCODE/8806164177129.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164175743",
@@ -11533,7 +12173,8 @@
     "images": [
       "/SIZED BARCODE/8806164175743.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164171974",
@@ -11551,7 +12192,8 @@
     "images": [
       "/SIZED BARCODE/8806164171974.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164141663",
@@ -11569,7 +12211,8 @@
     "images": [
       "/SIZED BARCODE/8806164141663.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164148990",
@@ -11587,7 +12230,8 @@
     "images": [
       "/SIZED BARCODE/8806164148990.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164164297",
@@ -11605,7 +12249,8 @@
     "images": [
       "/SIZED BARCODE/8806164164297.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164160749",
@@ -11623,7 +12268,8 @@
     "images": [
       "/SIZED BARCODE/8806164160749.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164160879",
@@ -11641,7 +12287,8 @@
     "images": [
       "/SIZED BARCODE/8806164160879.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164160862",
@@ -11659,7 +12306,8 @@
     "images": [
       "/SIZED BARCODE/8806164160862.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164179048",
@@ -11677,7 +12325,8 @@
     "images": [
       "/SIZED BARCODE/8806164179048.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164170731",
@@ -11695,7 +12344,8 @@
     "images": [
       "/SIZED BARCODE/8806164170731.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164170779",
@@ -11713,7 +12363,8 @@
     "images": [
       "/SIZED BARCODE/8806164170779.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164147269",
@@ -11731,7 +12382,8 @@
     "images": [
       "/SIZED BARCODE/8806164147269.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164143810",
@@ -11749,7 +12401,8 @@
     "images": [
       "/SIZED BARCODE/8806164143810.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164143841",
@@ -11767,7 +12420,8 @@
     "images": [
       "/SIZED BARCODE/8806164143841.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164143827",
@@ -11785,7 +12439,8 @@
     "images": [
       "/SIZED BARCODE/8806164143827.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164143803",
@@ -11803,7 +12458,8 @@
     "images": [
       "/SIZED BARCODE/8806164143803.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164149027",
@@ -11821,7 +12477,8 @@
     "images": [
       "/SIZED BARCODE/8806164149027.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164149003",
@@ -11839,7 +12496,8 @@
     "images": [
       "/SIZED BARCODE/8806164149003.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164149072",
@@ -11857,7 +12515,8 @@
     "images": [
       "/SIZED BARCODE/8806164149072.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164155578",
@@ -11875,7 +12534,8 @@
     "images": [
       "/SIZED BARCODE/8806164155578.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164179833",
@@ -11893,7 +12553,8 @@
     "images": [
       "/SIZED BARCODE/8806164179833.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164178300",
@@ -11911,7 +12572,8 @@
     "images": [
       "/SIZED BARCODE/8806164178300.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164184080",
@@ -11929,7 +12591,8 @@
     "images": [
       "/SIZED BARCODE/8806164184080.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164184127",
@@ -11947,7 +12610,8 @@
     "images": [
       "/SIZED BARCODE/8806164184127.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164184110",
@@ -11965,7 +12629,8 @@
     "images": [
       "/SIZED BARCODE/8806164184110.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164184134",
@@ -11983,7 +12648,8 @@
     "images": [
       "/SIZED BARCODE/8806164184134.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164184103",
@@ -12001,7 +12667,8 @@
     "images": [
       "/SIZED BARCODE/8806164184103.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164184097",
@@ -12019,7 +12686,8 @@
     "images": [
       "/SIZED BARCODE/8806164184097.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164183694",
@@ -12037,7 +12705,8 @@
     "images": [
       "/SIZED BARCODE/8806164183694.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164183717",
@@ -12055,7 +12724,8 @@
     "images": [
       "/SIZED BARCODE/8806164183717.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164183724",
@@ -12073,7 +12743,8 @@
     "images": [
       "/SIZED BARCODE/8806164183724.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164183779",
@@ -12091,7 +12762,8 @@
     "images": [
       "/SIZED BARCODE/8806164183779.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164183786",
@@ -12109,7 +12781,8 @@
     "images": [
       "/SIZED BARCODE/8806164183786.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164183793",
@@ -12127,7 +12800,8 @@
     "images": [
       "/SIZED BARCODE/8806164183793.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164161753",
@@ -12145,7 +12819,8 @@
     "images": [
       "/SIZED BARCODE/8806164161753.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164167373",
@@ -12163,7 +12838,8 @@
     "images": [
       "/SIZED BARCODE/8806164167373.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164167427",
@@ -12181,7 +12857,8 @@
     "images": [
       "/SIZED BARCODE/8806164167427.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164167298",
@@ -12199,7 +12876,8 @@
     "images": [
       "/SIZED BARCODE/8806164167298.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164167168",
@@ -12217,7 +12895,8 @@
     "images": [
       "/SIZED BARCODE/8806164167168.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164167151",
@@ -12235,7 +12914,8 @@
     "images": [
       "/SIZED BARCODE/8806164167151.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164167229",
@@ -12253,7 +12933,8 @@
     "images": [
       "/SIZED BARCODE/8806164167229.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164167144",
@@ -12271,7 +12952,8 @@
     "images": [
       "/SIZED BARCODE/8806164167144.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164160763",
@@ -12289,7 +12971,8 @@
     "images": [
       "/SIZED BARCODE/8806164160763.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164182451",
@@ -12307,7 +12990,8 @@
     "images": [
       "/SIZED BARCODE/8806164182451.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164182475",
@@ -12325,7 +13009,8 @@
     "images": [
       "/SIZED BARCODE/8806164182475.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164185148",
@@ -12343,7 +13028,8 @@
     "images": [
       "/SIZED BARCODE/8806164185148.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164185506",
@@ -12361,7 +13047,8 @@
     "images": [
       "/SIZED BARCODE/8806164185506.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164185513",
@@ -12379,7 +13066,8 @@
     "images": [
       "/SIZED BARCODE/8806164185513.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164185520",
@@ -12397,7 +13085,8 @@
     "images": [
       "/SIZED BARCODE/8806164185520.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164184875",
@@ -12415,7 +13104,8 @@
     "images": [
       "/SIZED BARCODE/8806164184875.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164184882",
@@ -12433,7 +13123,8 @@
     "images": [
       "/SIZED BARCODE/8806164184882.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164184899",
@@ -12451,7 +13142,8 @@
     "images": [
       "/SIZED BARCODE/8806164184899.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164184905",
@@ -12469,7 +13161,8 @@
     "images": [
       "/SIZED BARCODE/8806164184905.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164184912",
@@ -12487,7 +13180,8 @@
     "images": [
       "/SIZED BARCODE/8806164184912.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164184929",
@@ -12505,7 +13199,8 @@
     "images": [
       "/SIZED BARCODE/8806164184929.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164184240",
@@ -12523,7 +13218,8 @@
     "images": [
       "/SIZED BARCODE/8806164184240.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164182093",
@@ -12541,7 +13237,8 @@
     "images": [
       "/SIZED BARCODE/8806164182093.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164181881",
@@ -12559,7 +13256,8 @@
     "images": [
       "/SIZED BARCODE/8806164181881.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164181911",
@@ -12577,7 +13275,8 @@
     "images": [
       "/SIZED BARCODE/8806164181911.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164184646",
@@ -12595,7 +13294,8 @@
     "images": [
       "/SIZED BARCODE/8806164184646.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164171981",
@@ -12613,7 +13313,8 @@
     "images": [
       "/SIZED BARCODE/8806164171981.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164164280",
@@ -12631,7 +13332,8 @@
     "images": [
       "/SIZED BARCODE/8806164164280.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164125731",
@@ -12649,7 +13351,8 @@
     "images": [
       "/SIZED BARCODE/8806164125731.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164175057",
@@ -12667,7 +13370,8 @@
     "images": [
       "/SIZED BARCODE/8806164175057.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164174166",
@@ -12685,7 +13389,8 @@
     "images": [
       "/SIZED BARCODE/8806164174166.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164183519",
@@ -12703,7 +13408,8 @@
     "images": [
       "/SIZED BARCODE/8806164183519.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164183588",
@@ -12721,7 +13427,8 @@
     "images": [
       "/SIZED BARCODE/8806164183588.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164183571",
@@ -12739,7 +13446,8 @@
     "images": [
       "/SIZED BARCODE/8806164183571.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8806164156353",
@@ -12757,7 +13465,8 @@
     "images": [
       "/SIZED BARCODE/8806164156353.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809393728001",
@@ -12775,7 +13484,8 @@
     "images": [
       "/SIZED BARCODE/8809393728001.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809393728025",
@@ -12793,7 +13503,8 @@
     "images": [
       "/SIZED BARCODE/8809393728025.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716940004",
@@ -12811,7 +13522,8 @@
     "images": [
       "/SIZED BARCODE/8809716940004.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809393727998",
@@ -12829,7 +13541,8 @@
     "images": [
       "/SIZED BARCODE/8809393727998.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716941216",
@@ -12847,7 +13560,8 @@
     "images": [
       "/SIZED BARCODE/8809716941216.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809393729381",
@@ -12865,7 +13579,8 @@
     "images": [
       "/SIZED BARCODE/_8809393729381-.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716940042",
@@ -12883,7 +13598,8 @@
     "images": [
       "/SIZED BARCODE/8809716940042.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716940271",
@@ -12901,7 +13617,8 @@
     "images": [
       "/SIZED BARCODE/8809716940271.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716940295",
@@ -12919,7 +13636,8 @@
     "images": [
       "/SIZED BARCODE/8809716940295.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716941834",
@@ -12937,7 +13655,8 @@
     "images": [
       "/SIZED BARCODE/8809716941834.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942459",
@@ -12955,7 +13674,8 @@
     "images": [
       "/SIZED BARCODE/8809716942459.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942466",
@@ -12973,7 +13693,8 @@
     "images": [
       "/SIZED BARCODE/8809716942466.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942473",
@@ -12991,7 +13712,8 @@
     "images": [
       "/SIZED BARCODE/8809716942473.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942480",
@@ -13009,7 +13731,8 @@
     "images": [
       "/SIZED BARCODE/8809716942480.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942497",
@@ -13027,7 +13750,8 @@
     "images": [
       "/SIZED BARCODE/8809716942497.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942503",
@@ -13045,7 +13769,8 @@
     "images": [
       "/SIZED BARCODE/8809716942503.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942510",
@@ -13063,7 +13788,8 @@
     "images": [
       "/SIZED BARCODE/8809716942510.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942527",
@@ -13081,7 +13807,8 @@
     "images": [
       "/SIZED BARCODE/8809716942527.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942060",
@@ -13099,7 +13826,8 @@
     "images": [
       "/SIZED BARCODE/8809716942060.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942084",
@@ -13117,7 +13845,8 @@
     "images": [
       "/SIZED BARCODE/8809716942084.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942091",
@@ -13135,7 +13864,8 @@
     "images": [
       "/SIZED BARCODE/8809716942091.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942107",
@@ -13153,7 +13883,8 @@
     "images": [
       "/SIZED BARCODE/8809716942107.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942114",
@@ -13171,7 +13902,8 @@
     "images": [
       "/SIZED BARCODE/8809716942114.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942121",
@@ -13189,7 +13921,8 @@
     "images": [
       "/SIZED BARCODE/8809716942121.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942138",
@@ -13207,7 +13940,8 @@
     "images": [
       "/SIZED BARCODE/8809716942138.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716943067",
@@ -13225,7 +13959,8 @@
     "images": [
       "/SIZED BARCODE/8809716943067.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942176",
@@ -13243,7 +13978,8 @@
     "images": [
       "/SIZED BARCODE/8809716942176.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942183",
@@ -13261,7 +13997,8 @@
     "images": [
       "/SIZED BARCODE/8809716942183.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942190",
@@ -13279,7 +14016,8 @@
     "images": [
       "/SIZED BARCODE/8809716942190.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942213",
@@ -13297,7 +14035,8 @@
     "images": [
       "/SIZED BARCODE/8809716942213.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942220",
@@ -13315,7 +14054,8 @@
     "images": [
       "/SIZED BARCODE/8809716942220.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942237",
@@ -13333,7 +14073,8 @@
     "images": [
       "/SIZED BARCODE/8809716942237.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942244",
@@ -13351,7 +14092,8 @@
     "images": [
       "/SIZED BARCODE/8809716942244.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942770",
@@ -13369,7 +14111,8 @@
     "images": [
       "/SIZED BARCODE/8809716942770.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942787",
@@ -13387,7 +14130,8 @@
     "images": [
       "/SIZED BARCODE/8809716942787.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942794",
@@ -13405,7 +14149,8 @@
     "images": [
       "/SIZED BARCODE/8809716942794.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942831",
@@ -13423,7 +14168,8 @@
     "images": [
       "/SIZED BARCODE/8809716942831.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716942848",
@@ -13441,7 +14187,8 @@
     "images": [
       "/SIZED BARCODE/8809716942848.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716943340",
@@ -13459,7 +14206,8 @@
     "images": [
       "/SIZED BARCODE/8809716943340.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716943371",
@@ -13477,7 +14225,8 @@
     "images": [
       "/SIZED BARCODE/8809716943371.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716943395",
@@ -13495,7 +14244,8 @@
     "images": [
       "/SIZED BARCODE/8809716943395.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716943401",
@@ -13513,7 +14263,8 @@
     "images": [
       "/SIZED BARCODE/8809716943401.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716944088",
@@ -13531,7 +14282,8 @@
     "images": [
       "/SIZED BARCODE/8809716944088.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716944095",
@@ -13549,7 +14301,8 @@
     "images": [
       "/SIZED BARCODE/8809716944095.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809393727479",
@@ -13567,7 +14320,8 @@
     "images": [
       "/SIZED BARCODE/8809393727479.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809393727486",
@@ -13583,7 +14337,8 @@
     "inStock": true,
     "image": "/placeholder.jpg",
     "images": [],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809393727493",
@@ -13601,7 +14356,8 @@
     "images": [
       "/SIZED BARCODE/8809393727493.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809393727509",
@@ -13619,7 +14375,8 @@
     "images": [
       "/SIZED BARCODE/8809393727509.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809393727516",
@@ -13637,7 +14394,8 @@
     "images": [
       "/SIZED BARCODE/8809393727516.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809393727554",
@@ -13655,7 +14413,8 @@
     "images": [
       "/SIZED BARCODE/8809393727554.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809393727561",
@@ -13673,7 +14432,8 @@
     "images": [
       "/SIZED BARCODE/8809393727561.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809393727578",
@@ -13691,7 +14451,8 @@
     "images": [
       "/SIZED BARCODE/8809393727578.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809393727585",
@@ -13709,7 +14470,8 @@
     "images": [
       "/SIZED BARCODE/8809393727585.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716941988",
@@ -13727,7 +14489,8 @@
     "images": [
       "/SIZED BARCODE/8809716941988.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809716941995",
@@ -13745,7 +14508,8 @@
     "images": [
       "/SIZED BARCODE/8809716941995.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552279634",
@@ -13763,7 +14527,8 @@
     "images": [
       "/SIZED BARCODE/8809552279634.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552279641",
@@ -13781,7 +14546,8 @@
     "images": [
       "/SIZED BARCODE/8809552279641.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552278125",
@@ -13799,7 +14565,8 @@
     "images": [
       "/SIZED BARCODE/8809552278125.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552278941",
@@ -13817,7 +14584,8 @@
     "images": [
       "/SIZED BARCODE/8809552278941.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552278200",
@@ -13835,7 +14603,8 @@
     "images": [
       "/SIZED BARCODE/8809552278200.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552278033",
@@ -13853,7 +14622,8 @@
     "images": [
       "/SIZED BARCODE/8809552278033.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552279993",
@@ -13871,7 +14641,8 @@
     "images": [
       "/SIZED BARCODE/8809552279993.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552278132",
@@ -13889,7 +14660,8 @@
     "images": [
       "/SIZED BARCODE/8809552278132.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552279047",
@@ -13907,7 +14679,8 @@
     "images": [
       "/SIZED BARCODE/8809552279047.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552278217",
@@ -13925,7 +14698,8 @@
     "images": [
       "/SIZED BARCODE/8809552278217.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552278149",
@@ -13943,7 +14717,8 @@
     "images": [
       "/SIZED BARCODE/8809552278149.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552271270",
@@ -13961,7 +14736,8 @@
     "images": [
       "/SIZED BARCODE/8809552271270.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552279542",
@@ -13979,7 +14755,8 @@
     "images": [
       "/SIZED BARCODE/8809552279542.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552279139",
@@ -13997,7 +14774,8 @@
     "images": [
       "/SIZED BARCODE/8809552279139.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552278897",
@@ -14015,7 +14793,8 @@
     "images": [
       "/SIZED BARCODE/8809552278897.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552279559",
@@ -14033,7 +14812,8 @@
     "images": [
       "/SIZED BARCODE/8809552279559.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809552279795",
@@ -14051,7 +14831,8 @@
     "images": [
       "/SIZED BARCODE/8809552279795.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8800256114483",
@@ -14069,7 +14850,8 @@
     "images": [
       "/SIZED BARCODE/8800256114483.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928230430",
@@ -14087,7 +14869,8 @@
     "images": [
       "/SIZED BARCODE/8809928230430.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   },
   {
     "id": "8809928230436",
@@ -14105,6 +14888,7 @@
     "images": [
       "/SIZED BARCODE/8809928230436.jpg"
     ],
-    "isActive": true
+    "isActive": true,
+    "isKoreTrend": false
   }
 ]

@@ -297,3 +297,7 @@ INSERT INTO settings (setting_key, setting_value, setting_type, description) VAL
 ('tax_rate', '0', 'number', 'KDV oranı')
 ON DUPLICATE KEY UPDATE setting_key = setting_key;
 
+
+
+
+

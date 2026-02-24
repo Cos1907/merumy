@@ -12,6 +12,11 @@ function encodeImagePath(path: string): string {
   return path.split('/').map(part => encodeURIComponent(part)).join('/')
 }
 
+// Binlik ayırıcı ile fiyat formatla (1200 → 1.200)
+function formatPrice(n: number): string {
+  return n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
 export default function Frankly() {
   const { addToCart } = useCart()
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -163,15 +168,15 @@ export default function Frankly() {
                           {product.originalPrice && product.originalPrice > product.price ? (
                             <>
                               <span className="text-gray-400 line-through">
-                                ₺{product.originalPrice.toFixed(2)}
+                                ₺{formatPrice(product.originalPrice)}
                               </span>
                               <span className="text-red-500 font-semibold">
-                                ₺{product.price.toFixed(2)}
+                                ₺{formatPrice(product.price)}
                               </span>
                             </>
                           ) : (
                             <span className="text-gray-600">
-                              ₺{product.price.toFixed(2)}
+                              ₺{formatPrice(product.price)}
                             </span>
                           )}
                         </div>

@@ -61,7 +61,7 @@ export default function CategoryCards() {
         <div className="w-full">
           <Link 
             href={bottomCategory.link}
-            className="group relative flex flex-row items-end overflow-hidden cursor-pointer border-2 border-[#EEE695] rounded-xl md:rounded-[20px] p-3 md:p-[20px_30px] min-h-[150px] md:min-h-[300px]"
+            className="group relative flex flex-row items-end overflow-hidden cursor-pointer border-2 border-[#EEE695] rounded-xl md:rounded-[20px] p-3 md:p-[20px_30px] min-h-[180px] md:min-h-[400px]"
           >
             <div className="absolute inset-0 overflow-hidden rounded-xl md:rounded-[18px]">
               <Image

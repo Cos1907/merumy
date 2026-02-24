@@ -34,6 +34,9 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '50');
     const search = searchParams.get('search') || '';
     const role = searchParams.get('role') || '';
+    const sortBy = searchParams.get('sortBy') || 'newest';
+    const dateFrom = searchParams.get('dateFrom') || '';
+    const dateTo = searchParams.get('dateTo') || '';
     
     const offset = (page - 1) * limit;
     
@@ -49,8 +52,24 @@ export async function GET(request: NextRequest) {
       whereConditions.push('role = ?');
       params.push(role);
     }
+
+    if (dateFrom) {
+      whereConditions.push('DATE(created_at) >= ?');
+      params.push(dateFrom);
+    }
+
+    if (dateTo) {
+      whereConditions.push('DATE(created_at) <= ?');
+      params.push(dateTo);
+    }
     
     const whereClause = whereConditions.length > 0 ? 'WHERE ' + whereConditions.join(' AND ') : '';
+    
+    // Determine ORDER BY
+    let orderBy = 'created_at DESC';
+    if (sortBy === 'oldest') orderBy = 'created_at ASC';
+    else if (sortBy === 'most_orders') orderBy = 'orderCount DESC';
+    else if (sortBy === 'most_spent') orderBy = 'totalSpent DESC';
     
     // Get total count
     const [countResult] = await query<any[]>(`SELECT COUNT(*) as total FROM users ${whereClause}`, params);
@@ -73,7 +92,7 @@ export async function GET(request: NextRequest) {
         (SELECT COALESCE(SUM(total), 0) FROM orders WHERE customer_email = users.email AND status != 'cancelled') as totalSpent
       FROM users
       ${whereClause}
-      ORDER BY created_at DESC
+      ORDER BY ${orderBy}
       LIMIT ${Number(limit)} OFFSET ${Number(offset)}
     `;
     

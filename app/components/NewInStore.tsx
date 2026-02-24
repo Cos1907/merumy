@@ -5,6 +5,11 @@ import Link from 'next/link'
 import { Heart, ShoppingCart } from 'lucide-react'
 import { getNewProducts } from '../lib/products'
 
+// Binlik ayırıcı ile fiyat formatla (1200 → 1.200)
+function formatPrice(n: number): string {
+  return n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
 export default function NewInStore() {
   const products = getNewProducts(8)
 
@@ -71,7 +76,7 @@ export default function NewInStore() {
                   </h3>
                   <div className="flex items-center space-x-2 mb-2">
                     <span className="cs_fs_18 text-accent font-medium">
-                      ₺{product.price.toFixed(2)}
+                      ₺{formatPrice(product.price)}
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">

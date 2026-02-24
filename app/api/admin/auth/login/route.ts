@@ -32,6 +32,15 @@ export async function POST(request: NextRequest) {
     const sessionToken = crypto.randomUUID();
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
+    // Get IP address safely (handle long X-Forwarded-For headers)
+    let ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    // X-Forwarded-For can contain multiple IPs, take the first one
+    if (ipAddress.includes(',')) {
+      ipAddress = ipAddress.split(',')[0].trim();
+    }
+    // Truncate to 250 chars max to prevent database errors
+    ipAddress = ipAddress.substring(0, 250);
+
     // Store session in database
     await execute(
       `INSERT INTO admin_sessions (session_token, user_id, ip_address, expires_at)
@@ -39,7 +48,7 @@ export async function POST(request: NextRequest) {
       [
         sessionToken,
         user.id,
-        request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+        ipAddress,
         expiresAt
       ]
     );

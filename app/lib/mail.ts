@@ -15,11 +15,37 @@ const transporter = nodemailer.createTransport({
   },
   connectionTimeout: 60000,
   greetingTimeout: 60000,
-  socketTimeout: 60000
+  socketTimeout: 60000,
+  pool: true,
+  maxConnections: 3,
+  maxMessages: 10,
+  rateDelta: 2000,
+  rateLimit: 3
 })
 
 const FROM_EMAIL = 'Merumy <no-reply@merumy.com.tr>'
 const ADMIN_EMAILS = ['info@merumy.com', 'huseyinkulekci0@gmail.com']
+
+// Retry ile mail gönderme fonksiyonu
+async function sendMailWithRetry(mailOptions: nodemailer.SendMailOptions, retries = 3, delay = 2000): Promise<boolean> {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      await transporter.sendMail(mailOptions)
+      return true
+    } catch (error: any) {
+      console.error(`Mail gönderim hatası (deneme ${attempt}/${retries}):`, error.message)
+      
+      // 451 hatası veya geçici hata ise bekleyip tekrar dene
+      if (attempt < retries && (error.message?.includes('451') || error.message?.includes('Temporary'))) {
+        console.log(`${delay}ms bekleyip tekrar deneniyor...`)
+        await new Promise(resolve => setTimeout(resolve, delay * attempt))
+      } else if (attempt >= retries) {
+        throw error
+      }
+    }
+  }
+  return false
+}
 
 // Sipariş durumu etiketleri
 const STATUS_LABELS: Record<string, { label: string; emoji: string; color: string }> = {
@@ -35,7 +61,7 @@ const STATUS_LABELS: Record<string, { label: string; emoji: string; color: strin
 // Mail Templates
 export async function sendWelcomeEmail(to: string, firstName: string) {
   try {
-    await transporter.sendMail({
+    const result = await sendMailWithRetry({
       from: FROM_EMAIL,
       to,
       subject: 'Merumy\'ye Hoş Geldiniz! 🎉',
@@ -79,8 +105,10 @@ export async function sendWelcomeEmail(to: string, firstName: string) {
         </html>
       `
     })
-    console.log('Welcome email sent to:', to)
-    return true
+    if (result) {
+      console.log('Welcome email sent to:', to)
+    }
+    return result
   } catch (error) {
     console.error('Failed to send welcome email:', error)
     return false
@@ -626,6 +654,93 @@ export async function sendAdminNewUserNotification(userData: {
     return true
   } catch (error) {
     console.error('Failed to send admin new user notification:', error)
+    return false
+  }
+}
+
+// Hesap Bilgileri Güncelleme E-postası
+export async function sendAccountUpdateEmail(to: string, firstName: string, options?: { passwordChanged?: boolean }) {
+  try {
+    const passwordNote = options?.passwordChanged 
+      ? '<p style="color: #d97706; font-weight: bold;">⚠️ Şifreniz de değiştirildi. Eğer bu işlemi siz yapmadıysanız, lütfen hemen bizimle iletişime geçin.</p>'
+      : ''
+    
+    await transporter.sendMail({
+      from: FROM_EMAIL,
+      to,
+      subject: 'Hesap Bilgileriniz Güncellendi ✅',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .header { text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #92D0AA 0%, #7BC496 100%); border-radius: 12px 12px 0 0; }
+            .header h1 { color: white; margin: 0; font-size: 24px; }
+            .content { background: #ffffff; padding: 30px; }
+            .success-box { background: #dcfce7; border: 1px solid #86efac; padding: 20px; border-radius: 12px; margin: 20px 0; text-align: center; }
+            .success-icon { font-size: 48px; margin-bottom: 10px; }
+            .info-text { color: #166534; font-weight: 500; }
+            .details { background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0; }
+            .details p { margin: 8px 0; color: #4b5563; }
+            .footer { text-align: center; padding: 20px; background: #f8f9fa; border-radius: 0 0 12px 12px; }
+            .footer p { color: #6b7280; font-size: 12px; margin: 5px 0; }
+            .button { display: inline-block; background: #92D0AA; color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 15px 0; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Hesap Bilgileriniz Güncellendi</h1>
+            </div>
+            <div class="content">
+              <p>Merhaba <strong>${firstName}</strong>,</p>
+              
+              <div class="success-box">
+                <div class="success-icon">✅</div>
+                <p class="info-text">Hesap bilgileriniz başarıyla güncellendi!</p>
+              </div>
+              
+              ${passwordNote}
+              
+              <div class="details">
+                <p><strong>📅 İşlem Tarihi:</strong> ${new Date().toLocaleString('tr-TR', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}</p>
+                <p><strong>📧 E-posta:</strong> ${to}</p>
+              </div>
+              
+              <p>Hesabınıza giriş yaparak güncel bilgilerinizi görüntüleyebilirsiniz.</p>
+              
+              <div style="text-align: center;">
+                <a href="https://www.merumy.com/hesabim" class="button">Hesabıma Git</a>
+              </div>
+              
+              <p style="color: #6b7280; font-size: 13px; margin-top: 25px;">
+                Bu işlemi siz yapmadıysanız, lütfen hemen 
+                <a href="mailto:info@merumy.com" style="color: #92D0AA;">info@merumy.com</a> 
+                adresinden bizimle iletişime geçin.
+              </p>
+            </div>
+            <div class="footer">
+              <p><strong>Merumy</strong> - Kore Kozmetik</p>
+              <p>www.merumy.com</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `
+    })
+    console.log('Account update email sent to:', to)
+    return true
+  } catch (error) {
+    console.error('Failed to send account update email:', error)
     return false
   }
 }
