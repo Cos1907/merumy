@@ -21,8 +21,11 @@ function formatPrice(n: number): string {
 
 export default function ProductCardModern({ product }: { product: Product }) {
   const { addToCart } = useCart()
-  const discounted = product.price
-  const original = round2(discounted * 1.4)
+  const discounted = Number(product.price)
+  const rawOriginal = product.originalPrice ? Number(product.originalPrice) : null
+  const hasDiscount = rawOriginal !== null && rawOriginal > discounted
+  const original = hasDiscount ? rawOriginal! : null
+  const discountPercent = hasDiscount && original ? Math.round((1 - discounted / original) * 100) : 0
   const hasImage = product.image && product.image !== '/images/product-placeholder.png'
 
   return (
@@ -76,10 +79,10 @@ export default function ProductCardModern({ product }: { product: Product }) {
               </button>
             )}
 
-            {/* Discount badge - Sadece stokta varsa göster */}
-            {product.inStock && (
+            {/* Discount badge - Sadece gerçek indirim varsa göster */}
+            {product.inStock && hasDiscount && discountPercent > 0 && (
               <div className="absolute left-3 top-3 rounded-xl bg-[#92D0AA] px-2.5 py-1 text-[11px] font-bold text-white shadow">
-                %30 İNDİRİM
+                %{discountPercent} İNDİRİM
               </div>
             )}
           </div>
@@ -100,9 +103,11 @@ export default function ProductCardModern({ product }: { product: Product }) {
                   <div className="text-[16px] font-extrabold" style={{ color: '#92D0AA' }}>
                     ₺{formatPrice(discounted)}
                   </div>
-                  <div className="text-xs text-gray-400 line-through">
-                    ₺{formatPrice(original)}
-                  </div>
+                  {hasDiscount && original && (
+                    <div className="text-xs text-gray-400 line-through">
+                      ₺{formatPrice(original)}
+                    </div>
+                  )}
                 </div>
 
                 <span className="rounded-lg bg-[#92D0AA]/15 px-3 py-1.5 text-[11px] font-bold whitespace-nowrap" style={{ color: '#92D0AA' }}>
@@ -151,10 +156,10 @@ export default function ProductCardModern({ product }: { product: Product }) {
               </div>
             )}
 
-            {/* Discount badge - Mobil için küçük, sadece stokta varsa */}
-            {product.inStock && (
+            {/* Discount badge - Mobil için küçük, sadece gerçek indirim varsa */}
+            {product.inStock && hasDiscount && discountPercent > 0 && (
               <div className="absolute left-1.5 top-1.5 rounded-lg bg-[#92D0AA] px-1.5 py-0.5 text-[8px] font-bold text-white shadow">
-                %30
+                %{discountPercent}
               </div>
             )}
           </div>
@@ -176,9 +181,11 @@ export default function ProductCardModern({ product }: { product: Product }) {
                     <div className="text-[12px] font-extrabold" style={{ color: '#92D0AA' }}>
                       ₺{formatPrice(discounted)}
                     </div>
-                    <div className="text-[8px] text-gray-400 line-through">
-                      ₺{formatPrice(original)}
-                    </div>
+                    {hasDiscount && original && (
+                      <div className="text-[8px] text-gray-400 line-through">
+                        ₺{formatPrice(original)}
+                      </div>
+                    )}
                   </div>
 
                   {/* Sepete Ekle butonu - Mobilde her zaman görünür */}

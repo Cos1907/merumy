@@ -3,19 +3,19 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { getKoreTrendProducts, getRandomProducts } from '../lib/products'
 import ProductCardModern from './ProductCardModern'
 
 export default function KoreTrendleri() {
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
-  // Kore Trendleri ürünlerini rastgele getir - her render'da farklı ürünler
-  const [products, setProducts] = useState(() => getKoreTrendProducts(12))
+  const [products, setProducts] = useState<any[]>([])
   const [isAutoScrolling, setIsAutoScrolling] = useState(true)
   
-  // Sayfa yenilendiğinde farklı ürünler göster
   useEffect(() => {
-    setProducts(getKoreTrendProducts(12))
+    fetch(`/api/kore-trends?section=kore_trend&limit=30&t=${Date.now()}`)
+      .then(r => r.json())
+      .then(data => { if (data.products?.length) setProducts(data.products) })
+      .catch(() => {})
   }, [])
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const autoScrollRef = useRef<ReturnType<typeof setInterval> | null>(null)

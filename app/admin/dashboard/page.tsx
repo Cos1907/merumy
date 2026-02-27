@@ -116,13 +116,16 @@ const ITEMS_PER_PAGE = 15;
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'users' | 'reports' | 'hero' | 'activity'>('orders');
+  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'users' | 'reports' | 'hero' | 'activity' | 'kore-trends'>('orders');
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   
   // Current user info
   const [currentUserEmail, setCurrentUserEmail] = useState<string>('');
   const [currentUserName, setCurrentUserName] = useState<string>('');
+  // null = all sections allowed, string[] = restricted list
+  const [allowedSections, setAllowedSections] = useState<string[] | null>(null);
   
   // Hero management state
   const [heroSlides, setHeroSlides] = useState<HeroSlide[]>([]);
@@ -134,6 +137,14 @@ export default function AdminDashboard() {
   const [activityLogs, setActivityLogs] = useState<ActivityLog[]>([]);
   const [activityLoading, setActivityLoading] = useState(false);
   const [activityTotal, setActivityTotal] = useState(0);
+
+  // Kore Trendleri management state
+  const [koreSection, setKoreSection] = useState<'kore_trend' | 'makeup'>('kore_trend');
+  const [koreTrendProducts, setKoreTrendProducts] = useState<any[]>([]);
+  const [koreLoading, setKoreLoading] = useState(false);
+  const [koreSearch, setKoreSearch] = useState('');
+  const [koreSearchResults, setKoreSearchResults] = useState<any[]>([]);
+  const [koreSearchLoading, setKoreSearchLoading] = useState(false);
   
   // Orders state
   const [orders, setOrders] = useState<Order[]>([]);
@@ -210,6 +221,7 @@ export default function AdminDashboard() {
     else if (activeTab === 'reports') fetchAllOrdersForReport();
     else if (activeTab === 'hero') fetchHeroSlides();
     else if (activeTab === 'activity') fetchActivityLogs();
+    else if (activeTab === 'kore-trends') fetchKoreTrendProducts(koreSection as 'kore_trend' | 'makeup');
   }, [activeTab, orderPage, orderStatusFilter, userPage, userSort, dbProductsPage]);
 
   // Clear selection when changing filters
@@ -227,6 +239,12 @@ export default function AdminDashboard() {
         if (data.user) {
           setCurrentUserEmail(data.user.email || '');
           setCurrentUserName(data.user.name || '');
+          const sections = data.user.allowedSections as string[] | null;
+          setAllowedSections(sections);
+          // If user has restricted access, set default tab to first allowed section
+          if (sections && sections.length > 0 && !sections.includes('orders')) {
+            setActiveTab(sections[0] as any);
+          }
         }
         setLoading(false);
         fetchOrders();
@@ -594,6 +612,70 @@ export default function AdminDashboard() {
     }
   };
 
+  // Hero image upload
+  const [heroUploadLoading, setHeroUploadLoading] = useState<string | null>(null);
+
+  const uploadHeroImage = async (file: File, slideIdx: number, field: 'desktopImage' | 'mobileImage') => {
+    const key = `${slideIdx}-${field}`;
+    setHeroUploadLoading(key);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      const res = await fetch('/api/admin/hero/upload', { method: 'POST', body: formData });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        const updated = [...heroSlides];
+        updated[slideIdx] = { ...updated[slideIdx], [field]: data.url };
+        setHeroSlides(updated);
+      } else {
+        alert(data.error || 'Görsel yüklenemedi');
+      }
+    } catch {
+      alert('Görsel yüklenirken hata oluştu');
+    } finally {
+      setHeroUploadLoading(null);
+    }
+  };
+
+  const addNewHeroSlide = async () => {
+    const newSlide = {
+      id: 'new-' + Date.now(),
+      desktopImage: '/herosection/herosection01.jpg',
+      mobileImage: '/mobilsliderlar/slider1.jpg',
+      link: null,
+      title: null,
+      slideOrder: heroSlides.length + 1,
+      isActive: true,
+    };
+    // Save to DB immediately
+    try {
+      const res = await fetch('/api/admin/hero', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newSlide),
+      });
+      if (res.ok) {
+        await fetchHeroSlides(); // Refresh to get the new DB id
+      }
+    } catch {
+      alert('Slayt eklenemedi');
+    }
+  };
+
+  const deleteHeroSlide = async (slideId: string | number) => {
+    if (!confirm('Bu slaytı silmek istediğinize emin misiniz?')) return;
+    try {
+      const res = await fetch(`/api/admin/hero?id=${slideId}`, { method: 'DELETE' });
+      if (res.ok) {
+        setHeroSlides(prev => prev.filter(s => String(s.id) !== String(slideId)));
+      } else {
+        alert('Slayt silinemedi');
+      }
+    } catch {
+      alert('Hata oluştu');
+    }
+  };
+
   // Activity log functions
   const fetchActivityLogs = async () => {
     setActivityLoading(true);
@@ -606,6 +688,56 @@ export default function AdminDashboard() {
       console.error('Error fetching activity logs:', error);
     } finally {
       setActivityLoading(false);
+    }
+  };
+
+  const fetchKoreTrendProducts = async (section: 'kore_trend' | 'makeup') => {
+    setKoreLoading(true);
+    try {
+      const res = await fetch(`/api/admin/kore-trends?section=${section}`);
+      const data = await res.json();
+      if (data.products) setKoreTrendProducts(data.products);
+    } catch (error) {
+      console.error('Error fetching kore trend products:', error);
+    } finally {
+      setKoreLoading(false);
+    }
+  };
+
+  const searchProductsForKore = async (q: string) => {
+    if (!q.trim()) { setKoreSearchResults([]); return; }
+    setKoreSearchLoading(true);
+    try {
+      const res = await fetch(`/api/admin/products?search=${encodeURIComponent(q)}&limit=10`);
+      const data = await res.json();
+      if (data.products) setKoreSearchResults(data.products);
+    } catch {}
+    setKoreSearchLoading(false);
+  };
+
+  const addToKoreTrends = async (productId: number, section: 'kore_trend' | 'makeup') => {
+    try {
+      const res = await fetch('/api/admin/kore-trends', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId, section }),
+      });
+      if (res.ok) {
+        fetchKoreTrendProducts(section);
+        setKoreSearch('');
+        setKoreSearchResults([]);
+      }
+    } catch (error) {
+      console.error('Error adding product:', error);
+    }
+  };
+
+  const removeFromKoreTrends = async (curatedId: number, section: 'kore_trend' | 'makeup') => {
+    try {
+      const res = await fetch(`/api/admin/kore-trends?id=${curatedId}`, { method: 'DELETE' });
+      if (res.ok) fetchKoreTrendProducts(section);
+    } catch (error) {
+      console.error('Error removing product:', error);
     }
   };
 
@@ -703,19 +835,43 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-slate-900 flex">
+      {/* Mobile Sidebar Overlay */}
+      {mobileSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 z-40 lg:hidden"
+          onClick={() => setMobileSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-slate-800 border-r border-slate-700 transition-all duration-300 flex flex-col`}>
+      <aside
+        className={[
+          'bg-slate-800 border-r border-slate-700 transition-all duration-300 flex flex-col',
+          'fixed lg:static inset-y-0 left-0 z-50',
+          mobileSidebarOpen ? 'translate-x-0 w-72' : '-translate-x-full lg:translate-x-0 w-72',
+          sidebarOpen ? 'lg:w-64' : 'lg:w-20',
+        ].join(' ')}
+      >
         <div className="p-4 border-b border-slate-700">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center flex-shrink-0">
               <span className="text-white font-bold text-lg">M</span>
             </div>
-            {sidebarOpen && (
-              <div>
-                <span className="text-white font-semibold text-lg block">Merumy</span>
-                {currentUserName && <span className="text-slate-400 text-xs">{currentUserName}</span>}
+            {(sidebarOpen || mobileSidebarOpen) && (
+              <div className="flex-1 min-w-0">
+                <span className="text-white font-semibold text-lg block truncate">Merumy</span>
+                {currentUserName && <span className="text-slate-400 text-xs truncate block">{currentUserName}</span>}
               </div>
             )}
+            {/* Mobile close button */}
+            <button
+              onClick={() => setMobileSidebarOpen(false)}
+              className="lg:hidden ml-auto p-1 text-slate-400 hover:text-white"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         </div>
         
@@ -726,18 +882,19 @@ export default function AdminDashboard() {
             { id: 'users', icon: '👥', label: 'Kullanıcılar' },
             { id: 'reports', icon: '📊', label: 'Satış Raporu' },
             { id: 'hero', icon: '🎨', label: 'Hero Yönetimi' },
-          ].map(item => (
+            { id: 'kore-trends', icon: '🌸', label: 'Kore Trendleri' },
+          ].filter(item => !allowedSections || allowedSections.includes(item.id)).map(item => (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id as any)}
+              onClick={() => { setActiveTab(item.id as any); setMobileSidebarOpen(false); }}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                 activeTab === item.id
                   ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                   : 'text-slate-400 hover:bg-slate-700/50 hover:text-white'
               }`}
             >
-              <span className="text-xl">{item.icon}</span>
-              {sidebarOpen && (
+              <span className="text-xl flex-shrink-0">{item.icon}</span>
+              {(sidebarOpen || mobileSidebarOpen) && (
                 <>
                   <span className="flex-1 text-left font-medium">{item.label}</span>
                   {item.count !== undefined && (
@@ -748,17 +905,17 @@ export default function AdminDashboard() {
             </button>
           ))}
           {/* Activity Log - Only for admin@merumy.com */}
-          {currentUserEmail === 'admin@merumy.com' && (
+          {currentUserEmail === 'admin@merumy.com' && (!allowedSections || allowedSections.includes('activity')) && (
             <button
-              onClick={() => setActiveTab('activity')}
+              onClick={() => { setActiveTab('activity'); setMobileSidebarOpen(false); }}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                 activeTab === 'activity'
                   ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
                   : 'text-slate-400 hover:bg-slate-700/50 hover:text-white'
               }`}
             >
-              <span className="text-xl">📋</span>
-              {sidebarOpen && (
+              <span className="text-xl flex-shrink-0">📋</span>
+              {(sidebarOpen || mobileSidebarOpen) && (
                 <>
                   <span className="flex-1 text-left font-medium">Yapılan İşlemler</span>
                   {activityTotal > 0 && (
@@ -771,7 +928,7 @@ export default function AdminDashboard() {
         </nav>
         
         <div className="p-4 border-t border-slate-700">
-          {sidebarOpen && currentUserEmail && (
+          {(sidebarOpen || mobileSidebarOpen) && currentUserEmail && (
             <div className="mb-3 px-3 py-2 bg-slate-700/50 rounded-lg">
               <p className="text-slate-400 text-xs truncate">{currentUserEmail}</p>
             </div>
@@ -780,41 +937,55 @@ export default function AdminDashboard() {
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all"
           >
-            <span className="text-xl">🚪</span>
-            {sidebarOpen && <span className="font-medium">Çıkış Yap</span>}
+            <span className="text-xl flex-shrink-0">🚪</span>
+            {(sidebarOpen || mobileSidebarOpen) && <span className="font-medium">Çıkış Yap</span>}
           </button>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto min-w-0 w-full">
         {/* Top Bar */}
-        <header className="bg-slate-800/50 border-b border-slate-700 px-6 py-4 sticky top-0 z-10 backdrop-blur-sm">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-slate-700 rounded-lg text-slate-400">
+        <header className="bg-slate-800/50 border-b border-slate-700 px-3 md:px-6 py-3 md:py-4 sticky top-0 z-10 backdrop-blur-sm">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 md:gap-4 min-w-0">
+              {/* Mobile hamburger */}
+              <button
+                onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
+                className="p-2 hover:bg-slate-700 rounded-lg text-slate-400 lg:hidden flex-shrink-0"
+              >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
-              <h1 className="text-xl font-semibold text-white">
+              {/* Desktop sidebar toggle */}
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="p-2 hover:bg-slate-700 rounded-lg text-slate-400 hidden lg:flex flex-shrink-0"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              <h1 className="text-base md:text-xl font-semibold text-white truncate">
                 {activeTab === 'orders' && '📦 Siparişler'}
                 {activeTab === 'products' && '🛍️ Ürün Yönetimi'}
                 {activeTab === 'users' && '👥 Kullanıcılar'}
                 {activeTab === 'reports' && '📊 Satış Raporu'}
                 {activeTab === 'hero' && '🎨 Hero Yönetimi'}
                 {activeTab === 'activity' && '📋 Yapılan İşlemler'}
+                {activeTab === 'kore-trends' && '🌸 Kore Trendleri'}
               </h1>
             </div>
-            <div className="flex items-center gap-3">
-              <a href="https://merumy.com" target="_blank" className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-sm transition-colors">
-                🌐 Siteyi Görüntüle
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <a href="https://merumy.com" target="_blank" className="px-2 md:px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-xs md:text-sm transition-colors whitespace-nowrap">
+                🌐 <span className="hidden sm:inline">Siteyi Görüntüle</span>
               </a>
             </div>
           </div>
         </header>
 
-        <div className="p-6">
+        <div className="p-3 md:p-6">
           {/* ORDERS TAB */}
           {activeTab === 'orders' && (
             <div className="space-y-6">
@@ -1423,17 +1594,25 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between mb-2">
                   <div>
                     <h2 className="text-xl font-bold text-white">🎨 Hero Section Yönetimi</h2>
-                    <p className="text-slate-400 text-sm mt-1">Ana sayfadaki slider görsellerini ve linklerini düzenleyin. Değişiklikler sitede anlık yansır.</p>
+                    <p className="text-slate-400 text-sm mt-1">Ana sayfadaki slider görsellerini ve linklerini düzenleyin. Görsel yükleyin veya yol girin. Değişiklikler sitede anlık yansır.</p>
                   </div>
-                  <button
-                    onClick={saveHeroSlides}
-                    disabled={heroSaving || heroSlides.length === 0}
-                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-medium transition-colors flex items-center gap-2"
-                  >
-                    {heroSaving ? (
-                      <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Kaydediliyor...</>
-                    ) : '💾 Tüm Değişiklikleri Kaydet'}
-                  </button>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={addNewHeroSlide}
+                      className="px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-medium transition-colors flex items-center gap-2 text-sm"
+                    >
+                      ➕ Yeni Slayt Ekle
+                    </button>
+                    <button
+                      onClick={saveHeroSlides}
+                      disabled={heroSaving || heroSlides.length === 0}
+                      className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-medium transition-colors flex items-center gap-2"
+                    >
+                      {heroSaving ? (
+                        <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Kaydediliyor...</>
+                      ) : '💾 Kaydet'}
+                    </button>
+                  </div>
                 </div>
                 {heroSaveSuccess && (
                   <div className="mt-4 bg-emerald-500/20 border border-emerald-500/30 rounded-xl p-3 text-emerald-400 text-center font-medium">
@@ -1471,26 +1650,45 @@ export default function AdminDashboard() {
                             <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${slide.isActive ? 'translate-x-7' : 'translate-x-1'}`} />
                           </div>
                         </label>
+                        <button
+                          onClick={() => deleteHeroSlide(slide.id)}
+                          className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all"
+                          title="Slaytı Sil"
+                        >
+                          🗑️
+                        </button>
                       </div>
 
                       <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
-                        {/* Preview */}
-                        <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="bg-slate-900/50 rounded-xl p-3 border border-slate-600">
-                            <p className="text-slate-400 text-xs mb-2 font-medium">🖥️ Masaüstü Önizleme</p>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={slide.desktopImage} alt="desktop" className="w-full h-32 object-cover rounded-lg" onError={(e: any) => { e.target.style.display='none' }} />
-                          </div>
-                          <div className="bg-slate-900/50 rounded-xl p-3 border border-slate-600">
-                            <p className="text-slate-400 text-xs mb-2 font-medium">📱 Mobil Önizleme</p>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={slide.mobileImage} alt="mobile" className="w-full h-32 object-cover rounded-lg" onError={(e: any) => { e.target.style.display='none' }} />
-                          </div>
-                        </div>
-
-                        {/* Desktop Image Path */}
+                        {/* Desktop Image */}
                         <div>
-                          <label className="block text-slate-400 text-sm mb-2">🖥️ Masaüstü Görsel Yolu</label>
+                          <label className="block text-slate-400 text-sm mb-2">🖥️ Masaüstü Görsel</label>
+                          {/* Preview */}
+                          {slide.desktopImage && (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={slide.desktopImage} alt="desktop" className="w-full h-28 object-cover rounded-xl mb-2 border border-slate-600" onError={(e: any) => { e.target.style.display='none' }} />
+                          )}
+                          {/* Upload Button */}
+                          <label className="block mb-2">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) uploadHeroImage(file, idx, 'desktopImage');
+                                e.target.value = '';
+                              }}
+                            />
+                            <span className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border-2 border-dashed cursor-pointer text-sm transition-all ${heroUploadLoading === `${idx}-desktopImage` ? 'border-emerald-500/50 text-emerald-400 bg-emerald-500/10' : 'border-slate-600 text-slate-400 hover:border-emerald-500 hover:text-emerald-400 hover:bg-emerald-500/5'}`}>
+                              {heroUploadLoading === `${idx}-desktopImage` ? (
+                                <><div className="w-4 h-4 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />Yükleniyor...</>
+                              ) : (
+                                <>📤 Görsel Yükle (max 5MB)</>
+                              )}
+                            </span>
+                          </label>
+                          {/* Or path input */}
                           <input
                             type="text"
                             value={slide.desktopImage}
@@ -1499,15 +1697,41 @@ export default function AdminDashboard() {
                               updated[idx] = { ...updated[idx], desktopImage: e.target.value };
                               setHeroSlides(updated);
                             }}
-                            className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                            className="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-xl text-white text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                             placeholder="/herosection/herosection01.jpg"
                           />
-                          <p className="text-slate-500 text-xs mt-1">Görsel /public klasöründeki yol (örn: /herosection/gorsel.jpg)</p>
+                          <p className="text-slate-500 text-xs mt-1">Görsel yükleyin veya yol girin</p>
                         </div>
 
-                        {/* Mobile Image Path */}
+                        {/* Mobile Image */}
                         <div>
-                          <label className="block text-slate-400 text-sm mb-2">📱 Mobil Görsel Yolu</label>
+                          <label className="block text-slate-400 text-sm mb-2">📱 Mobil Görsel</label>
+                          {/* Preview */}
+                          {slide.mobileImage && (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={slide.mobileImage} alt="mobile" className="w-full h-28 object-cover rounded-xl mb-2 border border-slate-600" onError={(e: any) => { e.target.style.display='none' }} />
+                          )}
+                          {/* Upload Button */}
+                          <label className="block mb-2">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) uploadHeroImage(file, idx, 'mobileImage');
+                                e.target.value = '';
+                              }}
+                            />
+                            <span className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border-2 border-dashed cursor-pointer text-sm transition-all ${heroUploadLoading === `${idx}-mobileImage` ? 'border-emerald-500/50 text-emerald-400 bg-emerald-500/10' : 'border-slate-600 text-slate-400 hover:border-emerald-500 hover:text-emerald-400 hover:bg-emerald-500/5'}`}>
+                              {heroUploadLoading === `${idx}-mobileImage` ? (
+                                <><div className="w-4 h-4 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />Yükleniyor...</>
+                              ) : (
+                                <>📤 Görsel Yükle (max 5MB)</>
+                              )}
+                            </span>
+                          </label>
+                          {/* Or path input */}
                           <input
                             type="text"
                             value={slide.mobileImage}
@@ -1516,10 +1740,10 @@ export default function AdminDashboard() {
                               updated[idx] = { ...updated[idx], mobileImage: e.target.value };
                               setHeroSlides(updated);
                             }}
-                            className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                            className="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-xl text-white text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                             placeholder="/mobilsliderlar/slider1.jpg"
                           />
-                          <p className="text-slate-500 text-xs mt-1">Görsel /public klasöründeki yol (örn: /mobilsliderlar/gorsel.jpg)</p>
+                          <p className="text-slate-500 text-xs mt-1">Görsel yükleyin veya yol girin</p>
                         </div>
 
                         {/* Link */}
@@ -1543,6 +1767,111 @@ export default function AdminDashboard() {
                   ))}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* KORE TRENDLERİ MANAGEMENT TAB */}
+          {activeTab === 'kore-trends' && (
+            <div className="space-y-6">
+              {/* Section Switcher */}
+              <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
+                <h2 className="text-xl font-bold text-white mb-4">🌸 Kore Trendleri Yönetimi</h2>
+                <p className="text-slate-400 text-sm mb-5">Anasayfadaki Kore Trendleri, En Çok Satanlar ve Merumy.com'a Özel bölümlerinde gösterilecek ürünleri seçin. Her sayfa yenilemesinde bu listeden rastgele ürünler gösterilir.</p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => { setKoreSection('kore_trend'); fetchKoreTrendProducts('kore_trend'); setKoreSearch(''); setKoreSearchResults([]); }}
+                    className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all ${koreSection === 'kore_trend' ? 'bg-emerald-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+                  >
+                    🌸 Kore Trendleri / En Çok Satanlar / Özel
+                  </button>
+                  <button
+                    onClick={() => { setKoreSection('makeup'); fetchKoreTrendProducts('makeup'); setKoreSearch(''); setKoreSearchResults([]); }}
+                    className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all ${koreSection === 'makeup' ? 'bg-pink-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+                  >
+                    💄 Korean Make Up
+                  </button>
+                </div>
+              </div>
+
+              {/* Search & Add */}
+              <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
+                <h3 className="text-white font-semibold mb-3">Ürün Ekle</h3>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={koreSearch}
+                    onChange={(e) => { setKoreSearch(e.target.value); searchProductsForKore(e.target.value); }}
+                    placeholder="Ürün adı veya marka ara..."
+                    className="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500"
+                  />
+                  {koreSearchLoading && (
+                    <div className="absolute right-3 top-3.5 w-5 h-5 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
+                  )}
+                </div>
+                {koreSearchResults.length > 0 && (
+                  <div className="mt-2 bg-slate-700 rounded-xl border border-slate-600 max-h-60 overflow-y-auto divide-y divide-slate-600">
+                    {koreSearchResults.map((p: any) => {
+                      const alreadyAdded = koreTrendProducts.some(k => k.productId === p.id);
+                      return (
+                        <div key={p.id} className="flex items-center justify-between px-4 py-3 hover:bg-slate-600/50">
+                          <div className="min-w-0 flex-1">
+                            <p className="text-white text-sm font-medium truncate">{p.name}</p>
+                            <p className="text-slate-400 text-xs">{p.brand} • {Number(p.price).toLocaleString('tr-TR')} ₺</p>
+                          </div>
+                          <button
+                            onClick={() => !alreadyAdded && addToKoreTrends(p.id, koreSection)}
+                            disabled={alreadyAdded}
+                            className={`ml-3 px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex-shrink-0 ${alreadyAdded ? 'bg-slate-600 text-slate-400 cursor-not-allowed' : 'bg-emerald-500 hover:bg-emerald-600 text-white'}`}
+                          >
+                            {alreadyAdded ? '✓ Eklendi' : '+ Ekle'}
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Current List */}
+              <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
+                <div className="p-5 border-b border-slate-700 flex items-center justify-between">
+                  <h3 className="text-white font-semibold">
+                    {koreSection === 'kore_trend' ? '🌸 Kore Trendleri Listesi' : '💄 Makyaj Ürünleri Listesi'}
+                    <span className="ml-2 text-slate-400 text-sm font-normal">({koreTrendProducts.length} ürün)</span>
+                  </h3>
+                  <button onClick={() => fetchKoreTrendProducts(koreSection)} className="text-slate-400 hover:text-white text-sm">🔄 Yenile</button>
+                </div>
+                {koreLoading ? (
+                  <div className="flex items-center justify-center py-16">
+                    <div className="w-8 h-8 border-3 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
+                  </div>
+                ) : koreTrendProducts.length === 0 ? (
+                  <div className="p-12 text-center">
+                    <p className="text-slate-500">Henüz ürün eklenmemiş</p>
+                    <p className="text-slate-600 text-sm mt-1">Yukarıdan ürün arayarak ekleyebilirsiniz</p>
+                  </div>
+                ) : (
+                  <div className="divide-y divide-slate-700">
+                    {koreTrendProducts.map((item: any) => (
+                      <div key={item.curatedId} className="flex items-center justify-between px-5 py-3.5 hover:bg-slate-700/30">
+                        <div className="min-w-0 flex-1">
+                          <p className="text-white text-sm font-medium truncate">{item.name}</p>
+                          <p className="text-slate-400 text-xs">{item.brand} • {Number(item.price).toLocaleString('tr-TR')} ₺
+                            {item.stockStatus === 'out_of_stock' && <span className="ml-2 text-red-400">• Stokta Yok</span>}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => removeFromKoreTrends(item.curatedId, koreSection)}
+                          className="ml-4 p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all flex-shrink-0"
+                          title="Listeden Çıkar"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           )}
 

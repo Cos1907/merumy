@@ -3,15 +3,16 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { getMakeupProducts } from '../lib/products'
 import ProductCardModern from './ProductCardModern'
 
 export default function KoreanMakeup() {
-  const [products, setProducts] = useState(() => getMakeupProducts(12))
+  const [products, setProducts] = useState<any[]>([])
   
-  // Sayfa yenilendiğinde farklı ürünler göster
   useEffect(() => {
-    setProducts(getMakeupProducts(12))
+    fetch(`/api/kore-trends?section=makeup&limit=30&t=${Date.now()}`)
+      .then(r => r.json())
+      .then(data => { if (data.products?.length) setProducts(data.products) })
+      .catch(() => {})
   }, [])
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)

@@ -49,18 +49,16 @@ export default function AdminLoginPage() {
       <div className="relative z-10 w-full max-w-md mx-4">
         <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 md:p-10 border border-white/50">
           {/* Logo */}
-          <div className="flex justify-center mb-8">
-            <div className="relative">
-              <Image
-                src="/logo.svg"
-                alt="Merumy Logo"
-                width={160}
-                height={50}
-                className="h-12 w-auto"
-              />
-              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-[#92D0AA] text-white text-[10px] font-medium px-3 py-0.5 rounded-full">
-                YÖNETİM PANELİ
-              </div>
+          <div className="flex flex-col items-center mb-8 gap-3">
+            <Image
+              src="/logo.svg"
+              alt="Merumy Logo"
+              width={160}
+              height={50}
+              className="h-12 w-auto"
+            />
+            <div className="bg-[#92D0AA] text-white text-xs font-semibold px-4 py-1.5 rounded-full tracking-wider uppercase">
+              YÖNETİM PANELİ
             </div>
           </div>
 
@@ -153,7 +151,7 @@ export default function AdminLoginPage() {
           {/* Footer */}
           <div className="mt-8 pt-6 border-t border-gray-100 text-center">
             <p className="text-xs text-gray-400">
-              © 2024 Merumy. Tüm hakları saklıdır.
+              © {new Date().getFullYear()} Merumy. Tüm hakları saklıdır.
             </p>
           </div>
         </div>

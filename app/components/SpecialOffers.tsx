@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getKoreTrendProducts } from '../lib/products'
 import { useCart } from '../context/CartContext'
 
 // Binlik ayırıcı ile fiyat formatla (1200 → 1.200)
@@ -13,10 +12,13 @@ function formatPrice(n: number): string {
 
 export default function SpecialOffers() {
   const { addToCart } = useCart()
-  const [offerProducts, setOfferProducts] = useState(() => getKoreTrendProducts(2))
+  const [offerProducts, setOfferProducts] = useState<any[]>([])
   
   useEffect(() => {
-    setOfferProducts(getKoreTrendProducts(2))
+    fetch('/api/products?featured=true&limit=2&sortBy=price&sortOrder=desc')
+      .then(r => r.json())
+      .then(data => { if (data.products?.length) setOfferProducts(data.products) })
+      .catch(() => {})
   }, [])
 
   return (

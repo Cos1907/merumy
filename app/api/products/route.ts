@@ -33,13 +33,12 @@ export async function GET(request: NextRequest) {
           p.is_active as isActive,
           p.is_featured as isFeatured,
           b.name as brand,
-          c.name as category,
+          p.category,
           p.tags,
           (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1) as image,
           (SELECT JSON_ARRAYAGG(image_url) FROM product_images WHERE product_id = p.id) as images
         FROM products p
         LEFT JOIN brands b ON p.brand_id = b.id
-        LEFT JOIN categories c ON p.category_id = c.id
         WHERE p.slug = ? AND p.is_active = TRUE
       `, [slug]);
       
@@ -79,11 +78,10 @@ export async function GET(request: NextRequest) {
           p.compare_price as originalPrice,
           p.stock,
           b.name as brand,
-          c.name as category,
+          p.category,
           (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1) as image
         FROM products p
         LEFT JOIN brands b ON p.brand_id = b.id
-        LEFT JOIN categories c ON p.category_id = c.id
         WHERE p.barcode = ? AND p.is_active = TRUE
       `, [barcode]);
       
@@ -112,7 +110,7 @@ export async function GET(request: NextRequest) {
     }
     
     if (category) {
-      whereConditions.push('c.name = ?');
+      whereConditions.push('p.category = ?');
       params.push(category);
     }
     
@@ -138,7 +136,6 @@ export async function GET(request: NextRequest) {
       `SELECT COUNT(*) as total 
        FROM products p
        LEFT JOIN brands b ON p.brand_id = b.id
-       LEFT JOIN categories c ON p.category_id = c.id
        ${whereClause}`,
       params
     );
@@ -158,11 +155,10 @@ export async function GET(request: NextRequest) {
         p.stock,
         p.stock_status as stockStatus,
         b.name as brand,
-        c.name as category,
+        p.category,
         (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1) as image
       FROM products p
       LEFT JOIN brands b ON p.brand_id = b.id
-      LEFT JOIN categories c ON p.category_id = c.id
       ${whereClause}
       ORDER BY ${sortColumn} ${orderDirection}
       LIMIT ${Number(limit)} OFFSET ${Number(offset)}

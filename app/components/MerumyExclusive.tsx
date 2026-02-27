@@ -3,16 +3,16 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { getKoreTrendProducts } from '../lib/products'
 import ProductCardModern from './ProductCardModern'
 
 export default function MerumyExclusive() {
-  // Kore Trendleri ürünlerini rastgele getir
-  const [products, setProducts] = useState(() => getKoreTrendProducts(12))
+  const [products, setProducts] = useState<any[]>([])
   
-  // Sayfa yenilendiğinde farklı ürünler göster
   useEffect(() => {
-    setProducts(getKoreTrendProducts(12))
+    fetch(`/api/kore-trends?section=kore_trend&limit=30&t=${Date.now()}`)
+      .then(r => r.json())
+      .then(data => { if (data.products?.length) setProducts(data.products) })
+      .catch(() => {})
   }, [])
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 

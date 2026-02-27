@@ -101,20 +101,50 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
   // Live product data from API (overrides ONLY price/stock — category/brand/name stay from static JSON)
   const [liveProductData, setLiveProductData] = useState<any>(null)
 
-  // Merge static + live: keep all static fields, only update price/stock from API
-  const product = liveProductData && staticProduct
-    ? {
+  // Merge static + live: keep all static fields, only update price/stock/originalPrice from API
+  const product = (() => {
+    if (liveProductData && staticProduct) {
+      const liveOriginal = liveProductData.originalPrice != null ? Number(liveProductData.originalPrice) : null
+      return {
         ...staticProduct,
-        price: liveProductData.price ?? staticProduct.price,
-        originalPrice: (liveProductData.originalPrice && liveProductData.originalPrice > 0)
-          ? liveProductData.originalPrice
-          : staticProduct.originalPrice,
+        price: Number(liveProductData.price ?? staticProduct.price),
+        originalPrice: (liveOriginal && liveOriginal > 0) ? liveOriginal : staticProduct.originalPrice ?? null,
         inStock: liveProductData.stockStatus
           ? liveProductData.stockStatus !== 'out_of_stock'
           : staticProduct.inStock,
         stock: liveProductData.stock ?? staticProduct.stock,
       }
-    : staticProduct
+    }
+    if (liveProductData && !staticProduct) {
+      // Product exists in DB but not in JSON (newly added via admin panel)
+      const liveOriginal = liveProductData.originalPrice != null ? Number(liveProductData.originalPrice) : null
+      return {
+        id: String(liveProductData.id),
+        slug: liveProductData.slug,
+        name: liveProductData.name || '',
+        description: liveProductData.description || '',
+        price: Number(liveProductData.price),
+        originalPrice: (liveOriginal && liveOriginal > 0) ? liveOriginal : null,
+        inStock: liveProductData.stockStatus ? liveProductData.stockStatus !== 'out_of_stock' : true,
+        stock: liveProductData.stock ?? 0,
+        brand: liveProductData.brand || '',
+        category: liveProductData.category || '',
+        barcode: liveProductData.barcode || '',
+        image: liveProductData.image || '',
+        images: liveProductData.images || [],
+        rating: 4.5,
+        reviews: 50,
+        sold: 100,
+      }
+    }
+    return staticProduct
+  })()
+
+  // If live data is still loading, show loading state (don't 404 yet)
+  if (!product && !liveProductData) {
+    // Will either render once liveProductData loads, or notFound when confirmed missing
+    return null
+  }
 
   if (!product) {
     notFound()
@@ -196,10 +226,10 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                   />
                   
                   {/* İndirim etiketi - sol üst */}
-                  {product.originalPrice && product.originalPrice > product.price && (
+                  {product.originalPrice && Number(product.originalPrice) > Number(product.price) && (
                     <div className="absolute left-4 top-4 z-10">
                       <span className="bg-[#92D0AA] text-white text-lg md:text-xl font-bold px-6 py-3 rounded-2xl shadow-lg">
-                        %{Math.round((1 - product.price / product.originalPrice) * 100)} İNDİRİM
+                        %{Math.round((1 - Number(product.price) / Number(product.originalPrice)) * 100)} İNDİRİM
                       </span>
                     </div>
                   )}
@@ -320,21 +350,26 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
 
                 {/* Pricing - Büyük fiyatlar */}
                 <div className="mt-6 md:mt-8">
-                  {product.originalPrice && product.originalPrice > product.price ? (
+                  {product.originalPrice && Number(product.originalPrice) > Number(product.price) ? (
                     <div>
-                      <div className="flex items-baseline gap-4">
+                      <div className="flex items-baseline gap-4 flex-wrap">
                         <span className="text-4xl md:text-5xl font-extrabold" style={{ color: '#92D0AA' }}>
-                          ₺{product.price.toLocaleString('tr-TR')}
+                          ₺{Number(product.price).toLocaleString('tr-TR')}
                         </span>
-                        <span className="text-xl md:text-2xl text-gray-400 line-through">
-                          ₺{product.originalPrice.toLocaleString('tr-TR')}
-                        </span>
+                        <div className="flex flex-col">
+                          <span className="text-xl md:text-2xl text-gray-400 line-through">
+                            ₺{Number(product.originalPrice).toLocaleString('tr-TR')}
+                          </span>
+                          <span className="text-sm font-bold text-[#92D0AA]">
+                            %{Math.round((1 - Number(product.price) / Number(product.originalPrice)) * 100)} İndirim
+                          </span>
+                        </div>
                       </div>
                     </div>
                   ) : (
                     <div>
                       <span className="text-4xl md:text-5xl font-extrabold" style={{ color: '#92D0AA' }}>
-                        ₺{product.price.toLocaleString('tr-TR')}
+                        ₺{Number(product.price).toLocaleString('tr-TR')}
                       </span>
                     </div>
                   )}

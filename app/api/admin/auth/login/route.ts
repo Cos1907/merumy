@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { query, execute, queryOne } from '../../../../lib/db';
 import { serialize } from 'cookie';
 import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 
 const SESSION_COOKIE_NAME = 'admin_session';
 
@@ -23,8 +24,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Geçersiz kimlik bilgileri' }, { status: 401 });
     }
 
-    // Check password (currently plain text comparison - in production should use bcrypt)
-    if (user.password_hash !== password) {
+    // Check password using bcrypt (secure comparison)
+    const isValidPassword = await bcrypt.compare(password, user.password_hash);
+    if (!isValidPassword) {
       return NextResponse.json({ error: 'Geçersiz kimlik bilgileri' }, { status: 401 });
     }
 

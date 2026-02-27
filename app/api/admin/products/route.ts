@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
     }
     
     if (category) {
-      whereConditions.push('c.name = ?');
+      whereConditions.push('p.category = ?');
       params.push(category);
     }
     
@@ -108,7 +108,6 @@ export async function GET(request: NextRequest) {
       SELECT COUNT(*) as total 
       FROM products p
       LEFT JOIN brands b ON p.brand_id = b.id
-      LEFT JOIN categories c ON p.category_id = c.id
       ${whereClause}
     `;
     const [countResult] = await query<any[]>(countQuery, params);
@@ -132,11 +131,10 @@ export async function GET(request: NextRequest) {
         p.created_at as createdAt,
         p.updated_at as updatedAt,
         b.name as brand,
-        c.name as category,
+        p.category,
         (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1) as image
       FROM products p
       LEFT JOIN brands b ON p.brand_id = b.id
-      LEFT JOIN categories c ON p.category_id = c.id
       ${whereClause}
       ORDER BY p.updated_at DESC
       LIMIT ${Number(limit)} OFFSET ${Number(offset)}
@@ -146,7 +144,7 @@ export async function GET(request: NextRequest) {
     
     // Get filter options
     const brands = await query<any[]>('SELECT DISTINCT name FROM brands WHERE is_active = TRUE ORDER BY name');
-    const categories = await query<any[]>('SELECT DISTINCT name FROM categories WHERE is_active = TRUE ORDER BY name');
+    const categories = await query<any[]>('SELECT DISTINCT category FROM products WHERE category IS NOT NULL ORDER BY category');
     
     return NextResponse.json({
       products,
@@ -158,7 +156,7 @@ export async function GET(request: NextRequest) {
       },
       filters: {
         brands: brands.map((b: any) => b.name),
-        categories: categories.map((c: any) => c.name)
+        categories: categories.map((c: any) => c.category)
       }
     });
   } catch (error) {
@@ -197,13 +195,6 @@ export async function POST(request: NextRequest) {
       brandId = brandRow?.id;
     }
     
-    // Get category_id
-    let categoryId = null;
-    if (category) {
-      const catRow = await queryOne<any>('SELECT id FROM categories WHERE name = ?', [category]);
-      categoryId = catRow?.id;
-    }
-    
     // Determine stock status
     let stockStatus = 'in_stock';
     if (stock <= 0) stockStatus = 'out_of_stock';
@@ -211,9 +202,9 @@ export async function POST(request: NextRequest) {
     
     const result = await execute(
       `INSERT INTO products 
-       (slug, barcode, sku, name, description, price, compare_price, stock, stock_status, brand_id, category_id, is_active, is_featured)
+       (slug, barcode, sku, name, description, price, compare_price, stock, stock_status, brand_id, category, is_active, is_featured)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [slug, barcode, sku, name, description, price, comparePrice, stock, stockStatus, brandId, categoryId, isActive ?? true, isFeatured ?? false]
+      [slug, barcode, sku, name, description, price, comparePrice, stock, stockStatus, brandId, category || null, isActive ?? true, isFeatured ?? false]
     );
     
     // Add image if provided
@@ -253,13 +244,6 @@ export async function PUT(request: NextRequest) {
       brandId = brandRow?.id;
     }
     
-    // Get category_id
-    let categoryId = null;
-    if (category) {
-      const catRow = await queryOne<any>('SELECT id FROM categories WHERE name = ?', [category]);
-      categoryId = catRow?.id;
-    }
-    
     // Determine stock status
     let stockStatus = 'in_stock';
     if (stock <= 0) stockStatus = 'out_of_stock';
@@ -269,10 +253,10 @@ export async function PUT(request: NextRequest) {
       `UPDATE products SET 
         name = ?, barcode = ?, sku = ?, description = ?, 
         price = ?, compare_price = ?, stock = ?, stock_status = ?,
-        brand_id = ?, category_id = ?, is_active = ?, is_featured = ?,
+        brand_id = ?, category = ?, is_active = ?, is_featured = ?,
         updated_at = NOW()
        WHERE id = ?`,
-      [name, barcode, sku, description, price, comparePrice, stock, stockStatus, brandId, categoryId, isActive, isFeatured, id]
+      [name, barcode, sku, description, price, comparePrice, stock, stockStatus, brandId, category || null, isActive, isFeatured, id]
     );
     
     // Update image if provided
