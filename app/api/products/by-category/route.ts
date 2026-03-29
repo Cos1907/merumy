@@ -51,7 +51,9 @@ export async function GET(req: Request) {
        LEFT JOIN brands b ON b.id = p.brand_id
        WHERE p.category = ?
          AND p.is_active = 1
-       ORDER BY p.name ASC`,
+       ORDER BY
+         CASE WHEN p.stock_status = 'out_of_stock' OR p.stock = 0 THEN 1 ELSE 0 END ASC,
+         p.created_at DESC`,
       [dbCategory]
     )
 
