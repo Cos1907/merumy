@@ -41,17 +41,8 @@
   font-display: swap;
 }
 
-/* Grift Black Font - Barlow Condensed fallback */
+/* Barlow Condensed - grift font fallback */
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&display=swap');
-
-@font-face {
-  font-family: 'Grift Black';
-  src: url('/fonts/GriftBlack.woff2') format('woff2'),
-       url('/fonts/GriftBlack.woff') format('woff');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
 
 @tailwind base;
 @tailwind components;

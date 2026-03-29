@@ -135,7 +135,8 @@ export default function CategoryShopPage({ params }: { params: { category: strin
 
   const displayedProducts = filtered.slice(0, displayedCount)
 
-  if (categoryProducts.length === 0) {
+  const VALID_SLUGS = ['cilt-bakimi', 'sac-bakimi', 'makyaj', 'kisisel-bakim', 'mask-bar', 'bebek-ve-cocuk-bakimi']
+  if (!VALID_SLUGS.includes(categorySlug)) {
     return (
       <main className="min-h-screen bg-white">
         <div className="fixed top-0 left-0 right-0 z-50">

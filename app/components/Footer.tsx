@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import CargoTracker from './CargoTracker'
 
 export default function Footer() {
   return (
@@ -50,13 +49,10 @@ export default function Footer() {
               Müşteri Hizmetleri
             </h3>
             <ul className="space-y-1 md:space-y-2">
-              <li><Link href="/shipping-returns" className="text-white hover:text-[#EEE695] transition-colors font-grift font-normal text-[10px] md:text-xs leading-tight">Kargo ve İadeler</Link></li>
+              <li><Link href="/kargo-rehberi" className="text-white hover:text-[#EEE695] transition-colors font-grift font-normal text-[10px] md:text-xs leading-tight">Kargo ve İadeler</Link></li>
               <li><Link href="/contact" className="text-white hover:text-[#EEE695] transition-colors font-grift font-normal text-[10px] md:text-xs leading-tight">İletişim</Link></li>
               <li><Link href="/kvkk-aydinlatma" className="text-white hover:text-[#EEE695] transition-colors font-grift font-normal text-[10px] md:text-xs leading-tight">Gizlilik Politikası</Link></li>
               <li className="hidden md:block"><Link href="/satis-kosullari" className="text-white hover:text-[#EEE695] transition-colors font-grift font-normal text-[10px] md:text-xs leading-tight">Şartlar ve Koşullar</Link></li>
-              <li className="pt-1">
-                <CargoTracker />
-              </li>
             </ul>
           </div>
 
