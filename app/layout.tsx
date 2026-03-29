@@ -7,11 +7,21 @@ import CartToast from './components/CartToast'
 import CookieConsent from './components/CookieConsent'
 import PageTransition from './components/PageTransition'
 import DelayNoticePopup from './components/DelayNoticePopup'
+import WhatsAppButton from './components/WhatsAppButton'
+import AccessibilityWidget from './components/AccessibilityWidget'
 
 export const metadata: Metadata = {
-  title: 'Merumy - Kore Güzellik Ürünleri',
-  description: 'Kore\'nin önde gelen kozmetik ve yaşam markalarını Türkiye\'ye getiren yenilikçi perakende markası',
-  keywords: 'kore güzellik, k-beauty, kozmetik, cilt bakımı, kore markaları',
+  title: {
+    default: 'Merumy | Kore Güzellik Ürünleri',
+    template: '%s | Merumy',
+  },
+  description: 'Türkiye\'nin K-Beauty destinasyonu. Orijinal Kore kozmetik ürünleri hızlı teslimat ile.',
+  keywords: 'kore güzellik, k-beauty, kozmetik, cilt bakımı, kore markaları, türkiye',
+  metadataBase: new URL('https://merumy.com'),
+  robots: { index: true, follow: true },
+  authors: [{ name: 'Merumy' }],
+  creator: 'Merumy',
+  publisher: 'Merumy',
 }
 
 export default function RootLayout({
@@ -27,10 +37,8 @@ export default function RootLayout({
               <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
               <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
               <link rel="manifest" href="/site.webmanifest" />
-              {/* Preload kritik görseller */}
+              {/* Preload kritik görsel */}
               <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" />
-              <link rel="preload" href="/herosection/herosection01.jpg" as="image" type="image/jpeg" media="(min-width: 768px)" />
-              <link rel="preload" href="/mobilsliderlar/slider1.jpg" as="image" type="image/jpeg" media="(max-width: 767px)" />
               <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
               <link rel="preconnect" href="https://fonts.googleapis.com" />
               <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -57,6 +65,8 @@ export default function RootLayout({
           {children}
           <CookieConsent />
           <DelayNoticePopup />
+          <WhatsAppButton />
+          <AccessibilityWidget />
         </CartProvider>
       </body>
     </html>

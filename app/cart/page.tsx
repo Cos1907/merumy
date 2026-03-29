@@ -15,11 +15,6 @@ function formatRemaining(ms: number) {
   return `${m}:${String(s).padStart(2, '0')}`
 }
 
-// Binlik ayırıcı ile fiyat formatla (1200 → 1.200)
-function formatPrice(n: number): string {
-  return n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-}
-
 export default function CartPage() {
   const {
     items,
@@ -30,8 +25,6 @@ export default function CartPage() {
     discountFromOriginal,
     promoCode,
     promoDiscount,
-    promoMinAmount,
-    promoMinNotMet,
     setPromoCode,
     clearPromoCode,
   } = useCart()
@@ -126,7 +119,7 @@ export default function CartPage() {
                         <div className="text-sm text-gray-600 mt-1 line-clamp-1">{item.product.description || 'Ürün açıklaması'}</div>
 
                         <div className="mt-3 text-base font-bold" style={{ color: '#92D0AA' }}>
-                          ₺{formatPrice(item.product.price)}
+                          ₺{item.product.price.toFixed(2)}
                         </div>
 
                         <div className="mt-3 text-xs text-gray-500">
@@ -170,38 +163,31 @@ export default function CartPage() {
 
           {/* Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white p-8 rounded-[18px] border border-gray-100 shadow-sm sticky top-6">
-              {/* Başlık - Italic */}
-              <h2 className="text-3xl font-semibold italic mb-6" style={{ color: '#92D0AA' }}>Sipariş Özeti</h2>
+            <div className="bg-white p-6 rounded-[18px] border border-gray-200 sticky top-6">
+              <h2 className="text-2xl font-bold font-grift" style={{ color: '#92D0AA' }}>Sipariş Özeti</h2>
               
-              {/* Ürünler */}
-              <div className="flex justify-between items-center py-3">
-                <span className="text-gray-700">Ürünler</span>
-                <span className="text-gray-900 font-medium">{formatPrice(cartSubtotal + discountFromOriginal)} TL</span>
-              </div>
-              
-              {/* İndirim Kazancınız */}
-              <div className="flex justify-between items-center py-3">
-                <span style={{ color: '#92D0AA' }}>İndirim Kazancınız</span>
-                <span style={{ color: '#92D0AA' }}>-{formatPrice(discountFromOriginal)} TL</span>
-              </div>
-              
-              {/* Promosyon Kodu Ekle */}
-              <div className="py-3">
-                <button
-                  type="button"
-                  onClick={() => setPromoOpen((v) => !v)}
-                  className="flex w-full items-center justify-between"
-                >
-                  <span style={{ color: '#92D0AA' }}>Promosyon Kodu Ekle</span>
-                  <span style={{ color: '#92D0AA' }} className="text-xl">{promoOpen ? '-' : '+'}</span>
-                </button>
-              </div>
-              
-              {promoOpen && (
-                <div className="pb-3">
-                  {promoCode ? (
-                    <div>
+              <div className="space-y-3 mb-6">
+                <div className="flex justify-between text-gray-700 pt-4">
+                  <span>Ürünler</span>
+                  <span>₺{(cartSubtotal + discountFromOriginal).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-gray-700 border-t border-gray-200 pt-3">
+                  <span>İndirim Kazancınız</span>
+                  <span className="text-[#d9534f]">-₺{discountFromOriginal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-gray-700 border-t border-gray-200 pt-3">
+                  <button
+                    type="button"
+                    onClick={() => setPromoOpen((v) => !v)}
+                    className="flex w-full items-center justify-between text-left"
+                  >
+                    <span>Promosyon Kodu Ekle</span>
+                    <span>{promoOpen ? '-' : '+'}</span>
+                  </button>
+                </div>
+                {promoOpen && (
+                  <div className="border-t border-gray-200 pt-3">
+                    {promoCode ? (
                       <div className="flex items-center justify-between gap-3">
                         <div className="text-sm text-gray-700">
                           Uygulandı: <span className="font-bold">{promoCode}</span>
@@ -209,7 +195,6 @@ export default function CartPage() {
                         <button
                           type="button"
                           className="text-sm underline underline-offset-4"
-                          style={{ color: '#92D0AA' }}
                           onClick={async () => {
                             setPromoError(null)
                             await clearPromoCode()
@@ -218,73 +203,54 @@ export default function CartPage() {
                           Kaldır
                         </button>
                       </div>
-                      {promoMinNotMet && promoMinAmount > 0 && (
-                        <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                          <p className="text-sm text-yellow-800">
-                            ⚠️ Bu kupon kodu minimum <strong>{formatPrice(promoMinAmount)} TL</strong> alışverişte geçerlidir.
-                          </p>
-                          <p className="text-xs text-yellow-600 mt-1">
-                            Sepet tutarınız: {formatPrice(cartSubtotal)} TL | Kalan: {formatPrice(promoMinAmount - cartSubtotal)} TL
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <form
-                      className="flex items-center gap-2"
-                      onSubmit={async (e) => {
-                        e.preventDefault()
-                        setPromoError(null)
-                        const r = await setPromoCode(promoInput)
-                        if (!r.ok) setPromoError('Promosyon kodu geçersiz.')
-                        else setPromoInput('')
-                      }}
-                    >
-                      <input
-                        value={promoInput}
-                        onChange={(e) => setPromoInput(e.target.value)}
-                        placeholder="Kupon kodunuzu girin"
-                        className="flex-1 rounded-full border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#92D0AA]/30"
-                      />
-                      <button
-                        type="submit"
-                        className="rounded-full px-4 py-2 text-white text-sm font-semibold"
-                        style={{ backgroundColor: '#92D0AA' }}
+                    ) : (
+                      <form
+                        className="flex items-center gap-2"
+                        onSubmit={async (e) => {
+                          e.preventDefault()
+                          setPromoError(null)
+                          const r = await setPromoCode(promoInput)
+                          if (!r.ok) setPromoError('Promosyon kodu geçersiz.')
+                          else setPromoInput('')
+                        }}
                       >
-                        Uygula
-                      </button>
-                    </form>
-                  )}
-                  {promoError && <div className="mt-2 text-xs text-red-600">{promoError}</div>}
+                        <input
+                          value={promoInput}
+                          onChange={(e) => setPromoInput(e.target.value)}
+                          placeholder="Kodu girin (örn: MERUMY250)"
+                          className="flex-1 rounded-xl border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#92D0AA]/30"
+                        />
+                        <button
+                          type="submit"
+                          className="rounded-xl px-4 py-2 text-white text-sm font-semibold"
+                          style={{ backgroundColor: '#92D0AA' }}
+                        >
+                          Uygula
+                        </button>
+                      </form>
+                    )}
+                    {promoError && <div className="mt-2 text-xs text-red-600">{promoError}</div>}
+                  </div>
+                )}
+                {promoDiscount > 0 && (
+                  <div className="flex justify-between text-gray-700 border-t border-gray-200 pt-3">
+                    <span>Promosyon İndirimi</span>
+                    <span className="text-[#d9534f]">-₺{promoDiscount.toFixed(2)}</span>
+                  </div>
+                )}
+                <div className="border-t border-gray-200 pt-6 flex justify-between font-bold text-lg text-gray-900">
+                  <span>Toplam</span>
+                  <span>₺{cartTotal.toFixed(2)}</span>
                 </div>
-              )}
-              
-              {promoDiscount > 0 && (
-                <div className="flex justify-between items-center py-3">
-                  <span style={{ color: '#92D0AA' }}>Promosyon İndirimi</span>
-                  <span style={{ color: '#92D0AA' }}>-{formatPrice(promoDiscount)} TL</span>
-                </div>
-              )}
-              
-              {/* Ayraç */}
-              <div className="border-t border-gray-200 my-4"></div>
-              
-              {/* Kargo Bilgisi */}
-              <p className="text-gray-600 text-sm mb-4">1000 TL üzeri kargo ücretsiz!</p>
-              
-              {/* Toplam */}
-              <div className="flex justify-between items-center mb-6">
-                <span className="text-gray-700 font-medium">Toplam</span>
-                <span className="text-gray-900 font-bold text-lg">{formatPrice(cartTotal)} TL</span>
               </div>
 
-              {/* Teslimat Butonu */}
               <button 
                 onClick={() => router.push('/checkout')}
-                className="w-full text-white py-4 rounded-full font-semibold transition-colors uppercase tracking-wide"
+                className="w-full text-white py-4 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 uppercase"
                 style={{ backgroundColor: '#92D0AA' }}
               >
-                TESLİMAT ADIMINA GEÇ
+                Teslimat Adımına Geç
+                <ArrowRight size={18} />
               </button>
               
               <Link 

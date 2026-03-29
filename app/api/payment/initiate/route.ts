@@ -77,7 +77,6 @@ export async function POST(request: NextRequest) {
       items,
       subtotal,
       shipping,
-      promoCode,       // Kupon kodu
     } = body
 
     // Validasyonlar
@@ -189,7 +188,6 @@ export async function POST(request: NextRequest) {
         subtotal: subtotal || totalAmount,
         shipping: shipping || 0,
         total: totalAmount,
-        promoCode: promoCode || null,
       })
 
       return NextResponse.json({

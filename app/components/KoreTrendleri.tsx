@@ -1,124 +1,67 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { getKoreTrendProducts, getRandomProducts } from '../lib/products'
 import ProductCardModern from './ProductCardModern'
 
 export default function KoreTrendleri() {
+  const [currentIndex, setCurrentIndex] = useState(0)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
-  const [products, setProducts] = useState<any[]>([])
-  const [isAutoScrolling, setIsAutoScrolling] = useState(true)
+  // Kore Trendleri ürünlerini rastgele getir - her render'da farklı ürünler
+  const [products, setProducts] = useState(() => getKoreTrendProducts(12))
   
+  // Sayfa yenilendiğinde farklı ürünler göster
   useEffect(() => {
-    fetch(`/api/kore-trends?section=kore_trend&limit=30&t=${Date.now()}`)
-      .then(r => r.json())
-      .then(data => { if (data.products?.length) setProducts(data.products) })
-      .catch(() => {})
+    setProducts(getKoreTrendProducts(12))
   }, [])
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const autoScrollRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  
-  // Sonsuz döngü için ürünleri 3 kez tekrarla
-  const infiniteProducts = [...products, ...products, ...products]
-  
-  const updateScrollButtons = useCallback(() => {
-    const container = scrollContainerRef.current
-    if (!container) return
-    
-    const scrollLeft = container.scrollLeft
-    const scrollWidth = container.scrollWidth
-    const clientWidth = container.clientWidth
-    
-    setCanScrollLeft(scrollLeft > 10)
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10)
-  }, [])
-  
-  // Sonsuz döngü için scroll pozisyonunu kontrol et
-  const handleInfiniteScroll = useCallback(() => {
-    const container = scrollContainerRef.current
-    if (!container) return
-    
-    const scrollLeft = container.scrollLeft
-    const scrollWidth = container.scrollWidth
-    const clientWidth = container.clientWidth
-    const oneThird = scrollWidth / 3
-    
-    // Başa yaklaştığında ortaya atla
-    if (scrollLeft < 50) {
-      container.scrollLeft = oneThird + scrollLeft
-    }
-    // Sona yaklaştığında ortaya atla
-    else if (scrollLeft > scrollWidth - clientWidth - 50) {
-      container.scrollLeft = oneThird + (scrollLeft - (scrollWidth - clientWidth))
-    }
-    
-    updateScrollButtons()
-  }, [updateScrollButtons])
   
   useEffect(() => {
     const container = scrollContainerRef.current
     if (!container) return
 
-    // Başlangıçta ortadan başla (sonsuz döngü için)
-    const oneThird = container.scrollWidth / 3
-    container.scrollLeft = oneThird
+    const updateScrollButtons = () => {
+      const scrollLeft = container.scrollLeft
+      const scrollWidth = container.scrollWidth
+      const clientWidth = container.clientWidth
+      
+      setCanScrollLeft(scrollLeft > 10)
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10)
+    }
 
     updateScrollButtons()
-    container.addEventListener('scroll', handleInfiniteScroll)
+    container.addEventListener('scroll', updateScrollButtons)
     window.addEventListener('resize', updateScrollButtons)
     
     return () => {
-      container.removeEventListener('scroll', handleInfiniteScroll)
+      container.removeEventListener('scroll', updateScrollButtons)
       window.removeEventListener('resize', updateScrollButtons)
     }
-  }, [handleInfiniteScroll, updateScrollButtons, infiniteProducts.length])
-  
-  // Otomatik kaydırma
-  useEffect(() => {
-    if (!isAutoScrolling) return
-    
-    autoScrollRef.current = setInterval(() => {
-      if (scrollContainerRef.current) {
-        const cardWidth = scrollContainerRef.current.clientWidth / 4
-        scrollContainerRef.current.scrollBy({
-          left: cardWidth,
-          behavior: 'smooth'
-        })
-      }
-    }, 4000)
-    
-    return () => {
-      if (autoScrollRef.current) {
-        clearInterval(autoScrollRef.current)
-      }
-    }
-  }, [isAutoScrolling])
+  }, [])
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
-      setIsAutoScrolling(false) // Manuel kaydırmada otomatik kaydırmayı durdur
       const cardWidth = scrollContainerRef.current.clientWidth / 4
-      scrollContainerRef.current.scrollBy({
-        left: -cardWidth,
+      const scrollAmount = scrollContainerRef.current.scrollLeft - cardWidth
+      scrollContainerRef.current.scrollTo({
+        left: Math.max(0, scrollAmount),
         behavior: 'smooth'
       })
-      // 10 saniye sonra otomatik kaydırmayı tekrar başlat
-      setTimeout(() => setIsAutoScrolling(true), 10000)
     }
   }
 
   const scrollRight = () => {
     if (scrollContainerRef.current) {
-      setIsAutoScrolling(false) // Manuel kaydırmada otomatik kaydırmayı durdur
       const cardWidth = scrollContainerRef.current.clientWidth / 4
-      scrollContainerRef.current.scrollBy({
-        left: cardWidth,
+      const scrollAmount = scrollContainerRef.current.scrollLeft + cardWidth
+      const maxScroll = scrollContainerRef.current.scrollWidth - scrollContainerRef.current.clientWidth
+      scrollContainerRef.current.scrollTo({
+        left: Math.min(maxScroll, scrollAmount),
         behavior: 'smooth'
       })
-      // 10 saniye sonra otomatik kaydırmayı tekrar başlat
-      setTimeout(() => setIsAutoScrolling(true), 10000)
     }
   }
 
@@ -150,36 +93,40 @@ export default function KoreTrendleri() {
 
         {/* Product Slider */}
         <div className="relative group">
-          {/* Gradient Overlays - Sol ve Sağ fade efekti */}
-          <div className="hidden md:block absolute left-0 top-0 bottom-4 w-24 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
-          <div className="hidden md:block absolute right-0 top-0 bottom-4 w-24 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
-          
           {/* Navigation Arrows - Mobil için gizle, desktop için göster */}
           <button
             onClick={scrollLeft}
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-20 w-12 h-12 rounded-full items-center justify-center transition-all bg-[#92D0AA] hover:bg-[#7ab594] text-white shadow-lg cursor-pointer"
+            disabled={!canScrollLeft}
+            className={`hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 rounded-full items-center justify-center transition-all ${
+              canScrollLeft 
+                ? 'bg-[#92D0AA] hover:bg-[#7ab594] text-white shadow-lg cursor-pointer opacity-100' 
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-0'
+            }`}
           >
             <ChevronLeft className="w-8 h-8" />
           </button>
 
           <button
             onClick={scrollRight}
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-20 w-12 h-12 rounded-full items-center justify-center transition-all bg-[#92D0AA] hover:bg-[#7ab594] text-white shadow-lg cursor-pointer"
+            disabled={!canScrollRight}
+            className={`hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 rounded-full items-center justify-center transition-all ${
+              canScrollRight 
+                ? 'bg-[#92D0AA] hover:bg-[#7ab594] text-white shadow-lg cursor-pointer opacity-100' 
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-0'
+            }`}
           >
             <ChevronRight className="w-8 h-8" />
           </button>
 
-          {/* Product Cards Container - Sonsuz döngü ile */}
+          {/* Product Cards Container - Tüm cihazlar için optimize edildi */}
           <div 
             ref={scrollContainerRef}
             className="flex gap-2 md:gap-4 lg:gap-5 overflow-x-auto scroll-smooth pb-4 -mx-2 px-2 md:mx-0 md:px-0"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
-            onMouseEnter={() => setIsAutoScrolling(false)}
-            onMouseLeave={() => setIsAutoScrolling(true)}
           >
-            {infiniteProducts.map((product, index) => (
+            {products.map((product) => (
               <div 
-                key={`${product.id}-${index}`} 
+                key={product.id} 
                 className="flex-shrink-0 w-[130px] sm:w-[180px] md:w-[220px] lg:w-[260px] xl:w-[280px] 2xl:w-[300px]"
               >
                 <ProductCardModern product={product} />

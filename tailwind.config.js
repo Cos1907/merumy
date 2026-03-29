@@ -24,7 +24,7 @@ module.exports = {
         'sf-pro': ['SF Pro Display', 'system-ui', 'sans-serif'],
         'playfair': ['Playfair Display', 'serif'],
         'hello-seoul': ['Hello Seoul', 'sans-serif'],
-        'grift': ['Grift Black', 'sans-serif'],
+        'grift': ['Grift Black', 'Barlow Condensed', 'sans-serif'],
       },
       fontSize: {
         '100': '100px',

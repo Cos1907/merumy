@@ -1,19 +1,14 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { getProductsByBrand } from '../lib/products'
 import { useCart } from '../context/CartContext'
 
 function encodeImagePath(path: string): string {
   if (!path) return ''
   return path.split('/').map(part => encodeURIComponent(part)).join('/')
-}
-
-// Binlik ayırıcı ile fiyat formatla (1200 → 1.200)
-function formatPrice(n: number): string {
-  return n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
 
 export default function Frankly() {
@@ -22,15 +17,8 @@ export default function Frankly() {
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
   const [progressPercentage, setProgressPercentage] = useState(0)
-  const [products, setProducts] = useState<any[]>([])
+  const [products] = useState(() => getProductsByBrand('Frankly').slice(0, 12))
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-  
-  useEffect(() => {
-    fetch('/api/products?brand=Frankly&limit=12&sortBy=name')
-      .then(r => r.json())
-      .then(data => { if (data.products?.length) setProducts(data.products) })
-      .catch(() => {})
-  }, [])
   
   useEffect(() => {
     const container = scrollContainerRef.current
@@ -97,11 +85,11 @@ export default function Frankly() {
           {/* Left Side - Featured Image - Mobil için küçültüldü */}
           <div className="w-full lg:w-[400px] flex-shrink-0">
             <div className="w-full h-[200px] md:h-[350px] lg:h-[500px] bg-[#d9d9d9] rounded-xl md:rounded-[20px] overflow-hidden relative border-2 border-[#92D0AA]">
-              <Image 
-                src="/main/frankly.jpg" 
-                alt="Frankly Featured" 
-                fill 
-                className="object-cover"
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/main/frankly.jpg"
+                alt="Frankly Featured"
+                className="w-full h-full object-cover"
               />
             </div>
           </div>
@@ -138,12 +126,11 @@ export default function Frankly() {
                       {/* Product Image Box - Mobil için optimize edildi */}
                       <div className="aspect-[4/5] bg-[#d9d9d9] rounded-lg md:rounded-[20px] overflow-hidden mb-2 md:mb-4 relative border-2 border-[#92D0AA]">
                         {product.image && product.image !== '/images/product-placeholder.png' ? (
-                          <Image
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
                             src={encodeImagePath(product.image)}
-                            alt={product.name}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-300"
-                            sizes="(max-width: 768px) 40vw, 25vw"
+                            alt={product.name || ''}
+                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         ) : (
                            <div className="absolute inset-0 flex items-center justify-center text-gray-500 text-xs md:text-sm">
@@ -174,15 +161,15 @@ export default function Frankly() {
                           {product.originalPrice && product.originalPrice > product.price ? (
                             <>
                               <span className="text-gray-400 line-through">
-                                ₺{formatPrice(product.originalPrice)}
+                                ₺{product.originalPrice.toFixed(2)}
                               </span>
                               <span className="text-red-500 font-semibold">
-                                ₺{formatPrice(product.price)}
+                                ₺{product.price.toFixed(2)}
                               </span>
                             </>
                           ) : (
                             <span className="text-gray-600">
-                              ₺{formatPrice(product.price)}
+                              ₺{product.price.toFixed(2)}
                             </span>
                           )}
                         </div>

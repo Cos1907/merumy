@@ -1,8 +1,9 @@
-'use client'
+import type { Metadata } from 'next'
+import { query } from './lib/db'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import Image from 'next/image'
+// Her request'te DB'den taze veri çek - cache yok
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 import Header from './components/Header'
 import Hero from './components/Hero'
 import BrandCarousel from './components/BrandCarousel'
@@ -13,39 +14,66 @@ import SpecialOffers from './components/SpecialOffers'
 import MerumyExclusive from './components/MerumyExclusive'
 import CategoryGrid from './components/CategoryGrid'
 import Frankly from './components/Frankly'
-// MaskBar removed
 import KoreanMakeup from './components/KoreanMakeup'
-// SkinCare20 removed
 import Newsletter from './components/Newsletter'
 import Footer from './components/Footer'
 
-export default function Home() {
-  const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
+interface HeroSlide {
+  id: string | number
+  desktopImage: string
+  mobileImage: string
+  link: string | null
+}
 
-  useEffect(() => {
-    // Simulate loading for smooth transition or data fetching if needed
-    setIsLoading(false)
-  }, [])
+export const metadata: Metadata = {
+  title: 'Merumy | Kore Güzellik Ürünleri - K-Beauty Türkiye',
+  description:
+    'Türkiye\'nin K-Beauty destinasyonu Merumy\'de Pyunkang Yul, Anua, Medicube, Cosrx ve daha fazlasını keşfet. Orijinal Kore kozmetik ürünleri hızlı teslimat ile.',
+  keywords: 'kore güzellik, k-beauty, kozmetik, cilt bakımı, kore markaları, pyunkang yul, anua, medicube, cosrx, türkiye',
+  openGraph: {
+    title: 'Merumy | Kore Güzellik Ürünleri - K-Beauty Türkiye',
+    description: 'Türkiye\'nin K-Beauty destinasyonu. Orijinal Kore kozmetik ürünleri hızlı teslimat ile.',
+    url: 'https://merumy.com',
+    siteName: 'Merumy',
+    type: 'website',
+    images: [{ url: 'https://merumy.com/logo.svg', alt: 'Merumy Logo' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Merumy | K-Beauty Türkiye',
+    description: 'Orijinal Kore güzellik ürünleri - K-Beauty destinasyonu',
+  },
+  alternates: { canonical: 'https://merumy.com' },
+}
 
-  if (isLoading) {
-    return (
-      <main className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600 font-engram">Yükleniyor...</p>
-        </div>
-      </main>
+async function getHeroSlides(): Promise<HeroSlide[]> {
+  try {
+    const rows = await query<any[]>(
+      `SELECT id, desktop_image as desktopImage, mobile_image as mobileImage, link
+       FROM hero_slides WHERE is_active = 1 ORDER BY slide_order ASC`
     )
+    return rows.map((r) => ({
+      id: r.id,
+      desktopImage: r.desktopImage || '',
+      mobileImage: r.mobileImage || '',
+      // Tam URL ise iç URL'ye çevir
+      link: r.link ? r.link.replace(/^https?:\/\/merumy\.com/, '') : null,
+    }))
+  } catch {
+    return []
   }
+}
+
+export default async function Home() {
+  const heroSlides = await getHeroSlides()
 
   return (
     <main className="min-h-screen">
       <div className="fixed top-0 left-0 right-0 z-50">
         <Header />
       </div>
-      <Hero />
-      {/* Page content (except Hero) */}
+      <Hero initialSlides={heroSlides} />
+      {/* Page content */}
       <div className="mx-[175px] max-2xl:mx-24 max-xl:mx-12 max-lg:mx-6 max-md:mx-4">
         <BrandCarousel />
         <KoreTrendleri />
@@ -58,22 +86,7 @@ export default function Home() {
         <KoreanMakeup />
         <Newsletter />
       </div>
-      {/* Keep footer full-width */}
       <Footer />
-      <style jsx>{`
-        @keyframes scroll {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-        
-        .animate-scroll {
-          animation: scroll 30s linear infinite;
-        }
-      `}</style>
     </main>
   )
 }

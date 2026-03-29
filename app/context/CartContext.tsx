@@ -21,8 +21,6 @@ interface CartContextType {
   discountFromOriginal: number
   promoCode: string | null
   promoDiscount: number
-  promoMinAmount: number
-  promoMinNotMet: boolean
   setPromoCode: (code: string) => Promise<{ ok: boolean; error?: string }>
   clearPromoCode: () => Promise<void>
   lastAddedAt: number
@@ -37,8 +35,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [discountFromOriginal, setDiscountFromOriginal] = useState(0)
   const [promoCode, setPromoCodeState] = useState<string | null>(null)
   const [promoDiscount, setPromoDiscount] = useState(0)
-  const [promoMinAmount, setPromoMinAmount] = useState(0)
-  const [promoMinNotMet, setPromoMinNotMet] = useState(false)
   const [cartTotal, setCartTotal] = useState(0)
   const [lastAddedAt, setLastAddedAt] = useState(0)
   const [toast, setToast] = useState<{ title: string; message?: string } | null>(null)
@@ -51,8 +47,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setDiscountFromOriginal(Number(data?.discountFromOriginal || 0))
     setPromoCodeState(data?.promoCode || null)
     setPromoDiscount(Number(data?.promoDiscount || 0))
-    setPromoMinAmount(Number(data?.promoMinAmount || 0))
-    setPromoMinNotMet(Boolean(data?.promoMinNotMet))
     setCartTotal(Number(data?.total || 0))
   }
 
@@ -163,8 +157,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         discountFromOriginal,
         promoCode,
         promoDiscount,
-        promoMinAmount,
-        promoMinNotMet,
         setPromoCode,
         clearPromoCode,
         lastAddedAt,

@@ -41,6 +41,61 @@ function syncProductToJson(productId: string | number, updates: Record<string, a
   }
 }
 
+// Append a brand new product to the JSON data file
+function appendProductToJson(product: {
+  id: string | number
+  slug: string
+  name: string
+  brand: string
+  category: string
+  price: number
+  comparePrice?: number | null
+  stock: number
+  barcode: string
+  sku?: string
+  image?: string
+  description?: string
+  isActive?: boolean
+}) {
+  try {
+    const jsonPaths = [
+      path.join(process.cwd(), 'app', 'data', 'products.json'),
+      path.join(process.cwd(), 'data', 'products.json'),
+    ];
+    for (const jsonPath of jsonPaths) {
+      if (fs.existsSync(jsonPath)) {
+        const raw = fs.readFileSync(jsonPath, 'utf-8');
+        const productsArray: any[] = JSON.parse(raw);
+        // Don't add if already exists (by barcode or id)
+        const exists = productsArray.some(
+          (p: any) => String(p.barcode) === String(product.barcode) || String(p.id) === String(product.id)
+        );
+        if (!exists) {
+          productsArray.push({
+            id: String(product.id),
+            slug: product.slug,
+            name: product.name,
+            brand: product.brand || '',
+            category: product.category || '',
+            price: Number(product.price),
+            originalPrice: product.comparePrice ? Number(product.comparePrice) : null,
+            stock: Number(product.stock),
+            inStock: Number(product.stock) > 0 && product.isActive !== false,
+            barcode: product.barcode || '',
+            image: product.image || '',
+            description: product.description || '',
+          });
+          fs.writeFileSync(jsonPath, JSON.stringify(productsArray, null, 2), 'utf-8');
+          console.log('New product appended to JSON:', product.slug);
+        }
+        break;
+      }
+    }
+  } catch (err) {
+    console.error('Error appending product to JSON:', err);
+  }
+}
+
 // Session check helper
 async function checkAdminSession(): Promise<boolean> {
   try {
@@ -215,6 +270,24 @@ export async function POST(request: NextRequest) {
       );
     }
     
+    // Also add to products.json for immediate frontend visibility
+    if (result.insertId) {
+      const newSlug = name.toLowerCase()
+        .replace(/[^a-z0-9\-ğüşıöç]/gi, '-')
+        .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+        .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+        .replace(/-+/g, '-').replace(/^-|-$/g, '')
+        .substring(0, 100)
+      appendProductToJson({
+        id: result.insertId,
+        slug: newSlug,
+        name, brand: brand || '', category: category || '',
+        price: Number(price), comparePrice: comparePrice ? Number(comparePrice) : null,
+        stock: Number(stock), barcode: barcode || String(result.insertId),
+        sku, image, description, isActive
+      })
+    }
+
     return NextResponse.json({ success: true, productId: result.insertId });
   } catch (error) {
     console.error('Error creating product:', error);

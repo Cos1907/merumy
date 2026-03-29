@@ -5,7 +5,7 @@ import path from 'path'
 
 // SMTP Configuration
 const transporter = nodemailer.createTransport({
-  host: 'cpsrv1.ugurlubilisim.com',
+  host: 'mail.merumy.com.tr',
   port: 465,
   secure: true,
   auth: {

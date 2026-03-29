@@ -10,8 +10,6 @@ import {
   extractThreeDSResult
 } from '../../../lib/param'
 import { sendAdminOrderNotification, sendOrderSuccessEmail } from '../../../lib/mail'
-import { execute, queryOne } from '../../../lib/db'
-import { markPromoAsUsed } from '../../../lib/cart/store'
 import fs from 'fs'
 import path from 'path'
 
@@ -168,35 +166,7 @@ export async function POST(request: NextRequest) {
           }).catch(console.error)
         }
         
-        // Adres bilgisini hazırla
-        let shippingAddressStr = ''
-        let shippingCity = ''
-        let shippingDistrict = ''
-        
-        if (orderData.address) {
-          if (typeof orderData.address === 'string') {
-            shippingAddressStr = orderData.address
-          } else if (typeof orderData.address === 'object') {
-            const addr = orderData.address
-            shippingAddressStr = `${addr.title || ''}, ${addr.address || ''}, ${addr.district || ''}/${addr.city || ''}`.trim()
-            shippingCity = addr.city || ''
-            shippingDistrict = addr.district || ''
-          }
-        }
-        
-        // shippingAddress alanını da kontrol et
-        if (!shippingAddressStr && orderData.shippingAddress) {
-          if (typeof orderData.shippingAddress === 'string') {
-            shippingAddressStr = orderData.shippingAddress
-          } else if (typeof orderData.shippingAddress === 'object') {
-            const addr = orderData.shippingAddress
-            shippingAddressStr = `${addr.title || ''}, ${addr.address || ''}, ${addr.district || ''}/${addr.city || ''}`.trim()
-            shippingCity = addr.city || ''
-            shippingDistrict = addr.district || ''
-          }
-        }
-
-        // Siparişi JSON dosyasına kaydet
+        // Siparişi kalıcı olarak kaydet
         try {
           const ordersPath = path.join(process.cwd(), 'data', 'orders.json')
           let orders: any[] = []
@@ -216,74 +186,16 @@ export async function POST(request: NextRequest) {
             subtotal: orderData.subtotal || orderData.total,
             shipping: orderData.shipping || 0,
             total: orderData.total || 0,
-            shippingAddress: orderData.shippingAddress || orderData.address || '',
+            address: orderData.address || '',
             status: 'processing',
             createdAt: new Date().toISOString(),
           }
           
           orders.push(newOrder)
           fs.writeFileSync(ordersPath, JSON.stringify(orders, null, 2))
-          console.log('Order saved to JSON:', newOrder.orderId)
+          console.log('Order saved:', newOrder.orderId)
         } catch (e) {
-          console.error('Failed to save order to JSON:', e)
-        }
-        
-        // Siparişi veritabanına kaydet
-        try {
-          // Sipariş ana kaydı
-          await execute(`
-            INSERT INTO orders (
-              order_id, dekont_id, user_id, customer_name, customer_email, customer_phone,
-              shipping_address, shipping_city, shipping_district, subtotal, shipping_cost, total, status, created_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
-          `, [
-            siparisId || '',
-            result.Dekont_ID || '',
-            orderData.userId || null,
-            orderData.customerName || '',
-            orderData.customerEmail || '',
-            orderData.customerPhone || '',
-            shippingAddressStr,
-            shippingCity,
-            shippingDistrict,
-            orderData.subtotal || orderData.total || 0,
-            orderData.shipping || 0,
-            orderData.total || 0,
-            'processing'
-          ])
-          
-          // Sipariş ID'sini al
-          const dbOrder = await queryOne<{id: number}>('SELECT id FROM orders WHERE order_id = ?', [siparisId])
-          
-          if (dbOrder && orderData.items && Array.isArray(orderData.items)) {
-            // Sipariş kalemlerini kaydet
-            for (const item of orderData.items) {
-              await execute(`
-                INSERT INTO order_items (order_id, product_name, quantity, unit_price, total_price)
-                VALUES (?, ?, ?, ?, ?)
-              `, [
-                dbOrder.id,
-                item.name || item.productName || 'Ürün',
-                item.quantity || 1,
-                item.price || item.unitPrice || 0,
-                (item.quantity || 1) * (item.price || item.unitPrice || 0)
-              ])
-            }
-          }
-          
-          console.log('Order saved to database:', siparisId)
-        } catch (dbError) {
-          console.error('Failed to save order to database:', dbError)
-        }
-        
-        // Tek kullanımlık kupon kodunu kullanılmış olarak işaretle
-        if (orderData.promoCode) {
-          try {
-            markPromoAsUsed(orderData.promoCode)
-            console.log('Promo code marked as used:', orderData.promoCode)
-          } catch (promoError) {
-            console.error('Failed to mark promo as used:', promoError)
-          }
+          console.error('Failed to save order:', e)
         }
         
         // Pending order'ı sil

@@ -3,18 +3,44 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { getKoreTrendProducts } from '../lib/products'
 import ProductCardModern from './ProductCardModern'
 
 export default function MerumyExclusive() {
-  const [products, setProducts] = useState<any[]>([])
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(true)
+  // Kore Trendleri ürünlerini rastgele getir
+  const [products, setProducts] = useState(() => getKoreTrendProducts(12))
   
+  // Sayfa yenilendiğinde farklı ürünler göster
   useEffect(() => {
-    fetch(`/api/kore-trends?section=kore_trend&limit=30&t=${Date.now()}`)
-      .then(r => r.json())
-      .then(data => { if (data.products?.length) setProducts(data.products) })
-      .catch(() => {})
+    setProducts(getKoreTrendProducts(12))
   }, [])
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (!container) return
+
+    const updateScrollButtons = () => {
+      const scrollLeft = container.scrollLeft
+      const scrollWidth = container.scrollWidth
+      const clientWidth = container.clientWidth
+      
+      setCanScrollLeft(scrollLeft > 10)
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10)
+    }
+
+    updateScrollButtons()
+    container.addEventListener('scroll', updateScrollButtons)
+    window.addEventListener('resize', updateScrollButtons)
+    
+    return () => {
+      container.removeEventListener('scroll', updateScrollButtons)
+      window.removeEventListener('resize', updateScrollButtons)
+    }
+  }, [])
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
@@ -67,21 +93,27 @@ export default function MerumyExclusive() {
 
         {/* Product Slider */}
         <div className="relative group">
-          {/* Gradient Overlays - Sol ve Sağ fade efekti */}
-          <div className="hidden md:block absolute left-0 top-0 bottom-4 w-24 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
-          <div className="hidden md:block absolute right-0 top-0 bottom-4 w-24 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
-          
           {/* Navigation Arrows - Mobil için gizle, desktop için göster */}
           <button
             onClick={scrollLeft}
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-20 w-12 h-12 rounded-full items-center justify-center transition-all bg-[#92D0AA] hover:bg-[#7ab594] text-white shadow-lg cursor-pointer"
+            disabled={!canScrollLeft}
+            className={`hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 rounded-full items-center justify-center transition-all ${
+              canScrollLeft 
+                ? 'bg-[#92D0AA] hover:bg-[#7ab594] text-white shadow-lg cursor-pointer opacity-100' 
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-0'
+            }`}
           >
             <ChevronLeft className="w-8 h-8" />
           </button>
 
           <button
             onClick={scrollRight}
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-20 w-12 h-12 rounded-full items-center justify-center transition-all bg-[#92D0AA] hover:bg-[#7ab594] text-white shadow-lg cursor-pointer"
+            disabled={!canScrollRight}
+            className={`hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 rounded-full items-center justify-center transition-all ${
+              canScrollRight 
+                ? 'bg-[#92D0AA] hover:bg-[#7ab594] text-white shadow-lg cursor-pointer opacity-100' 
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-0'
+            }`}
           >
             <ChevronRight className="w-8 h-8" />
           </button>

@@ -36,7 +36,7 @@ function getBrandLogoPath(brandName: string): string {
     'Arencia': 'arencia.webp',
     'Roundlab': 'Roundlab.webp',
     'Round Lab': 'Roundlab.webp',
-    'Pyunkang Yul': 'pyunkang-yul.webp',
+    'Pkunkang Yul': 'Pkunkang Yul.webp',
     'Medisure': 'Medisure.jpg',
     'Medicube': 'Medicube.png',
     'LEADERS': 'LEADERS.jpg',

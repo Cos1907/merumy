@@ -32,7 +32,7 @@ function getBrandLogoPath(brandName: string): string {
     'Arencia': 'arencia.webp',
     'Roundlab': 'Roundlab.webp',
     'Round Lab': 'Roundlab.webp',
-    'Pyunkang Yul': 'pyunkang-yul.webp',
+    'Pkunkang Yul': 'Pkunkang Yul.webp',
     'Medisure': 'Medisure.jpg',
     'Medicube': 'Medicube.png',
     'LEADERS': 'LEADERS.jpg',
@@ -87,8 +87,6 @@ export default function BrandPage({ params }: { params: { brand: string } }) {
   const [headerHeight, setHeaderHeight] = useState(0)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [isFilterOpen, setIsFilterOpen] = useState(true)
-  // Live product data fetched from API (overrides bundled static JSON)
-  const [liveProducts, setLiveProducts] = useState(products)
 
   useEffect(() => {
     const calculateHeaderHeight = () => {
@@ -114,47 +112,16 @@ export default function BrandPage({ params }: { params: { brand: string } }) {
     }
   }, [])
 
-  // Fetch live price/stock data from API and merge with static products
-  // Only price/stock fields are overridden - category/brand/name stay from static JSON
-  useEffect(() => {
-    fetch('/api/products?limit=10000')
-      .then(r => r.json())
-      .then(data => {
-        if (data.products && data.products.length > 0) {
-          const overrides = new Map<string, { price: number; originalPrice: number | null; inStock: boolean; stock: number }>()
-          data.products.forEach((p: any) => {
-            if (p.slug) {
-              overrides.set(p.slug, {
-                price: p.price,
-                originalPrice: p.originalPrice ?? null,
-                inStock: p.stockStatus ? p.stockStatus !== 'out_of_stock' : Boolean(p.inStock),
-                stock: p.stock ?? 0
-              })
-            }
-          })
-          const updated = products.map(staticP => {
-            const live = overrides.get(staticP.slug)
-            if (!live) return staticP
-            return { ...staticP, price: live.price, originalPrice: live.originalPrice ?? staticP.originalPrice, inStock: live.inStock, stock: live.stock }
-          })
-          setLiveProducts(updated)
-        }
-      })
-      .catch(() => {/* fallback to static products */})
-  }, [])
-
-  const uniqueBrands = useMemo(() => 
-    Array.from(new Set(liveProducts.filter(p => p && p.brand).map((p) => p.brand))).sort()
-  , [liveProducts])
-  const brandName = useMemo(() => uniqueBrands.find((b) => b && slugifyBrand(b) === brandSlug) || null, [uniqueBrands, brandSlug])
+  const uniqueBrands = useMemo(() => Array.from(new Set(products.map((p) => p.brand))).sort(), [])
+  const brandName = useMemo(() => uniqueBrands.find((b) => slugifyBrand(b) === brandSlug) || null, [uniqueBrands, brandSlug])
 
   const brandProducts = useMemo(() => {
     if (!brandName) return []
-    return liveProducts.filter((p) => p && p.name && p.brand === brandName)
-  }, [liveProducts, brandName])
+    return products.filter((p) => p.brand === brandName)
+  }, [brandName])
 
   const availableCategories = useMemo(() => {
-    return Array.from(new Set(brandProducts.filter(p => p.category).map((p) => p.category))).sort()
+    return Array.from(new Set(brandProducts.map((p) => p.category))).sort()
   }, [brandProducts])
 
   const filteredProducts = useMemo(() => {

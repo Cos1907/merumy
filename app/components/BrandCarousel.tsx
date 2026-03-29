@@ -38,6 +38,7 @@ function getBrandLogoPath(brandName: string): string {
     'Roundlab': 'Roundlab.webp',
     'Round Lab': 'Roundlab.webp',
     'Pyunkang Yul': 'pyunkang-yul.webp',
+    'Pkunkang Yul': 'pyunkang-yul.webp',
     'Medisure': 'Medisure.jpg',
     'Medicube': 'Medicube.png',
     'LEADERS': 'LEADERS.jpg',
