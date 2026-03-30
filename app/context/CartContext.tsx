@@ -122,8 +122,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // HOSGELDIN10 gibi minimum tutarlı promolar için
   const promoMinAmount = promoCode === 'HOSGELDIN10' ? 200 : 0
   const promoMinNotMet = promoMinAmount > 0 && cartSubtotal < promoMinAmount
-  // 500 TL üzeri ücretsiz kargo
-  const freeShipping = cartSubtotal >= 500
+  // 1000 TL üzeri ücretsiz kargo
+  const freeShipping = cartSubtotal >= 1000
   // cartTotal is server-computed (includes promo). Kept name for compatibility.
 
   const setPromoCode = async (code: string) => {

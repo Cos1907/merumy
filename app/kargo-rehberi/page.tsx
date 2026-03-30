@@ -44,7 +44,7 @@ export default function KargoRehberiPage() {
             <div className="bg-[#92D0AA]/10 p-4 rounded-lg">
               <p className="font-semibold text-lg">1000 TL ve üzeri siparişlerde kargo ücretsiz!</p>
             </div>
-            <p>500 TL altı siparişlerde standart kargo ücreti uygulanır.</p>
+            <p>1000 TL altı siparişlerde 80 TL kargo ücreti uygulanır.</p>
 
             <h2 className="text-2xl font-bold text-[#92D0AA] mt-8">Teslimat Süresi</h2>
             <ul className="list-disc pl-6 space-y-2">

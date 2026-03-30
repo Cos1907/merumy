@@ -113,15 +113,31 @@ export function removeLine(cartKey: string, productId: string) {
 }
 
 type Promo =
-  | { code: 'MERUMY250'; type: 'amount'; amount: number }
-  | { code: 'MERUMY10'; type: 'percent'; percent: number }
-  | { code: 'HOSGELDIN10'; type: 'percent'; percent: number; minAmount: number }
+  | { code: string; type: 'amount'; amount: number; minAmount?: number }
+  | { code: string; type: 'percent'; percent: number; minAmount?: number }
+
+// 50 adet tek kullanımlık kupon kodu (1000 TL indirim, min 5000 TL sepet tutarı)
+const ONETIMECODES = new Set([
+  '3Hjm1d3e', 'DgzPEo5V', 'cfhYLkgy', 'yl7a90MW', 'GXe8oH2q',
+  '18Kab4H7', 'pL5vj9m7', '6yig4SVz', '3c6fM50B', '8aeNqUBx',
+  'orXjIwti', 'O2Dtqyhp', 'oNFieHdx', 'h8bqcHbf', 'KYtliyTG',
+  'LR2c3ZNK', 'BdkWWxf4', 'fLK2chO7', 'Hj1I7k2T', '4pSWwdMD',
+  'nrZGCwR2', 'QVfOJXIN', 'JvkUNU3U', 'fSEfIcVI', 'AYSO0FPk',
+  'S8xGHBEk', 'z6k8IbGh', 'W2oZy4Md', 'Z9I5tPWK', 'o6PoP5tC',
+  'UGCX3QXk', 'cIOvrSZy', 'lTF3P9W9', 'qCiQpM8G', 'RELOU5DD',
+  'zNMLCj74', 'oqVIoqk8', '3scg954i', 'yKKo2Jlq', 'I5LDq4VA',
+  '6Vw4gHEm', 'h8sCLZTw', 'dbuNml7e', 'M3R5AqsI', 'Zcgt819b',
+  'O7i4KrtC', '8TY268Ml', '5UZw4Upb', 'BLb4K31C', 'Gswp45ff',
+])
 
 function normalizePromo(code: string): Promo | null {
-  const c = code.trim().toUpperCase()
+  const trimmed = code.trim()
+  const c = trimmed.toUpperCase()
   if (c === 'MERUMY250') return { code: 'MERUMY250', type: 'amount', amount: 250 }
   if (c === 'MERUMY10') return { code: 'MERUMY10', type: 'percent', percent: 10 }
   if (c === 'HOSGELDIN10') return { code: 'HOSGELDIN10', type: 'percent', percent: 10, minAmount: 200 }
+  // Tek kullanımlık kodlar: 1000 TL indirim, min 5000 TL
+  if (ONETIMECODES.has(trimmed)) return { code: trimmed, type: 'amount', amount: 1000, minAmount: 5000 }
   return null
 }
 
