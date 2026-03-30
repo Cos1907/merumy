@@ -41,6 +41,7 @@ function getBrandLogoPath(brandName: string): string | null {
     'LEADERS': 'LEADERS.jpg',
     '2AN': '2an.png',
     '2an': '2an.png',
+    'The Saem': 'The Seam.jpg',
     'The Seam': 'The Seam.jpg',
     'Lilybyred': 'Lilybyred.webp',
     'Jejudo': 'Jejudo.png',

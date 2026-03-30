@@ -25,6 +25,9 @@ interface CartContextType {
   clearPromoCode: () => Promise<void>
   lastAddedAt: number
   toast: { title: string; message?: string } | null
+  promoMinAmount: number
+  promoMinNotMet: boolean
+  freeShipping: boolean
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
@@ -68,7 +71,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       await fetch('/api/cart', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'add', productId: product.id, quantity }),
+        body: JSON.stringify({ type: 'add', productId: product.id, quantity, productSnapshot: product }),
         credentials: 'include',
       })
       await sync()
@@ -115,6 +118,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }
 
   const cartCount = items.reduce((total, item) => total + item.quantity, 0)
+
+  // HOSGELDIN10 gibi minimum tutarlı promolar için
+  const promoMinAmount = promoCode === 'HOSGELDIN10' ? 200 : 0
+  const promoMinNotMet = promoMinAmount > 0 && cartSubtotal < promoMinAmount
+  // 500 TL üzeri ücretsiz kargo
+  const freeShipping = cartSubtotal >= 500
   // cartTotal is server-computed (includes promo). Kept name for compatibility.
 
   const setPromoCode = async (code: string) => {
@@ -161,6 +170,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         clearPromoCode,
         lastAddedAt,
         toast,
+        promoMinAmount,
+        promoMinNotMet,
+        freeShipping,
       }}
     >
       {children}

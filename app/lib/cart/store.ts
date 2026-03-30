@@ -12,6 +12,7 @@ export type CartLine = {
   quantity: number
   updatedAt: number
   expiresAt: number
+  productSnapshot?: Product // DB-only ürünler için snapshot
 }
 
 export type Cart = {
@@ -138,7 +139,7 @@ export function clearPromo(cartKey: string) {
   saveCarts(carts)
 }
 
-export function setQuantity(cartKey: string, productId: string, quantity: number) {
+export function setQuantity(cartKey: string, productId: string, quantity: number, productSnapshot?: Product) {
   const cart = readCart(cartKey)
   const now = Date.now()
   const expiresAt = now + TTL_MS
@@ -153,7 +154,11 @@ export function setQuantity(cartKey: string, productId: string, quantity: number
 
   const existing = cart.lines.find((l) => l.productId === productId)
   if (existing) {
-    const next = cart.lines.map((l) => (l.productId === productId ? { ...l, quantity: finalQuantity, updatedAt: now, expiresAt } : l))
+    const next = cart.lines.map((l) =>
+      l.productId === productId
+        ? { ...l, quantity: finalQuantity, updatedAt: now, expiresAt, ...(productSnapshot ? { productSnapshot } : {}) }
+        : l
+    )
     carts.set(cartKey, { ...cart, lines: next })
     saveCarts(carts)
     return
@@ -161,21 +166,23 @@ export function setQuantity(cartKey: string, productId: string, quantity: number
 
   carts.set(cartKey, {
     ...cart,
-    lines: [...cart.lines, { productId, quantity: finalQuantity, updatedAt: now, expiresAt }],
+    lines: [...cart.lines, { productId, quantity: finalQuantity, updatedAt: now, expiresAt, ...(productSnapshot ? { productSnapshot } : {}) }],
   })
   saveCarts(carts)
 }
 
-export function addQuantity(cartKey: string, productId: string, delta: number) {
+export function addQuantity(cartKey: string, productId: string, delta: number, productSnapshot?: Product) {
   const cart = readCart(cartKey)
   const current = cart.lines.find((l) => l.productId === productId)?.quantity || 0
-  setQuantity(cartKey, productId, current + delta)
+  setQuantity(cartKey, productId, current + delta, productSnapshot)
 }
 
 export function hydrateCart(cart: Cart) {
   const detailed = cart.lines
     .map((l) => {
-      const product = products.find((p) => p.id === l.productId) as Product | undefined
+      // Önce products.json'dan ara, bulamazsan cart'taki snapshot'ı kullan
+      const product = (products.find((p) => p.id === l.productId) as Product | undefined)
+        ?? (l.productSnapshot as Product | undefined)
       if (!product) return null
       return { product, quantity: l.quantity, expiresAt: l.expiresAt }
     })

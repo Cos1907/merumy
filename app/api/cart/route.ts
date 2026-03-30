@@ -115,7 +115,8 @@ export async function POST(req: Request) {
   } else if (type === 'add') {
     if (!productId) return NextResponse.json({ error: 'MISSING_PRODUCT' }, { status: 400 })
     const delta = Number(body?.quantity || 1)
-    addQuantity(cartKey, String(productId), delta)
+    const productSnapshot = body?.productSnapshot ?? undefined
+    addQuantity(cartKey, String(productId), delta, productSnapshot)
   } else {
     return NextResponse.json({ error: 'UNKNOWN_ACTION' }, { status: 400 })
   }

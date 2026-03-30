@@ -41,13 +41,13 @@ const stores: Store[] = [
   },
   {
     id: 3,
-    name: "City's Kozyatağı",
-    address: 'İçerenköy, Çayır Cd No: 1, 34752 Ataşehir/İstanbul',
+    name: 'Metropol AVM',
+    address: 'Atatürk, Erzincan Sk. No:11, 34758 Ataşehir/İstanbul',
     image: '/magazalar/cityskozyatagi.jpg',
     isComingSoon: true,
     phone: '+90 501 061 50 09',
     hours: '10:00 - 22:00',
-    mapLink: 'https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cac6498286da1b:0x1884c5c52073115a?sa=X&ved=1t:8290&ictx=111'
+    mapLink: 'https://maps.app.goo.gl/metropol'
   }
 ]
 
