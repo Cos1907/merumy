@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { ChevronLeft, ChevronRight, Minus, Plus, ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Minus, Plus, ChevronDown, ChevronUp, ZoomIn, X } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 import type { Product } from '../../lib/products'
 
@@ -81,6 +81,8 @@ export default function ProductClient({ product, relatedProducts }: ProductClien
   const [galleryImages, setGalleryImages] = useState<string[]>([])
   const [descExpanded, setDescExpanded] = useState(false)
   const [brandLogoError, setBrandLogoError] = useState(false)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [lightboxIndex, setLightboxIndex] = useState(0)
 
   const brandLogoPath = getBrandLogoPath(product.brand)
   const displayImages = galleryImages.length ? galleryImages : product.image ? [product.image] : []
@@ -115,6 +117,28 @@ export default function ProductClient({ product, relatedProducts }: ProductClien
     return () => { cancelled = true }
   }, [product.image, product.slug])
 
+  const openLightbox = useCallback((idx: number) => {
+    setLightboxIndex(idx)
+    setLightboxOpen(true)
+    document.body.style.overflow = 'hidden'
+  }, [])
+
+  const closeLightbox = useCallback(() => {
+    setLightboxOpen(false)
+    document.body.style.overflow = ''
+  }, [])
+
+  useEffect(() => {
+    if (!lightboxOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox()
+      if (e.key === 'ArrowRight') setLightboxIndex((i) => (i + 1) % displayImages.length)
+      if (e.key === 'ArrowLeft') setLightboxIndex((i) => (i - 1 + displayImages.length) % displayImages.length)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [lightboxOpen, displayImages.length, closeLightbox])
+
   return (
     <div style={{ marginTop: `${headerHeight}px` }}>
       <div className="mx-[175px] max-2xl:mx-24 max-xl:mx-12 max-lg:mx-6 max-md:mx-4">
@@ -124,14 +148,22 @@ export default function ProductClient({ product, relatedProducts }: ProductClien
 
             {/* Left: Image gallery */}
             <div className="relative rounded-[60px] bg-gray-100 overflow-hidden">
-              <div className="relative w-full aspect-[4/5]">
+              <div
+                className="relative w-full aspect-[4/5] cursor-zoom-in group"
+                onClick={() => openLightbox(selectedImage)}
+              >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={encodeImagePath(displayImages[selectedImage] || product.image)}
                   alt={product.name}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-[1.04]"
                   onError={(e) => { e.currentTarget.src = '/images/product-placeholder.png' }}
                 />
+
+                {/* Zoom icon on hover */}
+                <div className="absolute top-4 right-4 bg-white/80 rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow">
+                  <ZoomIn size={20} className="text-gray-600" />
+                </div>
 
                 {product.inStock === false && (
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -146,7 +178,7 @@ export default function ProductClient({ product, relatedProducts }: ProductClien
                   <>
                     <button
                       type="button"
-                      onClick={() => setSelectedImage((p) => (p - 1 + displayImages.length) % displayImages.length)}
+                      onClick={(e) => { e.stopPropagation(); setSelectedImage((p) => (p - 1 + displayImages.length) % displayImages.length) }}
                       className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full flex items-center justify-center text-white"
                       style={{ backgroundColor: '#92D0AA' }}
                     >
@@ -154,7 +186,7 @@ export default function ProductClient({ product, relatedProducts }: ProductClien
                     </button>
                     <button
                       type="button"
-                      onClick={() => setSelectedImage((p) => (p + 1) % displayImages.length)}
+                      onClick={(e) => { e.stopPropagation(); setSelectedImage((p) => (p + 1) % displayImages.length) }}
                       className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full flex items-center justify-center text-white"
                       style={{ backgroundColor: '#92D0AA' }}
                     >
@@ -178,6 +210,68 @@ export default function ProductClient({ product, relatedProducts }: ProductClien
                 </div>
               )}
             </div>
+
+            {/* Lightbox Modal */}
+            {lightboxOpen && (
+              <div
+                className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90"
+                onClick={closeLightbox}
+              >
+                <button
+                  type="button"
+                  onClick={closeLightbox}
+                  className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 rounded-full p-2 text-white transition-colors"
+                >
+                  <X size={28} />
+                </button>
+
+                {displayImages.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); setLightboxIndex((i) => (i - 1 + displayImages.length) % displayImages.length) }}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 rounded-full p-3 text-white transition-colors"
+                    >
+                      <ChevronLeft size={32} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); setLightboxIndex((i) => (i + 1) % displayImages.length) }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 rounded-full p-3 text-white transition-colors"
+                    >
+                      <ChevronRight size={32} />
+                    </button>
+                  </>
+                )}
+
+                <div
+                  className="max-w-[90vw] max-h-[90vh] flex items-center justify-center"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={encodeImagePath(displayImages[lightboxIndex] || product.image)}
+                    alt={product.name}
+                    className="max-w-[90vw] max-h-[90vh] object-contain rounded-xl shadow-2xl"
+                    onError={(e) => { e.currentTarget.src = '/images/product-placeholder.png' }}
+                  />
+                </div>
+
+                {displayImages.length > 1 && (
+                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+                    {displayImages.map((_, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); setLightboxIndex(idx) }}
+                        className="w-2.5 h-2.5 rounded-full transition-all"
+                        style={{ backgroundColor: idx === lightboxIndex ? '#92D0AA' : 'rgba(255,255,255,0.4)' }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Right: Product info */}
             <div>
@@ -207,7 +301,7 @@ export default function ProductClient({ product, relatedProducts }: ProductClien
 
               {/* Product name */}
               <h1
-                className="mt-4 font-grift font-bold uppercase leading-tight text-2xl lg:text-3xl"
+                className="mt-4 font-grift font-bold leading-tight text-2xl lg:text-3xl"
                 style={{ color: '#92D0AA' }}
               >
                 {product.name}
@@ -352,7 +446,7 @@ function RelatedProductCard({ product: p, compact = false }: { product: Product;
         </div>
         <div className="mt-2 text-center px-1">
           <div
-            className={`font-grift font-bold uppercase line-clamp-2 leading-tight ${compact ? 'text-[11px]' : 'text-xs md:text-sm'}`}
+            className={`font-grift font-bold line-clamp-2 leading-tight ${compact ? 'text-[11px]' : 'text-xs md:text-sm'}`}
             style={{ color: '#92D0AA' }}
           >
             {p.name}

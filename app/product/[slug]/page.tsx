@@ -6,6 +6,10 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import ProductClient from './ProductClient'
 
+// Her istekte canlı DB verisi kullan, önbelleğe alma
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 async function getProductFromDB(slug: string): Promise<Product | null> {
   try {
     const rows = await query<any[]>(
@@ -52,7 +56,7 @@ async function getProductFromDB(slug: string): Promise<Product | null> {
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const { slug } = params
-  const product = (getProductBySlug(slug) ?? null) || (await getProductFromDB(slug))
+  const product = (await getProductFromDB(slug)) || (getProductBySlug(slug) ?? null)
   if (!product) return { title: 'Ürün Bulunamadı | Merumy' }
 
   const title = product.name
@@ -134,15 +138,16 @@ async function getRelatedFromDB(productId: string, category: string, brand: stri
 export default async function ProductPage({ params }: { params: { slug: string } }) {
   const { slug } = params
 
-  // 1. JSON'dan dene
-  let product: Product | null = getProductBySlug(slug) ?? null
+  // 1. Her zaman önce DB'den çek (admin güncellemeleri anlık yansısın)
+  let product: Product | null = await getProductFromDB(slug)
 
-  // 2. JSON'da yoksa DB'den çek
+  // 2. DB'de yoksa JSON'dan dene (fallback)
   if (!product) {
-    product = await getProductFromDB(slug)
-    if (!product) {
-      notFound()
-    }
+    product = getProductBySlug(slug) ?? null
+  }
+
+  if (!product) {
+    notFound()
   }
 
   // İlgili ürünler: önce JSON'dan aynı kategori/marka, eksik kalan için DB'den tamamla
