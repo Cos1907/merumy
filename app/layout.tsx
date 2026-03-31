@@ -6,7 +6,6 @@ import { CartProvider } from './context/CartContext'
 import CartToast from './components/CartToast'
 import CookieConsent from './components/CookieConsent'
 import PageTransition from './components/PageTransition'
-import DelayNoticePopup from './components/DelayNoticePopup'
 import WhatsAppButton from './components/WhatsAppButton'
 import AccessibilityWidget from './components/AccessibilityWidget'
 
@@ -64,7 +63,6 @@ export default function RootLayout({
           <CartToast />
           {children}
           <CookieConsent />
-          <DelayNoticePopup />
           <WhatsAppButton />
           <AccessibilityWidget />
         </CartProvider>
