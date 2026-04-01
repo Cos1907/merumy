@@ -47,7 +47,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(true)
   const [processing, setProcessing] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-  const { items, cartTotal, cartSubtotal, discountFromOriginal, promoDiscount } = useCart()
+  const { items, cartTotal, cartSubtotal, discountFromOriginal, promoDiscount, freeShipping } = useCart()
   const [paymentStep, setPaymentStep] = useState(false)
   const paymentRef = useRef<HTMLDivElement>(null)
   const [headerHeight, setHeaderHeight] = useState(140)
@@ -165,7 +165,8 @@ export default function CheckoutPage() {
     return () => window.removeEventListener('resize', calculateHeaderHeight)
   }, [])
 
-  const checkoutTotal = testProduct ? testProduct.price : cartTotal
+  const shippingFee = freeShipping ? 0 : 80
+  const checkoutTotal = testProduct ? testProduct.price : (cartTotal + shippingFee)
   const checkoutItems = testProduct ? [{ product: testProduct, quantity: 1 }] : items
 
   // Test kartı doldur (example_code/odeme.js'deki veriler)

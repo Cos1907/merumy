@@ -1,278 +1,229 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
-import { ChevronDown, ChevronUp } from 'lucide-react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import ProductCardModern from '../../components/ProductCardModern'
-import { products } from '../../lib/products'
+import type { Product } from '../../lib/products'
+import { SlidersHorizontal, ChevronDown } from 'lucide-react'
 
 function slugifyBrand(input: string) {
-  return input
-    .toLowerCase()
-    .trim()
-    .replace(/ı/g, 'i')
-    .replace(/İ/g, 'i')
-    .replace(/ş/g, 's')
-    .replace(/ğ/g, 'g')
-    .replace(/ü/g, 'u')
-    .replace(/ö/g, 'o')
-    .replace(/ç/g, 'c')
-    .replace(/\s+/g, '-')
-    .replace(/[^a-z0-9-]/g, '')
+  return input.toLowerCase().trim()
+    .replace(/ı/g, 'i').replace(/İ/g, 'i').replace(/ş/g, 's')
+    .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ö/g, 'o').replace(/ç/g, 'c')
+    .replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
 }
 
-function getBrandLogoPath(brandName: string): string {
-  const brandMap: Record<string, string> = {
-    'Bibimcos': 'bibimcos.webp',
-    'Banobagi': 'banobagi.webp',
-    'Anua': 'anua.webp',
-    'Arencia': 'arencia.webp',
-    'Roundlab': 'Roundlab.webp',
-    'Round Lab': 'Roundlab.webp',
-    'Pkunkang Yul': 'Pkunkang Yul.webp',
-    'Medisure': 'Medisure.jpg',
-    'Medicube': 'Medicube.png',
-    'LEADERS': 'LEADERS.jpg',
-    '2an': '2an.png',
-    '2AN': '2an.png',
-    'The Saem': 'The Seam.jpg',
-    'The Seam': 'The Seam.jpg',
-    'Lilybyred': 'Lilybyred.webp',
-    'Jejudo': 'Jejudo.png',
-    'IUNIK': 'IUNIK.webp',
-    'Frankly': 'Frankly.webp',
-    'Dr. Althea': 'Dr. Althea.webp',
-    'Bouquet Garni': 'Bouquet Garni.jpg',
-    'Cosrx': 'cosrx.webp',
-    'Celimax': 'celimax.jpg',
-    'Biodance': 'biodance.png',
-    'Dalbam': 'dalbam.webp',
-    'DalBam': 'dalbam.webp',
-    'Mizon': 'mizon.png',
-    'Merumy': 'merumy.svg',
-    'Mjcare': 'mjcare.png',
-    'MJCare': 'mjcare.png',
-    'Tirtir': 'tirtir.webp',
-    'Tırtır': 'tirtir.webp',
-    'Nard': 'nard.png',
-    'VT': 'vt-logo.webp',
-    'Salt Train': 'salttrain.png',
-    'Salttrain': 'salttrain.png',
-    'Saltrain': 'salttrain.png',
-  }
-
-  const normalizedName = brandName.trim()
-  if (brandMap[normalizedName]) return `/markalar/${encodeURIComponent(brandMap[normalizedName])}`
-
-  const lowerName = normalizedName.toLowerCase()
-  for (const [key, value] of Object.entries(brandMap)) {
-    if (key.toLowerCase() === lowerName) return `/markalar/${encodeURIComponent(value)}`
-  }
-
-  const filename = normalizedName.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '')
-  for (const [_, value] of Object.entries(brandMap)) {
-    const valueName = value.replace(/\.[^.]+$/, '').toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '')
-    if (valueName === filename || valueName.includes(filename) || filename.includes(valueName)) {
-      return `/markalar/${encodeURIComponent(value)}`
-    }
-  }
-
-  return `/markalar/${encodeURIComponent(normalizedName + '.webp')}`
+const BRAND_LOGO_MAP: Record<string, string> = {
+  'Bibimcos': 'bibimcos.webp', 'Banobagi': 'banobagi.webp', 'Anua': 'anua.webp',
+  'Arencia': 'arencia.webp', 'Round Lab': 'Roundlab.webp', 'Roundlab': 'Roundlab.webp',
+  'Pyunkang Yul': 'pyunkang-yul.webp', 'Pkunkang Yul': 'pyunkang-yul.webp',
+  'Medisure': 'Medisure.jpg', 'Medicube': 'Medicube.png', 'LEADERS': 'LEADERS.jpg',
+  '2AN': '2an.png', '2an': '2an.png', 'The Saem': 'The Seam.jpg', 'The Seam': 'The Seam.jpg',
+  'Lilybyred': 'Lilybyred.webp', 'Jejudo': 'Jejudo.png', 'IUNIK': 'IUNIK.webp',
+  'Frankly': 'Frankly.webp', 'Dr. Althea': 'Dr. Althea.webp',
+  'Bouquet Garni': 'Bouquet Garni.jpg', 'Cosrx': 'cosrx.webp', 'Celimax': 'celimax.jpg',
+  'Biodance': 'biodance.png', 'DalBam': 'dalbam.webp', 'Dalbam': 'dalbam.webp',
+  'Mizon': 'mizon.png', 'Mjcare': 'mjcare.png', 'MJCare': 'mjcare.png',
+  'Tırtır': 'tirtir.webp', 'Tirtir': 'tirtir.webp', 'Nard': 'nard.png',
+  'VT': 'vt-logo.webp', 'Salt Train': 'salttrain.png', 'Saltrain': 'salttrain.png',
 }
+
+function getBrandLogoPath(brandName: string): string | null {
+  const filename = BRAND_LOGO_MAP[brandName]
+  return filename ? `/markalar/${encodeURIComponent(filename)}` : null
+}
+
+type SortKey = 'default' | 'price-asc' | 'price-desc' | 'popular'
+const SORT_OPTIONS: { value: SortKey; label: string }[] = [
+  { value: 'default', label: 'Son Eklenen' },
+  { value: 'popular', label: 'Popüler' },
+  { value: 'price-desc', label: 'Fiyat: Yüksekten Düşüğe' },
+  { value: 'price-asc', label: 'Fiyat: Düşükten Yükseğe' },
+]
+
+const PRODUCTS_PER_PAGE = 20
 
 export default function BrandPage({ params }: { params: { brand: string } }) {
   const brandSlug = params.brand
-  const [headerHeight, setHeaderHeight] = useState(0)
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [isFilterOpen, setIsFilterOpen] = useState(true)
+  const [allProducts, setAllProducts] = useState<Product[]>([])
+  const [brandName, setBrandName] = useState('')
+  const [isFetching, setIsFetching] = useState(true)
+  const [displayedCount, setDisplayedCount] = useState(PRODUCTS_PER_PAGE)
+  const [isLoading, setIsLoading] = useState(false)
+  const [sortKey, setSortKey] = useState<SortKey>('default')
+  const [isSortOpen, setIsSortOpen] = useState(false)
+  const [headerHeight, setHeaderHeight] = useState(140)
+  const [logoError, setLogoError] = useState(false)
+  const loaderRef = useRef<HTMLDivElement>(null)
+  const sortRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const calculateHeaderHeight = () => {
-      const headerContainer = document.querySelector('.fixed.top-0.left-0.right-0.z-50')
-      if (headerContainer) {
-        const height = (headerContainer as HTMLElement).offsetHeight
-        setHeaderHeight(height)
-      } else {
-        // Mobil için varsayılan değer
-        setHeaderHeight(window.innerWidth < 768 ? 90 : 140)
-      }
+    const calc = () => {
+      const el = document.querySelector('.fixed.top-0.left-0.right-0.z-50')
+      setHeaderHeight(el ? (el as HTMLElement).offsetHeight : 140)
     }
-    // Hemen hesapla
-    calculateHeaderHeight()
-    // Kısa bir gecikme ile tekrar hesapla (font yüklenmesi vs için)
-    const timer1 = setTimeout(calculateHeaderHeight, 100)
-    const timer2 = setTimeout(calculateHeaderHeight, 500)
-    window.addEventListener('resize', calculateHeaderHeight)
-    return () => {
-      clearTimeout(timer1)
-      clearTimeout(timer2)
-      window.removeEventListener('resize', calculateHeaderHeight)
-    }
+    setTimeout(calc, 50)
+    window.addEventListener('resize', calc)
+    return () => window.removeEventListener('resize', calc)
   }, [])
 
-  const uniqueBrands = useMemo(() => Array.from(new Set(products.map((p) => p.brand))).sort(), [])
-  const brandName = useMemo(() => uniqueBrands.find((b) => slugifyBrand(b) === brandSlug) || null, [uniqueBrands, brandSlug])
+  // Find actual brand name from slug
+  useEffect(() => {
+    // Try to find brand by fetching all brands
+    fetch('/api/search?limit=1')
+      .then(r => r.json())
+      .then(data => {
+        const brands: any[] = data.brands || []
+        const found = brands.find((b: any) => slugifyBrand(b.brand) === brandSlug)
+        if (found) setBrandName(found.brand)
+        else setBrandName(brandSlug.replace(/-/g, ' '))
+      })
+      .catch(() => setBrandName(brandSlug.replace(/-/g, ' ')))
+  }, [brandSlug])
 
-  const brandProducts = useMemo(() => {
-    if (!brandName) return []
-    return products.filter((p) => p.brand === brandName)
+  // Fetch brand products
+  useEffect(() => {
+    if (!brandName) return
+    setIsFetching(true)
+    fetch(`/api/search?brand=${encodeURIComponent(brandName)}&limit=200`)
+      .then(r => r.json())
+      .then(data => setAllProducts(data.products || []))
+      .catch(() => setAllProducts([]))
+      .finally(() => setIsFetching(false))
   }, [brandName])
 
-  const availableCategories = useMemo(() => {
-    return Array.from(new Set(brandProducts.map((p) => p.category))).sort()
-  }, [brandProducts])
+  const sorted = useMemo(() => {
+    const inStock = allProducts.filter((p: any) => p.inStock !== false)
+    const outStock = allProducts.filter((p: any) => p.inStock === false)
+    const sortFn = (list: Product[]) => {
+      const copy = [...list]
+      switch (sortKey) {
+        case 'price-asc': return copy.sort((a, b) => (a.price ?? 0) - (b.price ?? 0))
+        case 'price-desc': return copy.sort((a, b) => (b.price ?? 0) - (a.price ?? 0))
+        case 'popular': return copy.sort((a, b) => {
+          const aDisc = a.originalPrice ? a.originalPrice - a.price : 0
+          const bDisc = b.originalPrice ? b.originalPrice - b.price : 0
+          return bDisc - aDisc
+        })
+        default: return copy
+      }
+    }
+    return [...sortFn(inStock), ...sortFn(outStock)]
+  }, [allProducts, sortKey])
 
-  const filteredProducts = useMemo(() => {
-    if (!selectedCategory) return brandProducts
-    return brandProducts.filter((p) => p.category === selectedCategory)
-  }, [brandProducts, selectedCategory])
+  const displayedProducts = sorted.slice(0, displayedCount)
 
-  if (!brandName) {
-    return (
-      <main className="min-h-screen bg-white">
-        <div className="fixed top-0 left-0 right-0 z-50">
-          <Header />
-        </div>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Marka bulunamadı</h1>
-            <Link href="/" className="text-[#92D0AA] hover:underline">
-              Anasayfaya dön
-            </Link>
-          </div>
-        </div>
-      </main>
+  const loadMore = useCallback(() => {
+    if (isLoading || displayedCount >= sorted.length) return
+    setIsLoading(true)
+    setTimeout(() => {
+      setDisplayedCount(prev => Math.min(prev + PRODUCTS_PER_PAGE, sorted.length))
+      setIsLoading(false)
+    }, 300)
+  }, [isLoading, displayedCount, sorted.length])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => { if (entries[0].isIntersecting) loadMore() },
+      { threshold: 0.1 }
     )
-  }
+    if (loaderRef.current) observer.observe(loaderRef.current)
+    return () => observer.disconnect()
+  }, [loadMore])
 
-  const logoPath = getBrandLogoPath(brandName)
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(e.target as Node)) setIsSortOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
+
+  const logoPath = brandName ? getBrandLogoPath(brandName) : null
+  const currentSortLabel = SORT_OPTIONS.find(o => o.value === sortKey)?.label ?? 'Son Eklenen'
 
   return (
     <main className="min-h-screen bg-white">
-      <div className="fixed top-0 left-0 right-0 z-50">
-        <Header />
-      </div>
+      <div className="fixed top-0 left-0 right-0 z-50"><Header /></div>
 
-      {/* Hero */}
-      <div 
-        className="w-full relative overflow-hidden" 
-        style={{ marginTop: `${headerHeight}px` }}
-      >
-        {/* Mobil Header */}
-        <div className="md:hidden relative w-full bg-[#92D0AA]/10">
-          <div className="flex items-center">
-            <div className="px-4 py-3 flex-shrink-0">
-              <div className="bg-white/90 rounded-xl p-2 shadow-sm backdrop-blur">
-                <img
-                  src={logoPath}
-                  alt={`${brandName} logo`}
-                  className="h-8 w-24 object-contain"
-                  onError={(e) => {
-                    const t = e.target as HTMLImageElement
-                    t.style.display = 'none'
-                    const parent = t.parentElement
-                    if (parent) {
-                      parent.innerHTML = `<span class="text-lg font-bold text-[#92D0AA] font-grift uppercase">${brandName}</span>`
-                    }
-                  }}
-                />
+      <div style={{ marginTop: `${headerHeight}px` }}>
+        {/* Brand Header */}
+        <div className="bg-gradient-to-r from-[#92D0AA]/20 to-[#92D0AA]/5 border-b border-[#92D0AA]/20">
+          <div className="mx-4 sm:mx-6 lg:mx-12 xl:mx-24 2xl:mx-[175px] py-8 flex items-center gap-6">
+            {logoPath && !logoError ? (
+              <img src={logoPath} alt={brandName}
+                className="h-20 max-w-[180px] object-contain rounded-lg bg-white p-2 shadow-sm"
+                onError={() => setLogoError(true)} />
+            ) : (
+              <div className="h-20 w-44 flex items-center justify-center bg-[#92D0AA]/20 rounded-lg">
+                <span className="text-xl font-bold uppercase" style={{ color: '#92D0AA' }}>{brandName}</span>
               </div>
-            </div>
-            <div className="flex-1">
-              <img 
-                src="/mobilkategorislider.png" 
-                alt={brandName}
-                className="w-full h-auto max-h-[150px] object-contain"
-                style={{ maxWidth: '393px', marginLeft: 'auto' }}
-              />
+            )}
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold font-grift uppercase" style={{ color: '#92D0AA' }}>
+                {brandName}
+              </h1>
+              <p className="text-gray-500 mt-1">
+                {isFetching ? 'Yükleniyor...' : `${sorted.length} ürün`}
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Desktop Header */}
-        <div className="hidden md:block relative w-full h-[356px]">
-          <Image src="/main/kategoriler/kategoriler.jpg" alt={brandName} fill className="object-cover" priority quality={100} />
-          {/* Brand logo overlay */}
-          <div className="absolute left-10 top-10 z-10 rounded-2xl bg-white/85 p-4 shadow-lg backdrop-blur">
-            <div className="relative h-12 w-40">
-              <img
-                src={logoPath}
-                alt={`${brandName} logo`}
-                className="h-full w-full object-contain"
-                onError={(e) => {
-                  const t = e.target as HTMLImageElement
-                  t.style.display = 'none'
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="mx-[175px] max-2xl:mx-24 max-xl:mx-12 max-lg:mx-6 max-md:mx-4">
-        <section className="py-14">
-          <h1 className="text-3xl font-bold font-grift uppercase mb-6" style={{ color: '#92D0AA' }}>
-            {brandName}
-          </h1>
-
-          <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-8">
-            {/* Category Sidebar */}
-            <aside className="lg:sticky lg:top-36 h-fit">
-              <div className="rounded-2xl border border-[#92D0AA]/40 overflow-hidden bg-white">
-                <button 
-                  onClick={() => setIsFilterOpen(!isFilterOpen)}
-                  className="w-full px-4 py-3 font-bold uppercase text-sm text-white flex items-center justify-between cursor-pointer" 
-                  style={{ backgroundColor: '#92D0AA' }}
-                >
-                  <span>KATEGORİ</span>
-                  {isFilterOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-                </button>
-                <div 
-                  className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                    isFilterOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'
-                  }`}
-                >
-                  <div className="p-3">
-                    <button
-                      onClick={() => setSelectedCategory(null)}
-                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${!selectedCategory ? 'bg-[#92D0AA]/20 text-[#92D0AA] font-medium' : 'hover:bg-gray-50'}`}
-                    >
-                      Tümü ({brandProducts.length})
-                    </button>
-                    {availableCategories.map((c) => {
-                      const count = brandProducts.filter((p) => p.category === c).length
-                      return (
-                        <button
-                          key={c}
-                          onClick={() => setSelectedCategory(c)}
-                          className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${selectedCategory === c ? 'bg-[#92D0AA]/20 text-[#92D0AA] font-medium' : 'hover:bg-gray-50'}`}
-                        >
-                          {c} ({count})
-                        </button>
-                      )
-                    })}
-                  </div>
-                </div>
+        <div className="mx-4 sm:mx-6 lg:mx-12 xl:mx-24 2xl:mx-[175px] py-8">
+          {/* Sort bar */}
+          <div className="flex justify-end mb-4" ref={sortRef}>
+            <button onClick={() => setIsSortOpen(!isSortOpen)}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 text-sm text-gray-700 hover:border-[#92D0AA] bg-white shadow-sm">
+              <SlidersHorizontal className="w-4 h-4" />
+              <span>{currentSortLabel}</span>
+              <ChevronDown className={`w-4 h-4 transition-transform ${isSortOpen ? 'rotate-180' : ''}`} />
+            </button>
+            {isSortOpen && (
+              <div className="absolute right-4 mt-10 bg-white rounded-xl border border-gray-100 shadow-lg z-30 min-w-[210px]">
+                {SORT_OPTIONS.map(opt => (
+                  <button key={opt.value} onClick={() => { setSortKey(opt.value); setIsSortOpen(false) }}
+                    className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${sortKey === opt.value ? 'bg-[#92D0AA]/15 text-[#92D0AA] font-medium' : 'hover:bg-gray-50 text-gray-700'}`}>
+                    {opt.label}
+                  </button>
+                ))}
               </div>
-            </aside>
+            )}
+          </div>
 
-            {/* Products Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-              {filteredProducts.map((p) => (
-                <ProductCardModern key={p.id} product={p} />
+          {isFetching ? (
+            <div className="flex items-center justify-center py-24">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#92D0AA]"></div>
+            </div>
+          ) : sorted.length === 0 ? (
+            <div className="text-center py-16">
+              <p className="text-gray-500 text-lg">Bu markada ürün bulunamadı.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-6">
+              {displayedProducts.map(p => (
+                <ProductCardModern key={(p as any).id || (p as any).slug} product={p} />
               ))}
             </div>
-          </div>
-        </section>
-      </div>
+          )}
 
+          {!isFetching && displayedCount < sorted.length && (
+            <div ref={loaderRef} className="flex justify-center py-8">
+              {isLoading ? (
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#92D0AA]"></div>
+              ) : (
+                <button onClick={loadMore}
+                  className="px-6 py-3 bg-[#92D0AA] text-white rounded-xl hover:bg-[#7bb896] transition-colors">
+                  Daha Fazla Göster ({sorted.length - displayedCount} ürün kaldı)
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
       <Footer />
     </main>
   )
 }
-
-
-
