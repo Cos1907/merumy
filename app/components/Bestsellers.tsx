@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { getKoreTrendProducts, getRandomProducts } from '../lib/products'
+
 import ProductCardModern from './ProductCardModern'
 
 export default function Bestsellers() {
@@ -11,11 +11,13 @@ export default function Bestsellers() {
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
   // Kore Trendleri ürünlerini rastgele getir - her render'da farklı ürünler
-  const [products, setProducts] = useState(() => getKoreTrendProducts(12))
+  const [products, setProducts] = useState<any[]>([])
   
-  // Sayfa yenilendiğinde farklı ürünler göster
   useEffect(() => {
-    setProducts(getKoreTrendProducts(12))
+    fetch('/api/kore-trends?section=kore_trend&limit=12')
+      .then(r => r.json())
+      .then(d => { if (d.products) setProducts(d.products) })
+      .catch(() => {})
   }, [])
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   

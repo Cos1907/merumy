@@ -116,7 +116,7 @@ const ITEMS_PER_PAGE = 15;
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'users' | 'reports' | 'hero' | 'activity' | 'kore-trends' | 'discount-codes'>('orders');
+  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'users' | 'reports' | 'hero' | 'activity' | 'kore-trends' | 'discount-codes' | 'site-settings'>('orders');
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -153,6 +153,17 @@ export default function AdminDashboard() {
   const [discountSaving, setDiscountSaving] = useState(false);
   const [discountError, setDiscountError] = useState('');
   const [discountSuccess, setDiscountSuccess] = useState('');
+  
+  // Site settings state
+  const [siteSettings, setSiteSettings] = useState<any>({
+    topbarEnabled: true,
+    topbarText: '1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO',
+    topbarBgColor: '#000000',
+    topbarTextColor: '#ffffff',
+    maintenanceMode: false,
+  });
+  const [settingsSaving, setSettingsSaving] = useState(false);
+  const [settingsSuccess, setSettingsSuccess] = useState(false);
   
   // Orders state
   const [orders, setOrders] = useState<Order[]>([]);
@@ -231,6 +242,7 @@ export default function AdminDashboard() {
     else if (activeTab === 'activity') fetchActivityLogs();
     else if (activeTab === 'kore-trends') fetchKoreTrendProducts(koreSection as 'kore_trend' | 'makeup');
     else if (activeTab === 'discount-codes') fetchDiscountCodes();
+    else if (activeTab === 'site-settings') fetchSiteSettings();
   }, [activeTab, orderPage, orderStatusFilter, userPage, userSort, dbProductsPage]);
 
   // Clear selection when changing filters
@@ -712,6 +724,31 @@ export default function AdminDashboard() {
     fetchDiscountCodes();
   };
 
+    const fetchSiteSettings = async () => {
+    try {
+      const res = await fetch('/api/admin/site-settings');
+      const data = await res.json();
+      if (data.settings) setSiteSettings(data.settings);
+    } catch {}
+  };
+
+  const saveSiteSettings = async () => {
+    setSettingsSaving(true);
+    setSettingsSuccess(false);
+    try {
+      const res = await fetch('/api/admin/site-settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ settings: siteSettings }),
+      });
+      if (res.ok) {
+        setSettingsSuccess(true);
+        setTimeout(() => setSettingsSuccess(false), 3000);
+      }
+    } catch {}
+    finally { setSettingsSaving(false); }
+  };
+
     const addNewHeroSlide = async () => {
     const newSlide = {
       id: 'new-' + Date.now(),
@@ -958,6 +995,8 @@ export default function AdminDashboard() {
             { id: 'reports', icon: '📊', label: 'Satış Raporu' },
             { id: 'hero', icon: '🎨', label: 'Hero Yönetimi' },
             { id: 'kore-trends', icon: '🌸', label: 'Kore Trendleri' },
+            { id: 'discount-codes', icon: '🏷️', label: 'İndirim Kodları' },
+            { id: 'site-settings', icon: '⚙️', label: 'Site Ayarları' },
           ].filter(item => !allowedSections || allowedSections.includes(item.id)).map(item => (
             <button
               key={item.id}
@@ -1050,6 +1089,8 @@ export default function AdminDashboard() {
                 {activeTab === 'hero' && '🎨 Hero Yönetimi'}
                 {activeTab === 'activity' && '📋 Yapılan İşlemler'}
                 {activeTab === 'kore-trends' && '🌸 Kore Trendleri'}
+                {activeTab === 'discount-codes' && '🏷️ İndirim Kodları'}
+                {activeTab === 'site-settings' && '⚙️ Site Ayarları'}
               </h1>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
@@ -2124,6 +2165,107 @@ export default function AdminDashboard() {
                     </table>
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* SITE SETTINGS TAB */}
+          {activeTab === 'site-settings' && (
+            <div className="space-y-6">
+              <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
+                <h2 className="text-xl font-bold text-white mb-1">⚙️ Site Ayarları</h2>
+                <p className="text-slate-400 text-sm">Topbar, bakım modu ve genel site ayarlarını buradan yönetin.</p>
+              </div>
+
+              <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700 space-y-5">
+                <h3 className="text-lg font-semibold text-white">📢 Üst Bilgi Bandı (Topbar)</h3>
+                
+                {/* Topbar Enable/Disable */}
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <div
+                    onClick={() => setSiteSettings((p: any) => ({ ...p, topbarEnabled: !p.topbarEnabled }))}
+                    className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${siteSettings.topbarEnabled ? 'bg-emerald-500' : 'bg-slate-600'}`}
+                  >
+                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${siteSettings.topbarEnabled ? 'translate-x-7' : 'translate-x-1'}`} />
+                  </div>
+                  <div>
+                    <p className="text-white font-medium">Topbar {siteSettings.topbarEnabled ? 'Aktif' : 'Pasif'}</p>
+                    <p className="text-slate-400 text-xs">Sitenin üstündeki bilgi bandını göster/gizle</p>
+                  </div>
+                </label>
+
+                {/* Topbar Text */}
+                <div>
+                  <label className="block text-slate-400 text-sm mb-2">Topbar Yazısı</label>
+                  <input
+                    type="text"
+                    value={siteSettings.topbarText}
+                    onChange={(e) => setSiteSettings((p: any) => ({ ...p, topbarText: e.target.value }))}
+                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-emerald-500"
+                    placeholder="1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO"
+                  />
+                </div>
+
+                {/* Topbar Colors */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-slate-400 text-sm mb-2">Arka Plan Rengi</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="color"
+                        value={siteSettings.topbarBgColor}
+                        onChange={(e) => setSiteSettings((p: any) => ({ ...p, topbarBgColor: e.target.value }))}
+                        className="w-12 h-12 rounded-lg cursor-pointer border-0"
+                      />
+                      <input
+                        type="text"
+                        value={siteSettings.topbarBgColor}
+                        onChange={(e) => setSiteSettings((p: any) => ({ ...p, topbarBgColor: e.target.value }))}
+                        className="flex-1 px-3 py-2 bg-slate-700 border border-slate-600 rounded-xl text-white text-sm font-mono"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-slate-400 text-sm mb-2">Yazı Rengi</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="color"
+                        value={siteSettings.topbarTextColor}
+                        onChange={(e) => setSiteSettings((p: any) => ({ ...p, topbarTextColor: e.target.value }))}
+                        className="w-12 h-12 rounded-lg cursor-pointer border-0"
+                      />
+                      <input
+                        type="text"
+                        value={siteSettings.topbarTextColor}
+                        onChange={(e) => setSiteSettings((p: any) => ({ ...p, topbarTextColor: e.target.value }))}
+                        className="flex-1 px-3 py-2 bg-slate-700 border border-slate-600 rounded-xl text-white text-sm font-mono"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Preview */}
+                <div>
+                  <p className="text-slate-400 text-sm mb-2">Önizleme:</p>
+                  <div
+                    className="rounded-xl p-3 text-center text-sm font-medium"
+                    style={{ backgroundColor: siteSettings.topbarBgColor, color: siteSettings.topbarTextColor }}
+                  >
+                    {siteSettings.topbarText || 'Topbar yazısı burada görünecek'}
+                  </div>
+                </div>
+
+                {settingsSuccess && (
+                  <div className="p-3 bg-emerald-500/20 border border-emerald-500/30 rounded-xl text-emerald-400 text-sm">✓ Ayarlar kaydedildi!</div>
+                )}
+
+                <button
+                  onClick={saveSiteSettings}
+                  disabled={settingsSaving}
+                  className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-medium transition-colors flex items-center gap-2"
+                >
+                  {settingsSaving ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Kaydediliyor...</> : '💾 Ayarları Kaydet'}
+                </button>
               </div>
             </div>
           )}

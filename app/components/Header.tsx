@@ -18,6 +18,21 @@ export default function Header() {
   const userMenuRef = useRef<HTMLDivElement>(null)
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { cartCount, lastAddedAt } = useCart()
+  const [topbarSettings, setTopbarSettings] = useState({ enabled: true, text: '1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO', bgColor: '#000000', textColor: '#ffffff' })
+
+  useEffect(() => {
+    fetch('/api/site-settings')
+      .then(r => r.json())
+      .then(d => {
+        if (d.settings) setTopbarSettings({
+          enabled: d.settings.topbarEnabled !== false,
+          text: d.settings.topbarText || '1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO',
+          bgColor: d.settings.topbarBgColor || '#000000',
+          textColor: d.settings.topbarTextColor || '#ffffff',
+        })
+      })
+      .catch(() => {})
+  }, [])
   const [mounted, setMounted] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const router = useRouter()
@@ -115,22 +130,22 @@ export default function Header() {
   return (
     <>
       {/* Top Header - Scrolling Banner */}
-      <div className="bg-accent text-white py-2 overflow-hidden relative group">
+      {topbarSettings.enabled && <div className="py-2 overflow-hidden relative group" style={{ backgroundColor: topbarSettings.bgColor, color: topbarSettings.textColor }}>
         <div className="relative w-full">
           <div className="flex animate-scroll-banner font-grift font-bold">
             <div className="flex-shrink-0 whitespace-nowrap">
               <span className="banner-text" style={{ fontSize: '15px' }}>
-                <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • 
+                <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • 
               </span>
             </div>
             <div className="flex-shrink-0 whitespace-nowrap">
               <span className="banner-text" style={{ fontSize: '15px' }}>
-                <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • <span className="banner-item">1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO</span> • 
+                <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • 
               </span>
             </div>
           </div>
         </div>
-      </div>
+      </div>}
 
       {/* Main Header */}
       <div className="bg-white sticky top-0 z-40">

@@ -5,6 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { execute } from '../../../lib/db'
 import { 
   ThreeDSTamamla,
   extractThreeDSResult
@@ -194,6 +195,28 @@ export async function POST(request: NextRequest) {
           orders.push(newOrder)
           fs.writeFileSync(ordersPath, JSON.stringify(orders, null, 2))
           console.log('Order saved:', newOrder.orderId)
+          
+          // Decrement stock for each ordered item
+          try {
+            for (const item of (orderData.items || [])) {
+              if (item.barcode || item.id) {
+                const identifier = item.barcode || item.id
+                // Decrease stock by quantity
+                await execute(
+                  `UPDATE products SET stock = GREATEST(0, stock - ?) WHERE barcode = ? OR id = ?`,
+                  [item.quantity || 1, identifier, identifier]
+                )
+                // If stock reaches 0, mark as out_of_stock
+                await execute(
+                  `UPDATE products SET stock_status = 'out_of_stock', is_active = 0 WHERE (barcode = ? OR id = ?) AND stock = 0`,
+                  [identifier, identifier]
+                )
+              }
+            }
+            console.log('Stock decremented for order:', newOrder.orderId)
+          } catch (stockErr) {
+            console.error('Stock decrement error:', stockErr)
+          }
         } catch (e) {
           console.error('Failed to save order:', e)
         }
