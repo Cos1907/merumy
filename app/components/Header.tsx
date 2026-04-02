@@ -18,7 +18,8 @@ export default function Header() {
   const userMenuRef = useRef<HTMLDivElement>(null)
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { cartCount, lastAddedAt } = useCart()
-  const [topbarSettings, setTopbarSettings] = useState({ enabled: true, text: '1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO', bgColor: '#000000', textColor: '#ffffff' })
+  // Start with enabled: false to prevent flash when topbar is disabled
+  const [topbarSettings, setTopbarSettings] = useState<{ enabled: boolean; text: string; bgColor: string; textColor: string }>({ enabled: false, text: '1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO', bgColor: '#000000', textColor: '#ffffff' })
 
   useEffect(() => {
     fetch('/api/site-settings')
@@ -30,9 +31,11 @@ export default function Header() {
           bgColor: d.settings.topbarBgColor || '#000000',
           textColor: d.settings.topbarTextColor || '#ffffff',
         })
+        else setTopbarSettings({ enabled: false, text: '1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO', bgColor: '#000000', textColor: '#ffffff' })
       })
-      .catch(() => {})
+      .catch(() => { setTopbarSettings({ enabled: false, text: '1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO', bgColor: '#000000', textColor: '#ffffff' }) })
   }, [])
+
   const [mounted, setMounted] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const router = useRouter()
@@ -40,6 +43,20 @@ export default function Header() {
   const [authUser, setAuthUser] = useState<{ firstName: string; lastName: string; email: string } | null>(null)
   const [authLoading, setAuthLoading] = useState(true)
   const [cartBump, setCartBump] = useState(false)
+
+  // Live search state
+  const [searchSuggestions, setSearchSuggestions] = useState<any[]>([])
+  const [searchBrands, setSearchBrands] = useState<string[]>([])
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false)
+  const [searchDropdownLoading, setSearchDropdownLoading] = useState(false)
+  const searchDropdownRef = useRef<HTMLDivElement>(null)
+  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Mobile search live results
+  const [mobileSearchSuggestions, setMobileSearchSuggestions] = useState<any[]>([])
+  const [mobileSearchBrands, setMobileSearchBrands] = useState<string[]>([])
+  const [mobileSearchLoading, setMobileSearchLoading] = useState(false)
+  const mobileDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Mega menü hover fonksiyonları
   const handleMenuEnter = (categoryName: string) => {
@@ -73,6 +90,9 @@ export default function Header() {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
         setIsUserMenuOpen(false)
       }
+      if (searchDropdownRef.current && !searchDropdownRef.current.contains(event.target as Node)) {
+        setShowSearchDropdown(false)
+      }
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
@@ -101,7 +121,93 @@ export default function Header() {
     setIsMenuOpen(false)
     setIsMobileSearchOpen(false)
     setIsMobileCategoriesOpen(false)
+    setShowSearchDropdown(false)
   }, [pathname])
+
+  // Live search helper
+  const doSearch = async (q: string, setSuggestions: (v: any[]) => void, setBrands: (v: string[]) => void, setLoading: (v: boolean) => void) => {
+    if (!q || q.length < 2) {
+      setSuggestions([])
+      setBrands([])
+      return
+    }
+    setLoading(true)
+    try {
+      const res = await fetch(`/api/products/search?q=${encodeURIComponent(q)}&limit=6`)
+      const data = await res.json()
+      setSuggestions(data.products || [])
+      // Get brands that match the query
+      const allBrands: string[] = data.brands || []
+      const matchingBrands = allBrands.filter((b: string) =>
+        b.toLowerCase().includes(q.toLowerCase())
+      ).slice(0, 3)
+      setBrands(matchingBrands)
+    } catch { /* ignore */ }
+    setLoading(false)
+  }
+
+  // Desktop search debounce
+  useEffect(() => {
+    if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current)
+    const q = searchValue.trim()
+    if (!q || q.length < 2) {
+      setSearchSuggestions([])
+      setSearchBrands([])
+      setShowSearchDropdown(false)
+      return
+    }
+    setShowSearchDropdown(true)
+    searchDebounceRef.current = setTimeout(() => {
+      doSearch(q, setSearchSuggestions, setSearchBrands, setSearchDropdownLoading)
+    }, 300)
+    return () => { if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current) }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValue])
+
+  // Mobile search debounce
+  useEffect(() => {
+    if (mobileDebounceRef.current) clearTimeout(mobileDebounceRef.current)
+    const q = searchValue.trim()
+    if (!q || q.length < 2) {
+      setMobileSearchSuggestions([])
+      setMobileSearchBrands([])
+      return
+    }
+    mobileDebounceRef.current = setTimeout(() => {
+      doSearch(q, setMobileSearchSuggestions, setMobileSearchBrands, setMobileSearchLoading)
+    }, 300)
+    return () => { if (mobileDebounceRef.current) clearTimeout(mobileDebounceRef.current) }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValue, isMobileSearchOpen])
+
+  // Brand logo helper
+  const getBrandLogo = (brandName: string): string | null => {
+    const logos: Record<string, string> = {
+      'ANUA': '/brands/anua.png', 'Anua': '/brands/anua.png',
+      'COSRX': '/brands/cosrx.png', 'Cosrx': '/brands/cosrx.png',
+      'MEDICUBE': '/brands/medicube.png', 'Medicube': '/brands/medicube.png',
+      'PYUNKANG YUL': '/brands/pyunkangyul.png', 'Pyunkang Yul': '/brands/pyunkangyul.png',
+      'NUMBUZIN': '/brands/numbuzin.png', 'Numbuzin': '/brands/numbuzin.png',
+      'ISNTREE': '/brands/isntree.png', 'Isntree': '/brands/isntree.png',
+      'ROUND LAB': '/brands/roundlab.png', 'Round Lab': '/brands/roundlab.png',
+      'ILLIYOON': '/brands/illiyoon.png', 'Illiyoon': '/brands/illiyoon.png',
+      'BEAUTY OF JOSEON': '/brands/beautyofjoseon.png', 'Beauty of Joseon': '/brands/beautyofjoseon.png',
+      'SOME BY MI': '/brands/somebymi.png', 'Some By Mi': '/brands/somebymi.png',
+      'TORRIDEN': '/brands/torriden.png', 'Torriden': '/brands/torriden.png',
+      'AXIS-Y': '/brands/axisy.png', 'Axis-Y': '/brands/axisy.png',
+      'SKIN1004': '/brands/skin1004.png', 'Skin1004': '/brands/skin1004.png',
+      'DR.JART+': '/brands/drjart.png', 'Dr.Jart+': '/brands/drjart.png',
+      'INNISFREE': '/brands/innisfree.png', 'Innisfree': '/brands/innisfree.png',
+      'CELIMAX': '/brands/celimax.png', 'Celimax': '/brands/celimax.png',
+      'LANEIGE': '/brands/laneige.png', 'Laneige': '/brands/laneige.png',
+      'ETUDE': '/brands/etude.png', 'Etude': '/brands/etude.png',
+      'THE FACE SHOP': '/brands/thefaceshop.png', 'The Face Shop': '/brands/thefaceshop.png',
+    }
+    return logos[brandName] || null
+  }
+
+  const slugifyBrand = (brand: string) =>
+    brand.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
 
   const slugify = (input: string) => {
     return input
@@ -127,25 +233,114 @@ export default function Header() {
     { name: "Bebek ve Çocuk Bakımı", slug: "bebek-ve-cocuk-bakimi" }
   ]
 
+  // Search dropdown shared UI
+  const SearchDropdownContent = ({ suggestions, brands, loading, onSelect }: { suggestions: any[]; brands: string[]; loading: boolean; onSelect: () => void }) => (
+    <>
+      {loading && (
+        <div className="flex items-center justify-center p-4">
+          <div className="w-5 h-5 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
+          <span className="ml-2 text-sm text-gray-500">Aranıyor...</span>
+        </div>
+      )}
+      {!loading && brands.length > 0 && (
+        <div className="p-3 border-b border-gray-100">
+          <p className="text-xs font-semibold text-gray-400 uppercase mb-2 px-1">Markalar</p>
+          {brands.map((brand: string) => {
+            const logo = getBrandLogo(brand)
+            return (
+              <Link
+                key={brand}
+                href={`/marka/${slugifyBrand(brand)}`}
+                onClick={onSelect}
+                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-accent/5 transition-colors"
+              >
+                {logo ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={logo} alt={brand} className="w-10 h-8 object-contain" onError={(e: any) => { e.target.style.display='none' }} />
+                ) : (
+                  <div className="w-10 h-8 bg-accent/10 rounded flex items-center justify-center">
+                    <span className="text-[9px] font-bold text-accent">{brand.slice(0, 3)}</span>
+                  </div>
+                )}
+                <span className="text-sm font-medium text-gray-800">{brand}</span>
+                <span className="ml-auto text-xs text-accent">Markaya git →</span>
+              </Link>
+            )
+          })}
+        </div>
+      )}
+      {!loading && suggestions.length > 0 && (
+        <div className="p-3">
+          <p className="text-xs font-semibold text-gray-400 uppercase mb-2 px-1">Ürünler</p>
+          {suggestions.map((product: any) => (
+            <Link
+              key={product.id}
+              href={`/product/${product.slug}`}
+              onClick={onSelect}
+              className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-accent/5 transition-colors"
+            >
+              {product.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={product.image.startsWith('/') ? product.image : `/${product.image}`}
+                  alt={product.name}
+                  className="w-10 h-10 object-cover rounded-lg border border-gray-100 flex-shrink-0"
+                  onError={(e: any) => { e.target.src = '/logo.svg' }}
+                />
+              ) : (
+                <div className="w-10 h-10 bg-gray-100 rounded-lg flex-shrink-0" />
+              )}
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-800 truncate">{product.name}</p>
+                {product.brand && <p className="text-xs text-gray-400">{product.brand}</p>}
+              </div>
+              <span className="text-sm font-semibold text-accent whitespace-nowrap">₺{Number(product.price).toFixed(2)}</span>
+            </Link>
+          ))}
+        </div>
+      )}
+      {!loading && suggestions.length === 0 && brands.length === 0 && searchValue.trim().length >= 2 && (
+        <div className="p-6 text-center text-gray-400 text-sm">
+          <Search size={24} className="mx-auto mb-2 opacity-30" />
+          <p>&ldquo;{searchValue}&rdquo; için sonuç bulunamadı</p>
+        </div>
+      )}
+      {!loading && suggestions.length > 0 && (
+        <div className="border-t border-gray-100 p-3">
+          <Link
+            href={`/shop?q=${encodeURIComponent(searchValue)}`}
+            onClick={onSelect}
+            className="flex items-center justify-center gap-2 py-2 text-sm font-medium text-accent hover:bg-accent/5 rounded-lg transition-colors"
+          >
+            <Search size={16} />
+            Tüm sonuçları gör
+          </Link>
+        </div>
+      )}
+    </>
+  )
+
   return (
     <>
-      {/* Top Header - Scrolling Banner */}
-      {topbarSettings.enabled && <div className="py-2 overflow-hidden relative group" style={{ backgroundColor: topbarSettings.bgColor, color: topbarSettings.textColor }}>
-        <div className="relative w-full">
-          <div className="flex animate-scroll-banner font-grift font-bold">
-            <div className="flex-shrink-0 whitespace-nowrap">
-              <span className="banner-text" style={{ fontSize: '15px' }}>
-                <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • 
-              </span>
-            </div>
-            <div className="flex-shrink-0 whitespace-nowrap">
-              <span className="banner-text" style={{ fontSize: '15px' }}>
-                <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • 
-              </span>
+      {/* Top Header - Scrolling Banner - only render once settings are loaded to prevent flicker */}
+      {topbarSettings.enabled && (
+        <div className="py-2 overflow-hidden relative group" style={{ backgroundColor: topbarSettings.bgColor, color: topbarSettings.textColor }}>
+          <div className="relative w-full">
+            <div className="flex animate-scroll-banner font-grift font-bold">
+              <div className="flex-shrink-0 whitespace-nowrap">
+                <span className="banner-text" style={{ fontSize: '15px' }}>
+                  <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • 
+                </span>
+              </div>
+              <div className="flex-shrink-0 whitespace-nowrap">
+                <span className="banner-text" style={{ fontSize: '15px' }}>
+                  <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • <span className="banner-item">{topbarSettings.text}</span> • 
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>}
+      )}
 
       {/* Main Header */}
       <div className="bg-white sticky top-0 z-40">
@@ -175,13 +370,14 @@ export default function Header() {
             
             {/* Desktop Search */}
             <div className="hidden lg:flex items-center space-x-6 flex-1 max-w-3xl mx-8">
-              <div className="relative flex-1">
+              <div className="relative flex-1" ref={searchDropdownRef}>
                 <form
                   className="relative"
                   onSubmit={(e) => {
                     e.preventDefault()
                     const q = searchValue.trim()
                     if (!q) return
+                    setShowSearchDropdown(false)
                     router.push(`/shop?q=${encodeURIComponent(q)}`)
                   }}
                 >
@@ -193,9 +389,21 @@ export default function Header() {
                     placeholder="Ürün, marka, kategori ara..."
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
+                    onFocus={() => { if (searchValue.trim().length >= 2) setShowSearchDropdown(true) }}
                     className="w-full pl-12 pr-4 py-3 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-0 text-gray-700"
                   />
                 </form>
+                {/* Desktop Search Dropdown */}
+                {showSearchDropdown && searchValue.trim().length >= 2 && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 overflow-hidden max-h-[480px] overflow-y-auto">
+                    <SearchDropdownContent
+                      suggestions={searchSuggestions}
+                      brands={searchBrands}
+                      loading={searchDropdownLoading}
+                      onSelect={() => { setShowSearchDropdown(false); setSearchValue('') }}
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
@@ -582,10 +790,10 @@ export default function Header() {
 
       {/* Mobile Search Modal */}
       {isMobileSearchOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 bg-white">
+        <div className="lg:hidden fixed inset-0 z-50 bg-white overflow-y-auto">
           <div className="p-4">
             <div className="flex items-center space-x-3 mb-4">
-              <button onClick={() => setIsMobileSearchOpen(false)} className="p-2 -ml-2">
+              <button onClick={() => { setIsMobileSearchOpen(false); setSearchValue('') }} className="p-2 -ml-2">
                 <X size={24} className="text-gray-600" />
               </button>
               <h2 className="text-lg font-semibold">Ürün Ara</h2>
@@ -610,29 +818,40 @@ export default function Header() {
                 className="w-full pl-12 pr-4 py-4 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent text-lg"
               />
             </form>
-            
-            {/* Popular Categories */}
-            <div className="mt-6">
-              <p className="text-sm font-semibold text-gray-500 mb-3">Popüler Kategoriler</p>
-              <div className="flex flex-wrap gap-2">
-                {categoryList.map((cat) => (
-                  <Link
-                    key={cat.slug}
-                    href={`/shop/${cat.slug}`}
-                    onClick={() => setIsMobileSearchOpen(false)}
-                    className="px-4 py-2 bg-accent/10 text-accent rounded-full text-sm font-medium"
-                  >
-                    {cat.displayName || cat.name}
-                  </Link>
-                ))}
+
+            {/* Mobile Live Search Results */}
+            {searchValue.trim().length >= 2 && (
+              <div className="mt-3 bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+                <SearchDropdownContent
+                  suggestions={mobileSearchSuggestions}
+                  brands={mobileSearchBrands}
+                  loading={mobileSearchLoading}
+                  onSelect={() => { setIsMobileSearchOpen(false); setSearchValue('') }}
+                />
               </div>
-            </div>
+            )}
+            
+            {/* Popular Categories - show when no results yet */}
+            {searchValue.trim().length < 2 && (
+              <div className="mt-6">
+                <p className="text-sm font-semibold text-gray-500 mb-3">Popüler Kategoriler</p>
+                <div className="flex flex-wrap gap-2">
+                  {categoryList.map((cat) => (
+                    <Link
+                      key={cat.slug}
+                      href={`/shop/${cat.slug}`}
+                      onClick={() => setIsMobileSearchOpen(false)}
+                      className="px-4 py-2 bg-accent/10 text-accent rounded-full text-sm font-medium"
+                    >
+                      {cat.displayName || cat.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
-
-      {/* Spacer for fixed bottom nav on mobile */}
-      <div className="lg:hidden h-16"></div>
     </>
   )
 }

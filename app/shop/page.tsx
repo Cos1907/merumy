@@ -49,7 +49,7 @@ const CATEGORIES = [
 ]
 
 export default function ShopPage() {
-  const [headerHeight, setHeaderHeight] = useState(0)
+  const [headerHeight, setHeaderHeight] = useState(typeof window !== 'undefined' && window.innerWidth >= 1024 ? 80 : 64)
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [displayedCount, setDisplayedCount] = useState(PRODUCTS_PER_PAGE)

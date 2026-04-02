@@ -31,7 +31,8 @@ export default function Hero({ initialSlides }: HeroProps) {
   const TOTAL_SLIDES = HERO_SLIDES.length
 
   const [currentSlide, setCurrentSlide] = useState(0)
-  const [headerHeight, setHeaderHeight] = useState(0)
+  // Default to 64px (mobile header) to prevent layout shift on initial render
+  const [headerHeight, setHeaderHeight] = useState(64)
   const [isMobile, setIsMobile] = useState(false)
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
