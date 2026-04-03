@@ -127,6 +127,12 @@ export default function ShopPage() {
     router.push('/shop', { scroll: false })
   }
 
+  // Helper: get logo URL for a brand name
+  const getBrandLogo = (brandName: string): string | null => {
+    const found = brands.find((b: any) => (b.name || b.brand) === brandName)
+    return found?.logo_url || null
+  }
+
   const brandList = useMemo((): Array<{ brand: string; count: number }> => {
     if (brands.length > 0) {
       return brands
