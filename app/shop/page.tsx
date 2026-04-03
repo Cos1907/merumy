@@ -30,9 +30,6 @@ export default function ShopPage() {
   const [fetchLoading, setFetchLoading] = useState(true)
   const [displayedCount, setDisplayedCount] = useState(PRODUCTS_PER_PAGE)
   const [isLoading, setIsLoading] = useState(false)
-  const [isFetching, setIsFetching] = useState(true)
-  const [allProducts, setAllProducts] = useState<Product[]>([])
-  const [brandList, setBrandList] = useState<Array<{ brand: string; count: number }>>([])
   const [searchInput, setSearchInput] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const searchParams = useSearchParams()
@@ -130,10 +127,13 @@ export default function ShopPage() {
     router.push('/shop', { scroll: false })
   }
 
-  const brandList = useMemo(() => {
-    // Use brands from API if available, otherwise derive from products
-    if (brands.length > 0) return brands.map((b: any) => b.name).sort()
-    return Array.from(new Set(products.map((p: any) => p.brand))).filter(Boolean).sort() as string[]
+  const brandList = useMemo((): Array<{ brand: string; count: number }> => {
+    if (brands.length > 0) {
+      return brands
+        .map((b: any) => ({ brand: b.name || b.brand || String(b), count: b.count || 0 }))
+        .sort((a: { brand: string }, b: { brand: string }) => a.brand.localeCompare(b.brand))
+    }
+    return Array.from(new Set(products.map((p: any) => p.brand))).filter(Boolean).sort().map(br => ({ brand: br as string, count: 0 }))
   }, [brands, products])
 
   return (
