@@ -1,49 +1,12 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import { Search, User, ShoppingBag, MapPin, ChevronDown, Package, MapPinned, Ticket, LogOut, UserCircle, Home, Grid3X3, X, Menu } from 'lucide-react'
-import { categories, products, Product } from '../lib/products'
+import { categories, products } from '../lib/products'
 import { useCart } from '../context/CartContext'
-
-// Türkçe karakterleri normalleştir
-function normalizeText(text: string | null | undefined): string {
-  if (!text) return ''
-  return text
-    .toLowerCase()
-    .replace(/ı/g, 'i')
-    .replace(/İ/g, 'i')
-    .replace(/ş/g, 's')
-    .replace(/Ş/g, 's')
-    .replace(/ğ/g, 'g')
-    .replace(/Ğ/g, 'g')
-    .replace(/ü/g, 'u')
-    .replace(/Ü/g, 'u')
-    .replace(/ö/g, 'o')
-    .replace(/Ö/g, 'o')
-    .replace(/ç/g, 'c')
-    .replace(/Ç/g, 'c')
-}
-
-// Türkçe karakterleri büyük harfe çevir
-function turkishUpperCase(text: string): string {
-  return text
-    .replace(/i/g, 'İ')
-    .replace(/ı/g, 'I')
-    .replace(/ş/g, 'Ş')
-    .replace(/ğ/g, 'Ğ')
-    .replace(/ü/g, 'Ü')
-    .replace(/ö/g, 'Ö')
-    .replace(/ç/g, 'Ç')
-    .toUpperCase()
-}
-
-// Binlik ayırıcı ile fiyat formatla (1200 → 1.200)
-function formatPrice(n: number): string {
-  return n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-}
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -52,10 +15,7 @@ export default function Header() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
   const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false)
-  const [isSearchFocused, setIsSearchFocused] = useState(false)
   const userMenuRef = useRef<HTMLDivElement>(null)
-  const searchRef = useRef<HTMLDivElement>(null)
-  const mobileSearchRef = useRef<HTMLDivElement>(null)
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { cartCount, lastAddedAt } = useCart()
   const [mounted, setMounted] = useState(false)
@@ -65,51 +25,6 @@ export default function Header() {
   const [authUser, setAuthUser] = useState<{ firstName: string; lastName: string; email: string } | null>(null)
   const [authLoading, setAuthLoading] = useState(true)
   const [cartBump, setCartBump] = useState(false)
-  const [liveSearchProducts, setLiveSearchProducts] = useState(products)
-
-  // DB'den güncel ürünleri çek (yeni eklenenler ve isim güncellemeleri için)
-  useEffect(() => {
-    fetch('/api/products?limit=10000')
-      .then(r => r.json())
-      .then(data => {
-        if (data.products && data.products.length > 0) {
-          const dbMap = new Map<string, any>()
-          data.products.forEach((p: any) => {
-            if (p.slug) dbMap.set(p.slug, p)
-            if (p.barcode) dbMap.set('barcode:' + p.barcode, p)
-          })
-          // Merge static products with DB data
-          const merged = products.map(staticP => {
-            const live = dbMap.get(staticP.slug) || dbMap.get('barcode:' + staticP.barcode)
-            if (!live) return staticP
-            return { ...staticP, name: live.name || staticP.name, brand: live.brand || staticP.brand, category: live.category || staticP.category, price: Number(live.price) || staticP.price, image: live.image || staticP.image }
-          })
-          // Append new DB products
-          const staticSlugs = new Set(products.map(p => p.slug))
-          const newProds = data.products
-            .filter((p: any) => p.slug && !staticSlugs.has(p.slug) && p.name && p.isActive !== false)
-            .map((p: any) => ({ id: String(p.id || p.slug), slug: p.slug, name: p.name, brand: p.brand || '', category: p.category || '', price: Number(p.price) || 0, originalPrice: null, inStock: p.stockStatus !== 'out_of_stock', stock: p.stock ?? 0, image: p.image || '', barcode: p.barcode || '', description: p.description || '' }))
-          setLiveSearchProducts([...merged, ...newProds])
-        }
-      })
-      .catch(() => {})
-  }, [])
-
-  // Canlı arama sonuçları
-  const searchResults = useMemo(() => {
-    if (!searchValue.trim() || searchValue.trim().length < 2) return []
-    
-    const query = normalizeText(searchValue.trim())
-    const results = liveSearchProducts.filter((product) => {
-      const name = normalizeText(product.name)
-      const brand = normalizeText(product.brand)
-      const category = normalizeText(product.category)
-      
-      return name.includes(query) || brand.includes(query) || category.includes(query)
-    })
-    
-    return results.slice(0, 8) // Maksimum 8 sonuç göster
-  }, [searchValue, liveSearchProducts])
 
   // Mega menü hover fonksiyonları
   const handleMenuEnter = (categoryName: string) => {
@@ -137,14 +52,11 @@ export default function Header() {
     return () => clearTimeout(t)
   }, [lastAddedAt])
 
-  // Close user menu and search when clicking outside
+  // Close user menu when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
         setIsUserMenuOpen(false)
-      }
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setIsSearchFocused(false)
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -191,13 +103,12 @@ export default function Header() {
       .replace(/[^a-z0-9-]/g, '')
   }
 
-  // Kategori isimleri JSON'daki gerçek değerlerle eşleşmeli
   const categoryList = [
     { name: "Cilt Bakımı", slug: "cilt-bakimi" },
     { name: "Mask Bar", slug: "mask-bar" },
     { name: "Saç Bakımı", slug: "sac-bakimi" },
-    { name: "Makyaj", slug: "makyaj" },
-    { name: "Kişisel Bakım", slug: "kisisel-bakim" },
+    { name: "Makyaj", slug: "makyaj", displayName: "Makyaj" },
+    { name: "Vücut Bakımı", slug: "kisisel-bakim", displayName: "Kişisel Bakım" },
     { name: "Bebek ve Çocuk Bakımı", slug: "bebek-ve-cocuk-bakimi" }
   ]
 
@@ -242,14 +153,13 @@ export default function Header() {
                   alt="Merumy Logo" 
                   width={140} 
                   height={45} 
-                  priority
                   className="h-8 lg:h-10 w-auto border-0 shadow-none" 
                 />
               </Link>
             </div>
             
             {/* Desktop Search */}
-            <div className="hidden lg:flex items-center space-x-6 flex-1 max-w-3xl mx-8" ref={searchRef}>
+            <div className="hidden lg:flex items-center space-x-6 flex-1 max-w-3xl mx-8">
               <div className="relative flex-1">
                 <form
                   className="relative"
@@ -257,7 +167,6 @@ export default function Header() {
                     e.preventDefault()
                     const q = searchValue.trim()
                     if (!q) return
-                    setIsSearchFocused(false)
                     router.push(`/shop?q=${encodeURIComponent(q)}`)
                   }}
                 >
@@ -269,85 +178,9 @@ export default function Header() {
                     placeholder="Ürün, marka, kategori ara..."
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
-                    onFocus={() => setIsSearchFocused(true)}
                     className="w-full pl-12 pr-4 py-3 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-0 text-gray-700"
                   />
                 </form>
-                
-                {/* Canlı Arama Sonuçları Dropdown */}
-                {isSearchFocused && searchResults.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 max-h-[480px] overflow-y-auto">
-                    <div className="p-2">
-                      {searchResults.map((product) => (
-                        <Link
-                          key={product.id}
-                          href={`/product/${product.slug}`}
-                          onClick={() => {
-                            setIsSearchFocused(false)
-                            setSearchValue('')
-                          }}
-                          className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
-                        >
-                          {/* Ürün Görseli */}
-                          <div className="w-14 h-14 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
-                            {product.image ? (
-                              <img 
-                                src={product.image} 
-                                alt={product.name}
-                                className="w-full h-full object-contain"
-                              />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs">
-                                Görsel
-                              </div>
-                            )}
-                          </div>
-                          {/* Ürün Bilgileri */}
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-gray-800 line-clamp-1">{product.name}</p>
-                            <p className="text-xs text-gray-500">{product.brand}</p>
-                            <div className="flex items-center gap-2 mt-1">
-                              {product.originalPrice && product.originalPrice > product.price ? (
-                                <>
-                                  <span className="text-xs text-gray-400 line-through">₺{formatPrice(product.originalPrice)}</span>
-                                  <span className="text-sm font-bold text-[#92D0AA]">₺{formatPrice(product.price)}</span>
-                                </>
-                              ) : (
-                                <span className="text-sm font-bold text-gray-800">₺{formatPrice(product.price)}</span>
-                              )}
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                    {/* Tüm Sonuçları Gör */}
-                    <div className="border-t border-gray-100 p-3">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsSearchFocused(false)
-                          router.push(`/shop?q=${encodeURIComponent(searchValue)}`)
-                        }}
-                        className="w-full py-2 text-center text-sm font-medium text-[#92D0AA] hover:bg-[#92D0AA]/10 rounded-lg transition-colors"
-                      >
-                        Tüm sonuçları gör ({products.filter(p => {
-                          const query = normalizeText(searchValue.trim())
-                          const name = normalizeText(p.name)
-                          const brand = normalizeText(p.brand)
-                          const category = normalizeText(p.category)
-                          return name.includes(query) || brand.includes(query) || category.includes(query)
-                        }).length} ürün)
-                      </button>
-                    </div>
-                  </div>
-                )}
-                
-                {/* Arama yapılıyor ama sonuç yok */}
-                {isSearchFocused && searchValue.trim().length >= 2 && searchResults.length === 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 p-6 text-center">
-                    <p className="text-gray-500">"{searchValue}" için sonuç bulunamadı</p>
-                  </div>
-                )}
               </div>
             </div>
 
@@ -468,76 +301,51 @@ export default function Header() {
         <div className="w-full px-4 md:px-8 lg:px-16 xl:px-24 mx-auto">
           <nav className="flex items-center justify-center py-3 w-full">
             <div className="flex items-center space-x-8">
-              <Link 
-                href="/" 
-                className={`uppercase whitespace-nowrap font-grift font-bold text-xs px-4 py-2 rounded-full transition-all duration-200 ${
-                  pathname === '/' 
-                    ? 'bg-[#92D0AA] text-white' 
-                    : 'text-accent hover:bg-[#92D0AA] hover:text-white'
-                }`}
-              >
+              <Link href="/" className="text-accent hover:text-accent/80 transition-colors uppercase whitespace-nowrap font-grift font-bold text-xs">
                 ANA SAYFA
               </Link>
               
               {categoryList.map((cat) => {
-                const categoryBrands = Array.from(new Set(products.filter(p => p.category === cat.name).map(p => p.brand))).slice(0, 5)
-                const isHovered = hoveredCategory === cat.name
-                const isActive = pathname === `/shop/${cat.slug}` || pathname?.startsWith(`/shop/${cat.slug}?`)
+                const categoryBrands = Array.from(new Set(products.filter(p => p.category === cat.name).map(p => p.brand))).slice(0, 7)
                 return (
                   <div
                     key={cat.slug}
-                    className="relative"
+                    className="relative group"
                     onMouseEnter={() => handleMenuEnter(cat.name)}
                     onMouseLeave={handleMenuLeave}
                   >
                     <Link
                       href={`/shop/${cat.slug}`}
-                      className={`flex items-center space-x-1 uppercase whitespace-nowrap font-grift font-bold text-xs px-4 py-2 rounded-full transition-all duration-200 ${
-                        isHovered || isActive
-                          ? 'bg-[#92D0AA] text-white' 
-                          : 'text-accent hover:bg-[#92D0AA] hover:text-white'
-                      }`}
+                      className="text-accent hover:text-accent/80 transition-colors flex items-center space-x-1 uppercase whitespace-nowrap font-grift font-bold text-xs"
                     >
-                      <span>{turkishUpperCase(cat.name)}</span>
+                      <span>{cat.displayName || cat.name.toUpperCase()}</span>
                       {categoryBrands.length > 0 && (
-                        <ChevronDown size={12} className={`transition-transform ${isHovered ? 'rotate-180' : ''}`} />
+                        <ChevronDown size={12} className={`transition-transform ${hoveredCategory === cat.name ? 'rotate-180' : ''}`} />
                       )}
                     </Link>
-                    {isHovered && categoryBrands.length > 0 && (
+                    {hoveredCategory === cat.name && categoryBrands.length > 0 && (
                       <div 
-                        className="absolute top-full left-0 mt-1 w-56 bg-[#92D0AA] rounded-2xl shadow-xl z-50 overflow-hidden"
+                        className="absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-accent/20 z-50 p-5"
                         onMouseEnter={() => handleMenuEnter(cat.name)}
                         onMouseLeave={handleMenuLeave}
                       >
-                        {/* Başlık */}
-                        <div className="px-5 pt-4 pb-3">
-                          <h3 className="text-white font-bold text-sm uppercase tracking-wide">
-                            {turkishUpperCase(cat.name)}
-                          </h3>
-                        </div>
-                        <div className="border-t border-white/30 mx-4"></div>
-                        {/* Marka Listesi */}
-                        <div className="px-5 py-3">
-                          {categoryBrands.map((brand, idx) => (
-                            <div key={brand}>
-                              <Link
-                                href={`/shop/${cat.slug}?brand=${encodeURIComponent(brand)}`}
-                                className="block text-white/90 hover:text-white transition-colors text-sm py-2"
-                              >
-                                {brand}
-                              </Link>
-                              {idx < categoryBrands.length - 1 && (
-                                <div className="border-b border-white/20"></div>
-                              )}
-                            </div>
+                        <h3 className="text-accent font-bold text-sm uppercase tracking-wide mb-3">
+                          {cat.displayName || cat.name.toUpperCase()}
+                        </h3>
+                        <div className="border-t border-accent/20 mb-3"></div>
+                        <div className="space-y-2">
+                          {categoryBrands.map((brand) => (
+                            <Link
+                              key={brand}
+                              href={`/shop/${cat.slug}?brand=${encodeURIComponent(brand)}`}
+                              className="block text-gray-700 hover:text-accent transition-colors text-sm py-1"
+                            >
+                              {brand}
+                            </Link>
                           ))}
                         </div>
-                        {/* Tümünü Gör */}
-                        <div className="px-5 pb-4 pt-1">
-                          <Link 
-                            href={`/shop/${cat.slug}`} 
-                            className="text-sm font-bold text-white hover:underline"
-                          >
+                        <div className="border-t border-accent/20 mt-3 pt-3">
+                          <Link href={`/shop/${cat.slug}`} className="text-sm font-medium text-accent hover:underline">
                             Tümünü Gör
                           </Link>
                         </div>
@@ -640,7 +448,7 @@ export default function Header() {
                   className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50"
                 >
                   <Grid3X3 size={20} className="mr-3 text-accent" />
-                  <span className="font-medium">{cat.name}</span>
+                  <span className="font-medium">{cat.displayName || cat.name}</span>
                 </Link>
               ))}
             </div>
@@ -759,10 +567,10 @@ export default function Header() {
 
       {/* Mobile Search Modal */}
       {isMobileSearchOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 bg-white overflow-y-auto">
-          <div className="p-4 pb-24">
+        <div className="lg:hidden fixed inset-0 z-50 bg-white">
+          <div className="p-4">
             <div className="flex items-center space-x-3 mb-4">
-              <button onClick={() => { setIsMobileSearchOpen(false); setSearchValue(''); }} className="p-2 -ml-2">
+              <button onClick={() => setIsMobileSearchOpen(false)} className="p-2 -ml-2">
                 <X size={24} className="text-gray-600" />
               </button>
               <h2 className="text-lg font-semibold">Ürün Ara</h2>
@@ -773,7 +581,6 @@ export default function Header() {
                 const q = searchValue.trim()
                 if (!q) return
                 setIsMobileSearchOpen(false)
-                setSearchValue('')
                 router.push(`/shop?q=${encodeURIComponent(q)}`)
               }}
               className="relative"
@@ -789,97 +596,28 @@ export default function Header() {
               />
             </form>
             
-            {/* Canlı Arama Sonuçları */}
-            {searchResults.length > 0 && (
-              <div className="mt-4">
-                <p className="text-sm font-semibold text-gray-500 mb-3">Arama Sonuçları</p>
-                <div className="space-y-2">
-                  {searchResults.map((product) => (
-                    <Link
-                      key={product.id}
-                      href={`/product/${product.slug}`}
-                      onClick={() => {
-                        setIsMobileSearchOpen(false)
-                        setSearchValue('')
-                      }}
-                      className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl"
-                    >
-                      {/* Ürün Görseli */}
-                      <div className="w-16 h-16 flex-shrink-0 bg-white rounded-lg overflow-hidden border border-gray-100">
-                        {product.image ? (
-                          <img 
-                            src={product.image} 
-                            alt={product.name}
-                            className="w-full h-full object-contain"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs">
-                            Görsel
-                          </div>
-                        )}
-                      </div>
-                      {/* Ürün Bilgileri */}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-800 line-clamp-2">{product.name}</p>
-                        <p className="text-xs text-gray-500 mt-0.5">{product.brand}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          {product.originalPrice && product.originalPrice > product.price ? (
-                            <>
-                              <span className="text-xs text-gray-400 line-through">₺{formatPrice(product.originalPrice)}</span>
-                              <span className="text-sm font-bold text-[#92D0AA]">₺{formatPrice(product.price)}</span>
-                            </>
-                          ) : (
-                            <span className="text-sm font-bold text-gray-800">₺{formatPrice(product.price)}</span>
-                          )}
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-                {/* Tüm Sonuçları Gör */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsMobileSearchOpen(false)
-                    router.push(`/shop?q=${encodeURIComponent(searchValue)}`)
-                    setSearchValue('')
-                  }}
-                  className="w-full mt-4 py-3 text-center text-sm font-medium text-white bg-[#92D0AA] rounded-xl"
-                >
-                  Tüm sonuçları gör
-                </button>
+            {/* Popular Categories */}
+            <div className="mt-6">
+              <p className="text-sm font-semibold text-gray-500 mb-3">Popüler Kategoriler</p>
+              <div className="flex flex-wrap gap-2">
+                {categoryList.map((cat) => (
+                  <Link
+                    key={cat.slug}
+                    href={`/shop/${cat.slug}`}
+                    onClick={() => setIsMobileSearchOpen(false)}
+                    className="px-4 py-2 bg-accent/10 text-accent rounded-full text-sm font-medium"
+                  >
+                    {cat.displayName || cat.name}
+                  </Link>
+                ))}
               </div>
-            )}
-            
-            {/* Sonuç bulunamadı */}
-            {searchValue.trim().length >= 2 && searchResults.length === 0 && (
-              <div className="mt-6 text-center py-8">
-                <p className="text-gray-500">"{searchValue}" için sonuç bulunamadı</p>
-              </div>
-            )}
-            
-            {/* Popular Categories - Arama yapılmadığında göster */}
-            {searchValue.trim().length < 2 && (
-              <div className="mt-6">
-                <p className="text-sm font-semibold text-gray-500 mb-3">Popüler Kategoriler</p>
-                <div className="flex flex-wrap gap-2">
-                  {categoryList.map((cat) => (
-                    <Link
-                      key={cat.slug}
-                      href={`/shop/${cat.slug}`}
-                      onClick={() => { setIsMobileSearchOpen(false); setSearchValue(''); }}
-                      className="px-4 py-2 bg-accent/10 text-accent rounded-full text-sm font-medium"
-                    >
-                      {cat.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
+            </div>
           </div>
         </div>
       )}
 
+      {/* Spacer for fixed bottom nav on mobile */}
+      <div className="lg:hidden h-16"></div>
     </>
   )
 }
