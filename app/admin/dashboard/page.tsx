@@ -1138,7 +1138,7 @@ export default function AdminDashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: '#0b1117' }}>
         <div className="text-center">
-          <img src="/logo.svg" alt="Merumy" className="h-8 w-auto mx-auto mb-8 opacity-60" style={{ filter: 'brightness(0) invert(1)' }} />
+          <img src="/logo.svg" alt="Merumy" className="h-8 w-auto mx-auto mb-8 opacity-80" />
           <div className="w-10 h-10 border-2 border-t-[#92D0AA] rounded-full animate-spin mx-auto mb-4"
             style={{ borderColor: 'rgba(146,208,170,0.2)', borderTopColor: '#92D0AA' }} />
           <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>Yükleniyor...</p>
@@ -1175,7 +1175,7 @@ export default function AdminDashboard() {
                 src="/logo.svg"
                 alt="Merumy"
                 className={`object-contain ${(sidebarOpen || mobileSidebarOpen) ? 'h-7 w-auto' : 'h-7 w-7'}`}
-                style={{ filter: 'brightness(0) invert(1)', opacity: 0.9 }}
+                style={{ opacity: 0.9 }}
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = 'none';
                 }}

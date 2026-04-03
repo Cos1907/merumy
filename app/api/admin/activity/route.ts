@@ -2,14 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { query, execute, queryOne } from '../../../lib/db';
 import { cookies } from 'next/headers';
 
+export const dynamic = 'force-dynamic';
+
 async function getAdminUser(): Promise<{ isAdmin: boolean; userId?: number; email?: string }> {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const sessionToken = cookieStore.get('admin_session')?.value;
     if (!sessionToken) return { isAdmin: false };
     const session = await queryOne<any>(
       `SELECT s.user_id, u.email FROM admin_sessions s
-       JOIN users u ON s.user_id = u.id
+       JOIN admin_users u ON s.user_id = u.id
        WHERE s.session_token = ? AND s.expires_at > NOW()`,
       [sessionToken]
     );
@@ -30,20 +32,52 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const limit = Math.min(parseInt(searchParams.get('limit') || '100'), 500);
-    const offset = Math.max(parseInt(searchParams.get('offset') || '0'), 0);
+    const limit = Math.min(parseInt(searchParams.get('limit') || '25'), 500);
+    const page = Math.max(parseInt(searchParams.get('page') || '1'), 1);
+    const offset = (page - 1) * limit;
+    const userEmail = searchParams.get('userEmail') || '';
+    const dateFrom = searchParams.get('dateFrom') || '';
+    const dateTo = searchParams.get('dateTo') || '';
+
+    // Build WHERE clause
+    const conditions: string[] = [];
+    const queryParams: any[] = [];
+
+    if (userEmail) {
+      conditions.push('user_email LIKE ?');
+      queryParams.push(`%${userEmail}%`);
+    }
+    if (dateFrom) {
+      conditions.push('created_at >= ?');
+      queryParams.push(`${dateFrom} 00:00:00`);
+    }
+    if (dateTo) {
+      conditions.push('created_at <= ?');
+      queryParams.push(`${dateTo} 23:59:59`);
+    }
+
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
     const logs = await query<any[]>(
       `SELECT id, user_email, action, description, entity_type, entity_id, created_at
        FROM admin_activity_logs
+       ${whereClause}
        ORDER BY created_at DESC
-       LIMIT ${limit} OFFSET ${offset}`
+       LIMIT ${limit} OFFSET ${offset}`,
+      queryParams
     );
 
-    const countResult = await query<any[]>('SELECT COUNT(*) as total FROM admin_activity_logs');
-    const total = countResult?.[0]?.total || 0;
+    const countResult = await query<any[]>(
+      `SELECT COUNT(*) as total FROM admin_activity_logs ${whereClause}`,
+      queryParams
+    );
+    const total = Number(countResult?.[0]?.total) || 0;
+    const totalPages = Math.ceil(total / limit);
 
-    return NextResponse.json({ logs, total });
+    return NextResponse.json({
+      logs: logs || [],
+      pagination: { total, totalPages, page, limit },
+    });
   } catch (error) {
     console.error('Activity GET error:', error);
     return NextResponse.json({ error: 'Loglar getirilemedi' }, { status: 500 });
@@ -73,4 +107,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Log kaydedilemedi' }, { status: 500 });
   }
 }
-
