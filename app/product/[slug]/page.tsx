@@ -134,12 +134,12 @@ async function getRelatedFromDB(productId: string, category: string, brand: stri
 export default async function ProductPage({ params }: { params: { slug: string } }) {
   const { slug } = params
 
-  // 1. JSON'dan dene
-  let product: Product | null = getProductBySlug(slug) ?? null
+  // 1. Her zaman önce DB'den çek (güncel fiyat ve bilgiler için)
+  let product: Product | null = await getProductFromDB(slug)
 
-  // 2. JSON'da yoksa DB'den çek
+  // 2. DB'de yoksa JSON'dan dene (eski ürünler için fallback)
   if (!product) {
-    product = await getProductFromDB(slug)
+    product = getProductBySlug(slug) ?? null
     if (!product) {
       notFound()
     }

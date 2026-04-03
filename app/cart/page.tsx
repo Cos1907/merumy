@@ -104,7 +104,9 @@ export default function CartPage() {
                             {item.product.name}
                           </Link>
                         </div>
-                        <div className="text-sm text-gray-600 mt-1 line-clamp-1">{item.product.description || 'Ürün açıklaması'}</div>
+                        {item.product.description && (
+                          <div className="text-sm text-gray-600 mt-1 line-clamp-1">{item.product.description}</div>
+                        )}
 
                         <div className="mt-3 text-base font-bold" style={{ color: '#92D0AA' }}>
                           ₺{item.product.price.toFixed(2)}

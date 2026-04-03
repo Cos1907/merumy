@@ -357,68 +357,133 @@ export default function Header() {
             </Link>
 
             {/* Desktop Search */}
-            <div className="hidden lg:flex items-center space-x-6 flex-1 max-w-3xl mx-8">
-              <div className="relative flex-1" ref={searchRef}>
+            <div className="hidden lg:flex items-center flex-1 max-w-2xl mx-8">
+              <div className="relative w-full" ref={searchRef}>
                 <form
                   className="relative"
                   onSubmit={(e) => { e.preventDefault(); doSearch() }}
                 >
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-accent">
-                    <Search size={20} />
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#92D0AA] pointer-events-none">
+                    <Search size={18} />
                   </div>
                   <input
                     type="text"
-                    placeholder="Ürün, marka, kategori ara..."
+                    placeholder="Ürün, marka veya kategori ara..."
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
-                    onFocus={() => { if (searchResults.length > 0) setSearchOpen(true) }}
-                    className="w-full pl-12 pr-4 py-3 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-0 text-gray-700"
+                    onFocus={() => { if (searchResults.length > 0 || searchValue.trim()) setSearchOpen(true) }}
+                    className="w-full pl-11 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-full text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-[#92D0AA] focus:ring-2 focus:ring-[#92D0AA]/20 transition-all"
                   />
+                  {searchValue && (
+                    <button
+                      type="button"
+                      onClick={() => { setSearchValue(''); setSearchOpen(false); setSearchResults([]) }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    >
+                      <X size={16} />
+                    </button>
+                  )}
                 </form>
 
-                {/* Search Dropdown */}
-                {searchOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden max-h-96 overflow-y-auto">
+                {/* Search Dropdown - Full overlay below */}
+                {searchOpen && searchValue.trim() && (
+                  <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-white rounded-2xl shadow-2xl border border-gray-100 z-[999] overflow-hidden">
                     {searchLoading ? (
-                      <div className="flex items-center justify-center py-6">
-                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#92D0AA]" />
+                      <div className="flex items-center justify-center gap-3 py-8 text-gray-500">
+                        <div className="w-5 h-5 border-2 border-[#92D0AA]/30 border-t-[#92D0AA] rounded-full animate-spin" />
+                        <span className="text-sm">Aranıyor...</span>
                       </div>
                     ) : searchResults.length === 0 ? (
-                      <div className="py-6 text-center text-gray-400 text-sm">Sonuç bulunamadı</div>
+                      <div className="py-10 text-center">
+                        <Search size={32} className="mx-auto mb-3 text-gray-200" />
+                        <p className="text-gray-500 text-sm font-medium">&ldquo;{searchValue}&rdquo; için sonuç bulunamadı</p>
+                        <p className="text-gray-400 text-xs mt-1">Farklı anahtar kelimeler deneyin</p>
+                      </div>
                     ) : (
                       <>
-                        {searchResults.map((p: any) => (
-                          <Link
-                            key={p.id || p.slug}
-                            href={`/urun/${p.slug}`}
-                            onClick={() => { setSearchOpen(false); setSearchValue('') }}
-                            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0"
+                        {/* Results header */}
+                        <div className="px-4 py-3 border-b border-gray-50 flex items-center justify-between">
+                          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                            {searchResults.length} sonuç bulundu
+                          </span>
+                          <button
+                            onClick={doSearch}
+                            className="text-xs font-semibold text-[#92D0AA] hover:underline"
                           >
-                            <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
-                              {p.image ? (
-                                <img src={p.image} alt={p.name} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
-                              ) : (
-                                <div className="w-full h-full bg-gray-200" />
-                              )}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-gray-900 truncate">{p.name}</p>
-                              <div className="flex items-center gap-2">
-                                {p.brandLogo && (
-                                  <img src={p.brandLogo} alt={p.brand} className="h-4 w-8 object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                            Tümünü gör →
+                          </button>
+                        </div>
+
+                        {/* Product results */}
+                        <div className="max-h-[380px] overflow-y-auto">
+                          {searchResults.map((p: any, idx: number) => (
+                            <Link
+                              key={p.id || p.slug}
+                              href={`/product/${p.slug}`}
+                              onClick={() => { setSearchOpen(false); setSearchValue('') }}
+                              className={`flex items-center gap-4 px-4 py-3.5 hover:bg-[#92D0AA]/5 transition-colors group ${idx < searchResults.length - 1 ? 'border-b border-gray-50' : ''}`}
+                            >
+                              {/* Product image */}
+                              <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-50 border border-gray-100 flex-shrink-0">
+                                {p.image ? (
+                                  <img
+                                    src={p.image}
+                                    alt={p.name}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                                  />
+                                ) : (
+                                  <div className="w-full h-full bg-gradient-to-br from-[#92D0AA]/20 to-[#92D0AA]/5 flex items-center justify-center">
+                                    <Search size={16} className="text-[#92D0AA]/40" />
+                                  </div>
                                 )}
-                                <p className="text-xs text-gray-500">{p.brand}</p>
                               </div>
-                            </div>
-                            <p className="text-sm font-bold text-[#92D0AA] flex-shrink-0">₺{Number(p.price).toFixed(2)}</p>
-                          </Link>
-                        ))}
-                        <button
-                          onClick={doSearch}
-                          className="w-full py-3 text-sm font-medium text-[#92D0AA] hover:bg-[#92D0AA]/5 transition-colors"
-                        >
-                          "{searchValue}" için tüm sonuçları gör →
-                        </button>
+
+                              {/* Product info */}
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-[#92D0AA] transition-colors">
+                                  {p.name}
+                                </p>
+                                <div className="flex items-center gap-2 mt-0.5">
+                                  {p.brandLogo && (
+                                    <img
+                                      src={p.brandLogo}
+                                      alt={p.brand}
+                                      className="h-3.5 w-8 object-contain opacity-70"
+                                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                                    />
+                                  )}
+                                  <p className="text-xs text-gray-400">{p.brand}</p>
+                                  {p.category && (
+                                    <>
+                                      <span className="text-gray-200">·</span>
+                                      <p className="text-xs text-gray-400">{p.category}</p>
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Price */}
+                              <div className="text-right flex-shrink-0">
+                                <p className="text-sm font-bold text-[#92D0AA]">₺{Number(p.price).toFixed(0)}</p>
+                                {p.originalPrice && p.originalPrice > p.price && (
+                                  <p className="text-xs text-gray-400 line-through">₺{Number(p.originalPrice).toFixed(0)}</p>
+                                )}
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+
+                        {/* Footer CTA */}
+                        <div className="px-4 py-3 border-t border-gray-50 bg-gray-50/50">
+                          <button
+                            onClick={doSearch}
+                            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#92D0AA] text-white text-sm font-semibold hover:bg-[#7BC496] transition-colors"
+                          >
+                            <Search size={15} />
+                            &ldquo;{searchValue}&rdquo; için tüm sonuçları gör
+                          </button>
+                        </div>
                       </>
                     )}
                   </div>
@@ -734,61 +799,128 @@ export default function Header() {
 
       {/* Mobile Search Modal */}
       {isMobileSearchOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 bg-white overflow-y-auto">
-          <div className="p-4">
-            <div className="flex items-center space-x-3 mb-4">
-              <button onClick={() => { setIsMobileSearchOpen(false); setSearchValue('') }} className="p-2 -ml-2">
-                <X size={24} className="text-gray-600" />
-              </button>
-              <h2 className="text-lg font-semibold">Ürün Ara</h2>
-            </div>
-            <form onSubmit={(e) => { e.preventDefault(); doSearch() }} className="relative">
-              <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+        <div className="lg:hidden fixed inset-0 z-50 bg-white flex flex-col">
+          {/* Header */}
+          <div className="flex items-center gap-3 px-4 pt-4 pb-3 border-b border-gray-100">
+            <button
+              onClick={() => { setIsMobileSearchOpen(false); setSearchValue('') }}
+              className="p-2 -ml-1 text-gray-500 hover:text-gray-800 transition-colors"
+            >
+              <X size={22} />
+            </button>
+            <form onSubmit={(e) => { e.preventDefault(); doSearch() }} className="flex-1 relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#92D0AA] pointer-events-none">
+                <Search size={17} />
+              </div>
               <input
                 type="text"
                 placeholder="Ürün, marka veya kategori ara..."
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 autoFocus
-                className="w-full pl-12 pr-4 py-4 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent text-lg"
+                className="w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-full text-sm focus:outline-none focus:border-[#92D0AA] focus:ring-2 focus:ring-[#92D0AA]/20 focus:bg-white transition-all"
               />
+              {searchValue && (
+                <button
+                  type="button"
+                  onClick={() => { setSearchValue(''); setSearchResults([]) }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                >
+                  <X size={15} />
+                </button>
+              )}
             </form>
+          </div>
 
-            {/* Mobile live search results */}
-            {searchResults.length > 0 && (
-              <div className="mt-4 space-y-1">
-                {searchResults.map((p: any) => (
-                  <Link
-                    key={p.id || p.slug}
-                    href={`/urun/${p.slug}`}
-                    onClick={() => { setIsMobileSearchOpen(false); setSearchValue('') }}
-                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50"
-                  >
-                    {p.image && (
-                      <img src={p.image} alt={p.name} className="w-12 h-12 object-cover rounded-lg" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">{p.name}</p>
-                      <p className="text-xs text-gray-500">{p.brand}</p>
-                    </div>
-                    <p className="text-sm font-bold text-[#92D0AA]">₺{Number(p.price).toFixed(2)}</p>
-                  </Link>
-                ))}
+          {/* Content */}
+          <div className="flex-1 overflow-y-auto">
+            {/* Loading */}
+            {searchLoading && (
+              <div className="flex items-center justify-center gap-3 py-12 text-gray-400">
+                <div className="w-5 h-5 border-2 border-[#92D0AA]/30 border-t-[#92D0AA] rounded-full animate-spin" />
+                <span className="text-sm">Aranıyor...</span>
               </div>
             )}
 
-            {/* Popular Categories */}
-            {searchResults.length === 0 && (
-              <div className="mt-6">
-                <p className="text-sm font-semibold text-gray-500 mb-3">Popüler Kategoriler</p>
-                <div className="flex flex-wrap gap-2">
+            {/* Results */}
+            {!searchLoading && searchResults.length > 0 && (
+              <div>
+                <div className="px-4 py-3 flex items-center justify-between border-b border-gray-50">
+                  <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                    {searchResults.length} ürün bulundu
+                  </span>
+                  <button
+                    onClick={doSearch}
+                    className="text-xs font-semibold text-[#92D0AA]"
+                  >
+                    Tümünü gör →
+                  </button>
+                </div>
+                {searchResults.map((p: any, idx: number) => (
+                  <Link
+                    key={p.id || p.slug}
+                    href={`/product/${p.slug}`}
+                    onClick={() => { setIsMobileSearchOpen(false); setSearchValue('') }}
+                    className={`flex items-center gap-4 px-4 py-4 active:bg-[#92D0AA]/5 ${idx < searchResults.length - 1 ? 'border-b border-gray-50' : ''}`}
+                  >
+                    <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-50 border border-gray-100 flex-shrink-0">
+                      {p.image ? (
+                        <img src={p.image} alt={p.name} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                      ) : (
+                        <div className="w-full h-full bg-[#92D0AA]/10 flex items-center justify-center">
+                          <Search size={16} className="text-[#92D0AA]/40" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-gray-900 line-clamp-2 leading-snug">{p.name}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">{p.brand}</p>
+                    </div>
+                    <div className="text-right flex-shrink-0">
+                      <p className="text-sm font-bold text-[#92D0AA]">₺{Number(p.price).toFixed(0)}</p>
+                      {p.originalPrice && p.originalPrice > p.price && (
+                        <p className="text-xs text-gray-400 line-through">₺{Number(p.originalPrice).toFixed(0)}</p>
+                      )}
+                    </div>
+                  </Link>
+                ))}
+                {/* CTA */}
+                <div className="p-4">
+                  <button
+                    onClick={doSearch}
+                    className="w-full py-3.5 rounded-2xl bg-[#92D0AA] text-white text-sm font-semibold flex items-center justify-center gap-2 active:bg-[#7BC496] transition-colors"
+                  >
+                    <Search size={15} />
+                    Tüm sonuçları gör
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* No results */}
+            {!searchLoading && searchValue.trim() && searchResults.length === 0 && (
+              <div className="py-16 text-center px-8">
+                <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-4">
+                  <Search size={24} className="text-gray-300" />
+                </div>
+                <p className="text-gray-600 font-medium">&ldquo;{searchValue}&rdquo; bulunamadı</p>
+                <p className="text-gray-400 text-sm mt-1">Farklı bir kelime deneyin</p>
+              </div>
+            )}
+
+            {/* Empty state - show categories */}
+            {!searchLoading && !searchValue.trim() && (
+              <div className="p-4">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Kategoriler</p>
+                <div className="grid grid-cols-2 gap-2">
                   {categoryList.map((cat) => (
                     <Link
                       key={cat.slug}
                       href={`/shop/${cat.slug}`}
                       onClick={() => setIsMobileSearchOpen(false)}
-                      className="px-4 py-2 bg-accent/10 text-accent rounded-full text-sm font-medium"
+                      className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-xl text-sm font-medium text-gray-700 hover:bg-[#92D0AA]/10 hover:text-[#92D0AA] transition-colors"
                     >
+                      <span className="w-2 h-2 rounded-full bg-[#92D0AA] flex-shrink-0" />
                       {cat.name}
                     </Link>
                   ))}
