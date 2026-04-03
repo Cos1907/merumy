@@ -9,7 +9,9 @@ export async function GET(request: NextRequest) {
     const q = (searchParams.get('q') || '').trim()
     const brand = searchParams.get('brand') || ''
     const category = searchParams.get('category') || ''
-    const limit = Math.min(Number(searchParams.get('limit') || 60), 200)
+    // Inline limit in SQL to avoid mysql2 prepared statement LIMIT parameter issue
+    const limitRaw = parseInt(searchParams.get('limit') || '60', 10)
+    const limit = Math.min(isNaN(limitRaw) ? 60 : limitRaw, 200)
 
     let products: any[] = []
 
@@ -25,7 +27,7 @@ export async function GET(request: NextRequest) {
     const brands = brandRows
 
     if (brand) {
-      // Brand filter - show all products from that brand
+      // Brand filter - show all products from that brand (limit inlined for prepared statement compat)
       const rows = await query<any[]>(
         `SELECT p.barcode, p.name, b.name as brand, b.logo_url as brandLogo,
                 p.category, p.price, p.compare_price,
@@ -36,8 +38,8 @@ export async function GET(request: NextRequest) {
          JOIN brands b ON b.id = p.brand_id
          WHERE p.is_active = 1 AND b.name = ?
          ORDER BY CASE WHEN p.stock_status = 'out_of_stock' THEN 1 ELSE 0 END ASC, p.id DESC
-         LIMIT ?`,
-        [brand, limit]
+         LIMIT ${limit}`,
+        [brand]
       )
       products = rows
     } else if (category) {
@@ -52,8 +54,8 @@ export async function GET(request: NextRequest) {
          LEFT JOIN brands b ON b.id = p.brand_id
          WHERE p.is_active = 1 AND p.category = ?
          ORDER BY CASE WHEN p.stock_status = 'out_of_stock' THEN 1 ELSE 0 END ASC, p.id DESC
-         LIMIT ?`,
-        [category, limit]
+         LIMIT ${limit}`,
+        [category]
       )
       products = rows
     } else if (q) {
@@ -77,8 +79,8 @@ export async function GET(request: NextRequest) {
            AND (p.name LIKE ? OR b.name LIKE ? OR p.description LIKE ? OR p.category LIKE ?)
          ORDER BY CASE WHEN p.stock_status = 'out_of_stock' THEN 1 ELSE 0 END ASC,
                   relevance DESC, p.id DESC
-         LIMIT ?`,
-        [searchTerm, searchTerm, searchTerm, searchTerm, searchTerm, searchTerm, searchTerm, limit]
+         LIMIT ${limit}`,
+        [searchTerm, searchTerm, searchTerm, searchTerm, searchTerm, searchTerm, searchTerm]
       )
       products = rows
     } else {
@@ -93,8 +95,7 @@ export async function GET(request: NextRequest) {
          LEFT JOIN brands b ON b.id = p.brand_id
          WHERE p.is_active = 1
          ORDER BY CASE WHEN p.stock_status = 'out_of_stock' THEN 1 ELSE 0 END ASC, p.id DESC
-         LIMIT ?`,
-        [limit]
+         LIMIT ${limit}`
       )
       products = rows
     }
