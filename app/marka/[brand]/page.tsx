@@ -1,29 +1,23 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import ProductCardModern from '../../components/ProductCardModern'
 
 export default function BrandPage({ params }: { params: { brand: string } }) {
   const brandSlug = params.brand
-  const [allProducts, setAllProducts] = useState<Product[]>([])
-  const [brandName, setBrandName] = useState('')
-  const [isFetching, setIsFetching] = useState(true)
-  const [displayedCount, setDisplayedCount] = useState(PRODUCTS_PER_PAGE)
-  const [isLoading, setIsLoading] = useState(false)
-  const [sortKey, setSortKey] = useState<SortKey>('default')
-  const [isSortOpen, setIsSortOpen] = useState(false)
   const [headerHeight, setHeaderHeight] = useState(140)
-  const [logoError, setLogoError] = useState(false)
-  const loaderRef = useRef<HTMLDivElement>(null)
-  const sortRef = useRef<HTMLDivElement>(null)
-
   const [brandInfo, setBrandInfo] = useState<{ name: string; logo_url: string | null } | null>(null)
   const [products, setProducts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [isFilterOpen, setIsFilterOpen] = useState(true)
+  const sortRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const calculateHeaderHeight = () => {
@@ -43,21 +37,16 @@ export default function BrandPage({ params }: { params: { brand: string } }) {
       clearTimeout(t2)
       window.removeEventListener('resize', calculateHeaderHeight)
     }
-    setTimeout(calc, 50)
-    window.addEventListener('resize', calc)
-    return () => window.removeEventListener('resize', calc)
   }, [])
 
   useEffect(() => {
     const fetchBrand = async () => {
       setLoading(true)
       try {
-        // Fetch brands list to find brand name by slug
         const brandsRes = await fetch('/api/brands')
         const brandsData = await brandsRes.json()
         const allBrands: any[] = brandsData.brands || []
 
-        // Find brand by slug
         const found = allBrands.find((b: any) => b.slug === brandSlug)
 
         if (!found) {
@@ -68,7 +57,6 @@ export default function BrandPage({ params }: { params: { brand: string } }) {
 
         setBrandInfo({ name: found.name, logo_url: found.logo_url })
 
-        // Fetch products for this brand
         const productsRes = await fetch(`/api/products/search?brand=${encodeURIComponent(found.name)}&limit=200`)
         const productsData = await productsRes.json()
         setProducts(productsData.products || [])
@@ -113,17 +101,7 @@ export default function BrandPage({ params }: { params: { brand: string } }) {
         </div>
       </main>
     )
-    if (loaderRef.current) observer.observe(loaderRef.current)
-    return () => observer.disconnect()
-  }, [loadMore])
-
-  useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      if (sortRef.current && !sortRef.current.contains(e.target as Node)) setIsSortOpen(false)
-    }
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
-  }, [])
+  }
 
   const logoUrl = brandInfo.logo_url
 
@@ -179,9 +157,9 @@ export default function BrandPage({ params }: { params: { brand: string } }) {
         </div>
       </div>
 
-      <div className="mx-[175px] max-2xl:mx-24 max-xl:mx-12 max-lg:mx-6 max-md:mx-4">
-        <section className="py-14">
-          <h1 className="text-3xl font-bold font-grift uppercase mb-6" style={{ color: '#92D0AA' }}>
+      <div className="mx-4 sm:mx-6 lg:mx-12 xl:mx-24 2xl:mx-[175px]">
+        <section className="py-6 md:py-14">
+          <h1 className="hidden md:block text-3xl font-bold font-grift uppercase mb-6" style={{ color: '#92D0AA' }}>
             {brandInfo.name}
           </h1>
 
@@ -197,9 +175,7 @@ export default function BrandPage({ params }: { params: { brand: string } }) {
                   <span>KATEGORİ</span>
                   {isFilterOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                 </button>
-                <div
-                  className={`transition-all duration-300 ease-in-out overflow-hidden ${isFilterOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'}`}
-                >
+                <div className={`transition-all duration-300 ease-in-out overflow-hidden ${isFilterOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'}`}>
                   <div className="p-3">
                     <button
                       onClick={() => setSelectedCategory(null)}
@@ -222,21 +198,22 @@ export default function BrandPage({ params }: { params: { brand: string } }) {
                   </div>
                 </div>
               </div>
-            )}
-          </div>
+            </aside>
 
             {/* Products Grid */}
-            {filteredProducts.length === 0 ? (
-              <div className="text-center py-16 text-gray-400">
-                <p className="text-lg">Bu markada ürün bulunamadı.</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-                {filteredProducts.map((p: any) => (
-                  <ProductCardModern key={p.id || p.slug} product={p} />
-                ))}
-              </div>
-            )}
+            <div>
+              {filteredProducts.length === 0 ? (
+                <div className="text-center py-16 text-gray-400">
+                  <p className="text-lg">Bu markada ürün bulunamadı.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+                  {filteredProducts.map((p: any) => (
+                    <ProductCardModern key={p.id || p.slug} product={p} />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </section>
       </div>
