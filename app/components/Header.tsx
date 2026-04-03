@@ -214,6 +214,19 @@ export default function Header() {
     { id: 6, name: 'Bebek ve Çocuk Bakımı', slug: 'bebek-ve-cocuk-bakimi', brands: [] },
   ]
 
+  // Helper: brand name → URL slug
+  const slugifyBrand = (name: string) =>
+    name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+
+  // Helper: brand name → logo URL (looks up from navCategories)
+  const getBrandLogo = (brandName: string): string | null => {
+    for (const cat of navCategories) {
+      const found = cat.brands.find((b) => b.name === brandName)
+      if (found) return found.logo_url
+    }
+    return null
+  }
+
   // Search dropdown shared UI
   const SearchDropdownContent = ({ suggestions, brands, loading, onSelect }: { suggestions: any[]; brands: string[]; loading: boolean; onSelect: () => void }) => (
     <>
