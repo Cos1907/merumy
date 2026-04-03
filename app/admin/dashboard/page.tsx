@@ -209,6 +209,13 @@ export default function AdminDashboard() {
   const [editForm, setEditForm] = useState<ProductEditForm | null>(null);
   const [savingProduct, setSavingProduct] = useState(false);
 
+  // Product Gallery state
+  const [productGalleryImages, setProductGalleryImages] = useState<{id:number; image_url:string; is_primary:boolean; sort_order:number; alt_text:string|null}[]>([]);
+  const [galleryLoading, setGalleryLoading] = useState(false);
+  const [galleryUploading, setGalleryUploading] = useState(false);
+  const [galleryUrlInput, setGalleryUrlInput] = useState('');
+  const [galleryMsg, setGalleryMsg] = useState<{type:'success'|'error';text:string}|null>(null);
+
   // New product form state
   const [showNewProductForm, setShowNewProductForm] = useState(false);
   const [newProductForm, setNewProductForm] = useState({
@@ -271,6 +278,14 @@ export default function AdminDashboard() {
       if (!res.ok) {
         router.push('/admin/login');
       } else {
+        const data = await res.json();
+        if (data.user) {
+          setCurrentUserEmail(data.user.email || '');
+          setCurrentUserName(data.user.name || '');
+          if (data.user.allowedSections) {
+            setAllowedSections(data.user.allowedSections);
+          }
+        }
         setLoading(false);
         fetchOrders();
       }
@@ -680,12 +695,105 @@ export default function AdminDashboard() {
       isFeatured: product.isFeatured || false,
     });
     setSaveSuccess(false);
+    setProductGalleryImages([]);
+    setGalleryMsg(null);
+    setGalleryUrlInput('');
+    fetchProductGallery(product.id);
   };
 
   const closeEditModal = () => {
     setEditingProduct(null);
     setEditForm(null);
     setSaveSuccess(false);
+    setProductGalleryImages([]);
+    setGalleryUrlInput('');
+    setGalleryMsg(null);
+  };
+
+  const fetchProductGallery = async (productId: number) => {
+    setGalleryLoading(true);
+    try {
+      const res = await fetch(`/api/admin/product-images?productId=${productId}`);
+      const data = await res.json();
+      if (data.images) setProductGalleryImages(data.images);
+    } catch {
+      // ignore
+    } finally {
+      setGalleryLoading(false);
+    }
+  };
+
+  const uploadGalleryImage = async (file: File, productId: number) => {
+    setGalleryUploading(true);
+    setGalleryMsg(null);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('productId', String(productId));
+      formData.append('isPrimary', productGalleryImages.length === 0 ? 'true' : 'false');
+      const res = await fetch('/api/admin/product-images', { method: 'POST', body: formData });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setGalleryMsg({ type: 'success', text: 'Görsel yüklendi' });
+        fetchProductGallery(productId);
+      } else {
+        setGalleryMsg({ type: 'error', text: data.error || 'Görsel yüklenemedi' });
+      }
+    } catch {
+      setGalleryMsg({ type: 'error', text: 'Yükleme sırasında hata oluştu' });
+    } finally {
+      setGalleryUploading(false);
+    }
+  };
+
+  const addGalleryImageByUrl = async (productId: number) => {
+    if (!galleryUrlInput.trim()) return;
+    setGalleryUploading(true);
+    setGalleryMsg(null);
+    try {
+      const res = await fetch('/api/admin/product-images', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId, imageUrl: galleryUrlInput.trim(), isPrimary: productGalleryImages.length === 0 }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setGalleryMsg({ type: 'success', text: 'Görsel eklendi' });
+        setGalleryUrlInput('');
+        fetchProductGallery(productId);
+      } else {
+        setGalleryMsg({ type: 'error', text: data.error || 'Görsel eklenemedi' });
+      }
+    } catch {
+      setGalleryMsg({ type: 'error', text: 'Hata oluştu' });
+    } finally {
+      setGalleryUploading(false);
+    }
+  };
+
+  const setGalleryPrimary = async (imageId: number, productId: number) => {
+    try {
+      const res = await fetch('/api/admin/product-images', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageId, productId }),
+      });
+      if (res.ok) {
+        fetchProductGallery(productId);
+        setGalleryMsg({ type: 'success', text: 'Ana görsel güncellendi' });
+      }
+    } catch { /* ignore */ }
+  };
+
+  const deleteGalleryImage = async (imageId: number, productId: number) => {
+    if (!confirm('Bu görseli silmek istediğinize emin misiniz?')) return;
+    try {
+      const res = await fetch(`/api/admin/product-images?id=${imageId}`, { method: 'DELETE' });
+      if (res.ok) {
+        fetchProductGallery(productId);
+        setGalleryMsg({ type: 'success', text: 'Görsel silindi' });
+      }
+    } catch { /* ignore */ }
   };
 
   const handleSaveProduct = async () => {
@@ -1028,21 +1136,23 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0b1117' }}>
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-400">Yükleniyor...</p>
+          <img src="/logo.svg" alt="Merumy" className="h-8 w-auto mx-auto mb-8 opacity-60" style={{ filter: 'brightness(0) invert(1)' }} />
+          <div className="w-10 h-10 border-2 border-t-[#92D0AA] rounded-full animate-spin mx-auto mb-4"
+            style={{ borderColor: 'rgba(146,208,170,0.2)', borderTopColor: '#92D0AA' }} />
+          <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>Yükleniyor...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 flex">
+    <div className="min-h-screen flex" style={{ background: '#0d1117' }}>
       {/* Mobile Sidebar Overlay */}
       {mobileSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/60 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/70 z-40 lg:hidden backdrop-blur-sm"
           onClick={() => setMobileSidebarOpen(false)}
         />
       )}
@@ -1050,50 +1160,68 @@ export default function AdminDashboard() {
       {/* Sidebar */}
       <aside
         className={[
-          'bg-slate-800 border-r border-slate-700 transition-all duration-300 flex flex-col',
+          'transition-all duration-300 flex flex-col',
           'fixed lg:static inset-y-0 left-0 z-50',
           mobileSidebarOpen ? 'translate-x-0 w-72' : '-translate-x-full lg:translate-x-0 w-72',
           sidebarOpen ? 'lg:w-64' : 'lg:w-20',
         ].join(' ')}
+        style={{ background: '#0b1117', borderRight: '1px solid rgba(255,255,255,0.06)' }}
       >
-        <div className="p-4 border-b border-slate-700">
-          <div className="flex items-start gap-3">
+        {/* Sidebar Logo Area */}
+        <div className="px-4 py-5" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="flex items-center gap-3">
             <div className="flex-shrink-0">
-              {/* Logo */}
               <img
-                src="/footerlogo.png"
+                src="/logo.svg"
                 alt="Merumy"
-                className={`object-contain ${(sidebarOpen || mobileSidebarOpen) ? 'h-8 w-auto' : 'h-8 w-8'}`}
+                className={`object-contain ${(sidebarOpen || mobileSidebarOpen) ? 'h-7 w-auto' : 'h-7 w-7'}`}
+                style={{ filter: 'brightness(0) invert(1)', opacity: 0.9 }}
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = 'none';
                 }}
               />
             </div>
             {(sidebarOpen || mobileSidebarOpen) && (
-              <div className="flex-1 min-w-0 pt-0.5">
-                {currentUserName && (
-                  <p className="text-slate-300 text-xs font-medium truncate">
-                    Merhaba, <span className="text-white font-semibold">{currentUserName}</span>
-                  </p>
-                )}
-                {currentUserEmail && (
-                  <p className="text-slate-500 text-[11px] truncate mt-0.5">{currentUserEmail}</p>
-                )}
+              <div className="flex-1 min-w-0">
+                <span className="text-xs font-medium px-2 py-0.5 rounded-md" style={{ background: 'rgba(146,208,170,0.1)', color: '#92D0AA' }}>
+                  Admin Panel
+                </span>
               </div>
             )}
             {/* Mobile close button */}
             <button
               onClick={() => setMobileSidebarOpen(false)}
-              className="lg:hidden ml-auto p-1 text-slate-400 hover:text-white flex-shrink-0"
+              className="lg:hidden ml-auto p-1.5 rounded-lg transition-colors flex-shrink-0"
+              style={{ color: 'rgba(255,255,255,0.4)' }}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
         </div>
-        
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+
+        {/* User Info */}
+        {(sidebarOpen || mobileSidebarOpen) && (currentUserName || currentUserEmail) && (
+          <div className="mx-3 mt-3 px-3 py-3 rounded-xl" style={{ background: 'rgba(146,208,170,0.06)', border: '1px solid rgba(146,208,170,0.12)' }}>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0"
+                style={{ background: 'rgba(146,208,170,0.15)', color: '#92D0AA' }}>
+                {(currentUserName || currentUserEmail).charAt(0).toUpperCase()}
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold truncate text-white">
+                  {currentUserName || currentUserEmail.split('@')[0]}
+                </p>
+                <p className="text-[11px] truncate mt-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                  {currentUserEmail}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <nav className="flex-1 p-3 space-y-1 overflow-y-auto mt-2">
           {[
             { id: 'orders', icon: '📦', label: 'Siparişler', count: orderStats?.total },
             { id: 'products', icon: '🛍️', label: 'Ürün Yönetimi', count: dbProductsTotal || undefined },
@@ -1106,18 +1234,39 @@ export default function AdminDashboard() {
             <button
               key={item.id}
               onClick={() => { setActiveTab(item.id as any); setMobileSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                activeTab === item.id
-                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                  : 'text-slate-400 hover:bg-slate-700/50 hover:text-white'
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
+                activeTab === item.id ? '' : ''
               }`}
+              style={activeTab === item.id ? {
+                background: 'rgba(146,208,170,0.12)',
+                color: '#92D0AA',
+                border: '1px solid rgba(146,208,170,0.2)',
+              } : {
+                color: 'rgba(255,255,255,0.45)',
+                border: '1px solid transparent',
+              }}
+              onMouseEnter={e => {
+                if (activeTab !== item.id) {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+                  e.currentTarget.style.color = 'rgba(255,255,255,0.85)';
+                }
+              }}
+              onMouseLeave={e => {
+                if (activeTab !== item.id) {
+                  e.currentTarget.style.background = '';
+                  e.currentTarget.style.color = 'rgba(255,255,255,0.45)';
+                }
+              }}
             >
-              <span className="text-xl flex-shrink-0">{item.icon}</span>
+              <span className="text-lg flex-shrink-0">{item.icon}</span>
               {(sidebarOpen || mobileSidebarOpen) && (
                 <>
-                  <span className="flex-1 text-left font-medium">{item.label}</span>
+                  <span className="flex-1 text-left text-sm font-medium">{item.label}</span>
                   {item.count !== undefined && (
-                    <span className="px-2 py-0.5 bg-slate-700 rounded-full text-xs">{item.count}</span>
+                    <span className="px-2 py-0.5 rounded-full text-[11px] font-medium"
+                      style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)' }}>
+                      {item.count}
+                    </span>
                   )}
                 </>
               )}
@@ -1127,18 +1276,37 @@ export default function AdminDashboard() {
           {currentUserEmail === 'admin@merumy.com' && (!allowedSections || allowedSections.includes('activity')) && (
             <button
               onClick={() => { setActiveTab('activity'); setMobileSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                activeTab === 'activity'
-                  ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-                  : 'text-slate-400 hover:bg-slate-700/50 hover:text-white'
-              }`}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all"
+              style={activeTab === 'activity' ? {
+                background: 'rgba(167,139,250,0.12)',
+                color: '#a78bfa',
+                border: '1px solid rgba(167,139,250,0.2)',
+              } : {
+                color: 'rgba(255,255,255,0.45)',
+                border: '1px solid transparent',
+              }}
+              onMouseEnter={e => {
+                if (activeTab !== 'activity') {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+                  e.currentTarget.style.color = 'rgba(255,255,255,0.85)';
+                }
+              }}
+              onMouseLeave={e => {
+                if (activeTab !== 'activity') {
+                  e.currentTarget.style.background = '';
+                  e.currentTarget.style.color = 'rgba(255,255,255,0.45)';
+                }
+              }}
             >
-              <span className="text-xl flex-shrink-0">📋</span>
+              <span className="text-lg flex-shrink-0">📋</span>
               {(sidebarOpen || mobileSidebarOpen) && (
                 <>
-                  <span className="flex-1 text-left font-medium">Yapılan İşlemler</span>
+                  <span className="flex-1 text-left text-sm font-medium">Yapılan İşlemler</span>
                   {activityTotal > 0 && (
-                    <span className="px-2 py-0.5 bg-purple-500/30 text-purple-300 rounded-full text-xs">{activityTotal}</span>
+                    <span className="px-2 py-0.5 rounded-full text-[11px] font-medium"
+                      style={{ background: 'rgba(167,139,250,0.15)', color: '#a78bfa' }}>
+                      {activityTotal}
+                    </span>
                   )}
                 </>
               )}
@@ -1146,13 +1314,24 @@ export default function AdminDashboard() {
           )}
         </nav>
         
-        <div className="p-4 border-t border-slate-700">
+        <div className="p-3 pb-4" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all"
+            style={{ color: 'rgba(255,255,255,0.35)', border: '1px solid transparent' }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(239,68,68,0.08)';
+              e.currentTarget.style.color = '#f87171';
+              e.currentTarget.style.borderColor = 'rgba(239,68,68,0.15)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = '';
+              e.currentTarget.style.color = 'rgba(255,255,255,0.35)';
+              e.currentTarget.style.borderColor = 'transparent';
+            }}
           >
-            <span className="text-xl flex-shrink-0">🚪</span>
-            {(sidebarOpen || mobileSidebarOpen) && <span className="font-medium">Çıkış Yap</span>}
+            <span className="text-lg flex-shrink-0">🚪</span>
+            {(sidebarOpen || mobileSidebarOpen) && <span className="text-sm font-medium">Çıkış Yap</span>}
           </button>
         </div>
       </aside>
@@ -1160,13 +1339,17 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <main className="flex-1 overflow-auto min-w-0 w-full">
         {/* Top Bar */}
-        <header className="bg-slate-800/50 border-b border-slate-700 px-3 md:px-6 py-3 md:py-4 sticky top-0 z-10 backdrop-blur-sm">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 md:gap-4 min-w-0">
+        <header className="sticky top-0 z-10 px-4 md:px-6 py-3.5 backdrop-blur-md"
+          style={{ background: 'rgba(13,17,23,0.9)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
               {/* Mobile hamburger */}
               <button
                 onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
-                className="p-2 hover:bg-slate-700 rounded-lg text-slate-400 lg:hidden flex-shrink-0"
+                className="p-2 rounded-lg lg:hidden flex-shrink-0 transition-colors"
+                style={{ color: 'rgba(255,255,255,0.5)' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = 'white'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -1175,27 +1358,57 @@ export default function AdminDashboard() {
               {/* Desktop sidebar toggle */}
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="p-2 hover:bg-slate-700 rounded-lg text-slate-400 hidden lg:flex flex-shrink-0"
+                className="p-2 rounded-lg hidden lg:flex flex-shrink-0 transition-colors"
+                style={{ color: 'rgba(255,255,255,0.4)' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = 'white'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.4)'; }}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
-              <h1 className="text-base md:text-xl font-semibold text-white truncate">
-                {activeTab === 'orders' && '📦 Siparişler'}
-                {activeTab === 'products' && '🛍️ Ürün Yönetimi'}
-                {activeTab === 'users' && '👥 Kullanıcılar'}
-                {activeTab === 'reports' && '📊 Satış Raporu'}
-                {activeTab === 'hero' && '🎨 Hero Yönetimi'}
-                {activeTab === 'activity' && '📋 Yapılan İşlemler'}
-                {activeTab === 'kore-trends' && '🌸 Kore Trendleri'}
-                {activeTab === 'fatura' && '🧾 Fatura Yönetimi'}
-              </h1>
+
+              <div className="min-w-0">
+                <h1 className="text-sm md:text-base font-semibold text-white truncate">
+                  {activeTab === 'orders' && 'Siparişler'}
+                  {activeTab === 'products' && 'Ürün Yönetimi'}
+                  {activeTab === 'users' && 'Kullanıcılar'}
+                  {activeTab === 'reports' && 'Satış Raporu'}
+                  {activeTab === 'hero' && 'Hero Yönetimi'}
+                  {activeTab === 'activity' && 'Yapılan İşlemler'}
+                  {activeTab === 'kore-trends' && 'Kore Trendleri'}
+                  {activeTab === 'fatura' && 'Fatura Yönetimi'}
+                </h1>
+                {currentUserName && (
+                  <p className="text-xs hidden sm:block" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                    Hoş geldin, <span style={{ color: '#92D0AA' }}>{currentUserName}</span> 👋
+                  </p>
+                )}
+              </div>
             </div>
+
             <div className="flex items-center gap-2 flex-shrink-0">
-              <a href="https://merumy.com" target="_blank" className="px-2 md:px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-xs md:text-sm transition-colors whitespace-nowrap">
-                🌐 <span className="hidden sm:inline">Siteyi Görüntüle</span>
+              <a
+                href="https://merumy.com"
+                target="_blank"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs transition-all"
+                style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.08)' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.09)'; e.currentTarget.style.color = 'white'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; }}
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                <span className="hidden sm:inline font-medium">Siteyi Görüntüle</span>
               </a>
+
+              {/* User Avatar */}
+              {currentUserName && (
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold hidden md:flex"
+                  style={{ background: 'rgba(146,208,170,0.15)', color: '#92D0AA' }}>
+                  {currentUserName.charAt(0).toUpperCase()}
+                </div>
+              )}
             </div>
           </div>
         </header>
@@ -1206,7 +1419,7 @@ export default function AdminDashboard() {
             <div className="space-y-6">
               {/* Stats */}
               {orderStats && (
-                <div className={`grid gap-4 ${currentUserEmail === 'admin@merumy.com' ? 'grid-cols-2 md:grid-cols-4 lg:grid-cols-7' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-6'}`}>
+                <div className={`grid gap-3 ${currentUserEmail === 'admin@merumy.com' ? 'grid-cols-2 md:grid-cols-4 lg:grid-cols-7' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-6'}`}>
                   {[
                     { label: 'Toplam', value: orderStats.total, color: 'from-slate-500 to-slate-600' },
                     { label: 'Beklemede', value: orderStats.pending, color: 'from-amber-500 to-orange-500' },
@@ -1219,12 +1432,12 @@ export default function AdminDashboard() {
                       : []
                     ),
                   ].map((stat, i) => (
-                    <div key={i} className="bg-slate-800 rounded-2xl p-4 border border-slate-700">
-                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center mb-3`}>
-                        <span className="text-white text-lg font-bold">{(stat as any).isPrice ? '₺' : stat.value}</span>
+                    <div key={i} className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                      <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center mb-3`}>
+                        <span className="text-white text-base font-bold">{(stat as any).isPrice ? '₺' : stat.value}</span>
                       </div>
                       <p className="text-2xl font-bold text-white">{(stat as any).isPrice ? stat.value : stat.value || 0}</p>
-                      <p className="text-slate-400 text-sm">{stat.label}</p>
+                      <p className="text-sm mt-0.5" style={{ color: 'rgba(255,255,255,0.45)' }}>{stat.label}</p>
                     </div>
                   ))}
                 </div>
@@ -3122,75 +3335,92 @@ export default function AdminDashboard() {
 
       {/* Product Edit Modal */}
       {editingProduct && editForm && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-          <div className="bg-slate-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-slate-700">
-            <div className="p-6 border-b border-slate-700 flex justify-between items-center sticky top-0 bg-slate-800 z-10">
+        <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4 backdrop-blur-md">
+          <div className="rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" style={{ background: '#161b22', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div className="p-6 flex justify-between items-center sticky top-0 z-10" style={{ background: '#161b22', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
               <div>
-                <h2 className="text-xl font-bold text-white">Ürün Düzenle</h2>
-                <p className="text-slate-400 text-sm mt-1 line-clamp-1">{editingProduct.name}</p>
+                <h2 className="text-lg font-bold text-white">Ürün Düzenle</h2>
+                <p className="text-sm mt-0.5 line-clamp-1" style={{ color: 'rgba(255,255,255,0.4)' }}>{editingProduct.name}</p>
               </div>
-              <button onClick={closeEditModal} className="p-2 hover:bg-slate-700 rounded-lg text-slate-400 text-xl">✕</button>
+              <button onClick={closeEditModal} className="p-2 rounded-xl transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = 'white'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.4)'; }}>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
+              </button>
             </div>
             
             <div className="p-6 space-y-5">
               {/* Product image preview */}
               {editingProduct.image && (
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 p-3 rounded-xl" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
                   <img
                     src={editingProduct.image}
                     alt={editingProduct.name}
-                    className="w-20 h-20 rounded-xl object-cover bg-slate-700"
+                    className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+                    style={{ background: 'rgba(255,255,255,0.05)' }}
                     onError={(e) => { (e.target as HTMLImageElement).src = '/gorselsizurun.jpg'; }}
                   />
-                  <div>
-                    <p className="text-slate-400 text-xs">Mevcut Görsel</p>
-                    <p className="text-slate-500 text-xs mt-1 break-all">{editingProduct.image}</p>
+                  <div className="min-w-0">
+                    <p className="text-xs font-medium" style={{ color: 'rgba(255,255,255,0.4)' }}>Ana Görsel</p>
+                    <p className="text-xs mt-1 break-all" style={{ color: 'rgba(255,255,255,0.25)' }}>{editingProduct.image}</p>
                   </div>
                 </div>
               )}
 
               {/* Name */}
               <div>
-                <label className="block text-slate-400 text-sm mb-2">Ürün Adı *</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(255,255,255,0.55)' }}>Ürün Adı *</label>
                 <input
                   type="text"
                   value={editForm.name}
                   onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-xl text-white text-sm focus:outline-none transition-all"
+                  style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
+                  onFocus={e => { e.currentTarget.style.borderColor = 'rgba(146,208,170,0.5)'; e.currentTarget.style.background = 'rgba(146,208,170,0.04)'; }}
+                  onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
                 />
               </div>
 
               {/* Description */}
               <div>
-                <label className="block text-slate-400 text-sm mb-2">Açıklama</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(255,255,255,0.55)' }}>Açıklama</label>
                 <textarea
                   value={editForm.description}
                   onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
-                  rows={4}
-                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none"
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-xl text-white text-sm focus:outline-none transition-all resize-none"
+                  style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
+                  onFocus={e => { e.currentTarget.style.borderColor = 'rgba(146,208,170,0.5)'; }}
+                  onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
                 />
               </div>
 
               {/* Price & Compare Price */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-slate-400 text-sm mb-2">Fiyat (₺) *</label>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(255,255,255,0.55)' }}>Fiyat (₺) *</label>
                   <input
                     type="number"
                     value={editForm.price}
                     onChange={(e) => setEditForm({ ...editForm, price: e.target.value })}
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-emerald-500"
+                    className="w-full px-4 py-3 rounded-xl text-white text-sm focus:outline-none transition-all"
+                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(146,208,170,0.5)'; }}
+                    onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
                     min="0"
                     step="0.01"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-400 text-sm mb-2">İndirimden Önceki Fiyat (₺)</label>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(255,255,255,0.55)' }}>İndirimden Önceki Fiyat (₺)</label>
                   <input
                     type="number"
                     value={editForm.comparePrice}
                     onChange={(e) => setEditForm({ ...editForm, comparePrice: e.target.value })}
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-emerald-500"
+                    className="w-full px-4 py-3 rounded-xl text-white text-sm focus:outline-none transition-all"
+                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(146,208,170,0.5)'; }}
+                    onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
                     min="0"
                     step="0.01"
                   />
@@ -3199,40 +3429,49 @@ export default function AdminDashboard() {
 
               {/* Stock */}
               <div>
-                <label className="block text-slate-400 text-sm mb-2">Stok Miktarı</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(255,255,255,0.55)' }}>Stok Miktarı</label>
                 <input
                   type="number"
                   value={editForm.stock}
                   onChange={(e) => setEditForm({ ...editForm, stock: e.target.value })}
-                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-emerald-500"
+                  className="w-full px-4 py-3 rounded-xl text-white text-sm focus:outline-none transition-all"
+                  style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
+                  onFocus={e => { e.currentTarget.style.borderColor = 'rgba(146,208,170,0.5)'; }}
+                  onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
                   min="0"
                 />
-                <p className="text-slate-500 text-xs mt-1">0 = Stok dışı, 1-5 = Az stok, 6+ = Stokta</p>
+                <p className="text-xs mt-1.5" style={{ color: 'rgba(255,255,255,0.3)' }}>0 = Stok dışı · 1-5 = Az stok · 6+ = Stokta</p>
               </div>
 
               {/* Brand & Category */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-slate-400 text-sm mb-2">Marka</label>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(255,255,255,0.55)' }}>Marka</label>
                   <input
                     type="text"
                     value={editForm.brand}
                     onChange={(e) => setEditForm({ ...editForm, brand: e.target.value })}
                     list="brand-options"
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-emerald-500"
+                    className="w-full px-4 py-3 rounded-xl text-white text-sm focus:outline-none transition-all"
+                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(146,208,170,0.5)'; }}
+                    onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
                   />
                   <datalist id="brand-options">
                     {dbBrands.map(b => <option key={b} value={b} />)}
                   </datalist>
                 </div>
                 <div>
-                  <label className="block text-slate-400 text-sm mb-2">Kategori</label>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(255,255,255,0.55)' }}>Kategori</label>
                   <input
                     type="text"
                     value={editForm.category}
                     onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
                     list="category-options"
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-emerald-500"
+                    className="w-full px-4 py-3 rounded-xl text-white text-sm focus:outline-none transition-all"
+                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(146,208,170,0.5)'; }}
+                    onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
                   />
                   <datalist id="category-options">
                     {dbCategories.map(c => <option key={c} value={c} />)}
@@ -3243,79 +3482,208 @@ export default function AdminDashboard() {
               {/* Barcode & SKU */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-slate-400 text-sm mb-2">Barkod</label>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(255,255,255,0.55)' }}>Barkod</label>
                   <input
                     type="text"
                     value={editForm.barcode}
                     onChange={(e) => setEditForm({ ...editForm, barcode: e.target.value })}
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 font-mono"
+                    className="w-full px-4 py-3 rounded-xl text-white text-sm font-mono focus:outline-none transition-all"
+                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(146,208,170,0.5)'; }}
+                    onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-400 text-sm mb-2">SKU / Kod</label>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(255,255,255,0.55)' }}>SKU / Kod</label>
                   <input
                     type="text"
                     value={editForm.sku}
                     onChange={(e) => setEditForm({ ...editForm, sku: e.target.value })}
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 font-mono"
+                    className="w-full px-4 py-3 rounded-xl text-white text-sm font-mono focus:outline-none transition-all"
+                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(146,208,170,0.5)'; }}
+                    onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
                   />
                 </div>
               </div>
 
               {/* Toggles */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <label className="flex items-center gap-3 cursor-pointer bg-slate-700/50 rounded-xl p-4 flex-1">
-                  <div
-                    onClick={() => setEditForm({ ...editForm, isActive: !editForm.isActive })}
-                    className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${editForm.isActive ? 'bg-emerald-500' : 'bg-slate-600'}`}
-                  >
-                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${editForm.isActive ? 'translate-x-7' : 'translate-x-1'}`} />
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  type="button"
+                  onClick={() => setEditForm({ ...editForm, isActive: !editForm.isActive })}
+                  className="flex items-center gap-3 rounded-xl p-4 flex-1 text-left transition-all"
+                  style={{ background: editForm.isActive ? 'rgba(146,208,170,0.08)' : 'rgba(255,255,255,0.04)', border: `1px solid ${editForm.isActive ? 'rgba(146,208,170,0.2)' : 'rgba(255,255,255,0.07)'}` }}
+                >
+                  <div className={`w-11 h-6 rounded-full transition-colors relative flex-shrink-0 ${editForm.isActive ? 'bg-[#92D0AA]' : ''}`}
+                    style={!editForm.isActive ? { background: 'rgba(255,255,255,0.15)' } : {}}>
+                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${editForm.isActive ? 'translate-x-6' : 'translate-x-1'}`} />
                   </div>
                   <div>
                     <p className="text-white font-medium text-sm">Aktif / Satışta</p>
-                    <p className="text-slate-400 text-xs">{editForm.isActive ? 'Sitede görünür' : 'Sitede gizli'}</p>
+                    <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>{editForm.isActive ? 'Sitede görünür' : 'Sitede gizli'}</p>
                   </div>
-                </label>
-                <label className="flex items-center gap-3 cursor-pointer bg-slate-700/50 rounded-xl p-4 flex-1">
-                  <div
-                    onClick={() => setEditForm({ ...editForm, isFeatured: !editForm.isFeatured })}
-                    className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${editForm.isFeatured ? 'bg-amber-500' : 'bg-slate-600'}`}
-                  >
-                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${editForm.isFeatured ? 'translate-x-7' : 'translate-x-1'}`} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEditForm({ ...editForm, isFeatured: !editForm.isFeatured })}
+                  className="flex items-center gap-3 rounded-xl p-4 flex-1 text-left transition-all"
+                  style={{ background: editForm.isFeatured ? 'rgba(251,191,36,0.08)' : 'rgba(255,255,255,0.04)', border: `1px solid ${editForm.isFeatured ? 'rgba(251,191,36,0.2)' : 'rgba(255,255,255,0.07)'}` }}
+                >
+                  <div className={`w-11 h-6 rounded-full transition-colors relative flex-shrink-0`}
+                    style={{ background: editForm.isFeatured ? '#f59e0b' : 'rgba(255,255,255,0.15)' }}>
+                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${editForm.isFeatured ? 'translate-x-6' : 'translate-x-1'}`} />
                   </div>
                   <div>
                     <p className="text-white font-medium text-sm">Öne Çıkan</p>
-                    <p className="text-slate-400 text-xs">{editForm.isFeatured ? 'Öne çıkan ürün' : 'Normal ürün'}</p>
+                    <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>{editForm.isFeatured ? 'Öne çıkan ürün' : 'Normal ürün'}</p>
                   </div>
-                </label>
+                </button>
+              </div>
+
+              {/* ── Product Gallery ── */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <label className="block text-slate-400 text-sm font-medium">🖼️ Ürün Görselleri (Galeri)</label>
+                  {galleryLoading && (
+                    <div className="w-4 h-4 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
+                  )}
+                </div>
+
+                {galleryMsg && (
+                  <div className={`mb-3 px-3 py-2 rounded-lg text-xs font-medium ${galleryMsg.type === 'success' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25' : 'bg-red-500/15 text-red-400 border border-red-500/25'}`}>
+                    {galleryMsg.text}
+                  </div>
+                )}
+
+                {/* Gallery Grid */}
+                {productGalleryImages.length > 0 ? (
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-3">
+                    {productGalleryImages.map(img => (
+                      <div key={img.id} className="relative group aspect-square rounded-xl overflow-hidden bg-slate-700 border border-slate-600">
+                        <img
+                          src={img.image_url}
+                          alt="Ürün görseli"
+                          className="w-full h-full object-cover"
+                          onError={(e) => { (e.target as HTMLImageElement).src = '/gorselsizurun.jpg'; }}
+                        />
+                        {img.is_primary && (
+                          <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 bg-emerald-500 rounded-md text-[10px] text-white font-bold leading-none">
+                            Ana
+                          </div>
+                        )}
+                        {/* Hover Actions */}
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1.5">
+                          {!img.is_primary && (
+                            <button
+                              onClick={() => setGalleryPrimary(img.id, editingProduct!.id)}
+                              className="px-2 py-1 bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] font-medium rounded-lg transition-colors w-20 text-center"
+                            >
+                              Ana Yap
+                            </button>
+                          )}
+                          <button
+                            onClick={() => deleteGalleryImage(img.id, editingProduct!.id)}
+                            className="px-2 py-1 bg-red-500/80 hover:bg-red-600 text-white text-[11px] font-medium rounded-lg transition-colors w-20 text-center"
+                          >
+                            Sil
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  !galleryLoading && (
+                    <div className="mb-3 py-6 rounded-xl border border-dashed border-slate-600 text-center">
+                      <p className="text-slate-500 text-sm">Henüz galeri görseli eklenmemiş</p>
+                      <p className="text-slate-600 text-xs mt-1">Aşağıdan görsel yükleyin veya URL ekleyin</p>
+                    </div>
+                  )
+                )}
+
+                {/* Upload / URL Add */}
+                <div className="space-y-2">
+                  {/* File upload */}
+                  <label className="flex items-center gap-2 px-3 py-2.5 bg-slate-700/60 border border-slate-600 rounded-xl cursor-pointer hover:bg-slate-700 transition-colors">
+                    <svg className="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                    </svg>
+                    <span className="text-slate-300 text-sm">{galleryUploading ? 'Yükleniyor...' : 'Bilgisayardan Görsel Yükle'}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      disabled={galleryUploading}
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file && editingProduct) {
+                          await uploadGalleryImage(file, editingProduct.id);
+                          e.target.value = '';
+                        }
+                      }}
+                    />
+                  </label>
+
+                  {/* URL input */}
+                  <div className="flex gap-2">
+                    <input
+                      type="url"
+                      value={galleryUrlInput}
+                      onChange={e => setGalleryUrlInput(e.target.value)}
+                      placeholder="https://... (görsel URL'si)"
+                      className="flex-1 px-3 py-2.5 bg-slate-700/60 border border-slate-600 rounded-xl text-white text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
+                      onKeyDown={e => { if (e.key === 'Enter' && editingProduct) addGalleryImageByUrl(editingProduct.id); }}
+                    />
+                    <button
+                      onClick={() => editingProduct && addGalleryImageByUrl(editingProduct.id)}
+                      disabled={!galleryUrlInput.trim() || galleryUploading}
+                      className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white text-sm rounded-xl transition-colors font-medium whitespace-nowrap"
+                    >
+                      Ekle
+                    </button>
+                  </div>
+                </div>
               </div>
 
               {/* Success message */}
               {saveSuccess && (
-                <div className="bg-emerald-500/20 border border-emerald-500/30 rounded-xl p-4 text-emerald-400 text-center font-medium">
-                  ✓ Ürün başarıyla güncellendi! Değişiklikler sitede canlı olarak yansıtıldı.
+                <div className="rounded-xl p-4 text-center text-sm font-medium" style={{ background: 'rgba(146,208,170,0.12)', border: '1px solid rgba(146,208,170,0.25)', color: '#92D0AA' }}>
+                  ✓ Ürün başarıyla güncellendi!
                 </div>
               )}
             </div>
             
-            <div className="p-6 border-t border-slate-700 flex justify-end gap-3 sticky bottom-0 bg-slate-800">
+            <div className="p-5 flex justify-end gap-3 sticky bottom-0" style={{ background: '#161b22', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
               <button
                 onClick={closeEditModal}
-                className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl"
+                className="px-5 py-2.5 rounded-xl text-sm font-medium transition-colors"
+                style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.7)' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.color = 'white'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; }}
               >
                 İptal
               </button>
               <button
                 onClick={handleSaveProduct}
                 disabled={savingProduct || !editForm.name || !editForm.price}
-                className="px-8 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-medium transition-colors flex items-center gap-2"
+                className="px-7 py-2.5 rounded-xl font-medium text-sm transition-colors flex items-center gap-2 disabled:opacity-50"
+                style={{ background: '#92D0AA', color: '#0a1f14' }}
+                onMouseEnter={e => { if (!savingProduct) e.currentTarget.style.background = '#7abb96'; }}
+                onMouseLeave={e => { if (!savingProduct) e.currentTarget.style.background = '#92D0AA'; }}
               >
                 {savingProduct ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 rounded-full animate-spin" style={{ borderColor: 'rgba(10,31,20,0.3)', borderTopColor: '#0a1f14' }} />
                     Kaydediliyor...
                   </>
-                ) : '💾 Kaydet'}
+                ) : (
+                  <>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Kaydet
+                  </>
+                )}
               </button>
             </div>
           </div>
