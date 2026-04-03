@@ -116,7 +116,7 @@ const ITEMS_PER_PAGE = 15;
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'users' | 'reports' | 'hero' | 'activity' | 'kore-trends' | 'fatura'>('orders');
+  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'users' | 'reports' | 'hero' | 'activity' | 'kore-trends' | 'fatura' | 'analytics' | 'mail-marketing'>('orders');
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -216,6 +216,22 @@ export default function AdminDashboard() {
   const [galleryUrlInput, setGalleryUrlInput] = useState('');
   const [galleryMsg, setGalleryMsg] = useState<{type:'success'|'error';text:string}|null>(null);
 
+  // Analytics state (admin@merumy.com only)
+  const [analyticsData, setAnalyticsData] = useState<any>(null);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
+  const [analyticsDateFrom, setAnalyticsDateFrom] = useState('');
+  const [analyticsDateTo, setAnalyticsDateTo] = useState('');
+
+  // Mail Marketing state
+  const [mailUsers, setMailUsers] = useState<any[]>([]);
+  const [mailLoading, setMailLoading] = useState(false);
+  const [mailFilter, setMailFilter] = useState('all');
+  const [mailSearch, setMailSearch] = useState('');
+  const [mailTotal, setMailTotal] = useState(0);
+  const [mailCopied, setMailCopied] = useState(false);
+  const [mailDateFrom, setMailDateFrom] = useState('');
+  const [mailDateTo, setMailDateTo] = useState('');
+
   // New product form state
   const [showNewProductForm, setShowNewProductForm] = useState(false);
   const [newProductForm, setNewProductForm] = useState({
@@ -265,6 +281,8 @@ export default function AdminDashboard() {
     else if (activeTab === 'activity') fetchActivityLogs();
     else if (activeTab === 'kore-trends') fetchKoreTrendProducts(koreSection as 'kore_trend' | 'makeup');
     else if (activeTab === 'fatura') fetchFaturaOrders();
+    else if (activeTab === 'analytics') fetchAnalytics();
+    else if (activeTab === 'mail-marketing') fetchMailMarketing();
   }, [activeTab, orderPage, orderStatusFilter, userPage, userSort, dbProductsPage]);
 
   // Clear selection when changing filters
@@ -1003,6 +1021,35 @@ export default function AdminDashboard() {
     }
   };
 
+  const fetchAnalytics = async () => {
+    setAnalyticsLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (analyticsDateFrom) params.append('dateFrom', analyticsDateFrom);
+      if (analyticsDateTo) params.append('dateTo', analyticsDateTo);
+      const res = await fetch(`/api/admin/analytics?${params}`);
+      const data = await res.json();
+      if (res.ok) setAnalyticsData(data);
+    } catch (e) { console.error('Analytics error:', e); }
+    finally { setAnalyticsLoading(false); }
+  };
+
+  const fetchMailMarketing = async () => {
+    setMailLoading(true);
+    try {
+      const params = new URLSearchParams();
+      params.append('filter', mailFilter);
+      if (mailSearch) params.append('search', mailSearch);
+      if (mailDateFrom) params.append('dateFrom', mailDateFrom);
+      if (mailDateTo) params.append('dateTo', mailDateTo);
+      params.append('limit', '2000');
+      const res = await fetch(`/api/admin/mail-marketing?${params}`);
+      const data = await res.json();
+      if (res.ok) { setMailUsers(data.users || []); setMailTotal(data.total || 0); }
+    } catch (e) { console.error('Mail marketing error:', e); }
+    finally { setMailLoading(false); }
+  };
+
   const fetchKoreTrendProducts = async (section: 'kore_trend' | 'makeup') => {
     setKoreLoading(true);
     try {
@@ -1181,13 +1228,7 @@ export default function AdminDashboard() {
                 }}
               />
             </div>
-            {(sidebarOpen || mobileSidebarOpen) && (
-              <div className="flex-1 min-w-0">
-                <span className="text-xs font-medium px-2 py-0.5 rounded-md" style={{ background: 'rgba(146,208,170,0.1)', color: '#92D0AA' }}>
-                  Admin Panel
-                </span>
-              </div>
-            )}
+            {(sidebarOpen || mobileSidebarOpen) && <div className="flex-1 min-w-0" />}
             {/* Mobile close button */}
             <button
               onClick={() => setMobileSidebarOpen(false)}
@@ -1272,6 +1313,48 @@ export default function AdminDashboard() {
               )}
             </button>
           ))}
+          {/* Analytics - Only for admin@merumy.com */}
+          {currentUserEmail === 'admin@merumy.com' && (
+            <button
+              onClick={() => { setActiveTab('analytics'); setMobileSidebarOpen(false); }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all"
+              style={activeTab === 'analytics' ? {
+                background: 'rgba(56,189,248,0.12)',
+                color: '#38bdf8',
+                border: '1px solid rgba(56,189,248,0.2)',
+              } : {
+                color: 'rgba(255,255,255,0.45)',
+                border: '1px solid transparent',
+              }}
+              onMouseEnter={e => { if (activeTab !== 'analytics') { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'rgba(255,255,255,0.85)'; } }}
+              onMouseLeave={e => { if (activeTab !== 'analytics') { e.currentTarget.style.background = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.45)'; } }}
+            >
+              <span className="text-lg flex-shrink-0">📈</span>
+              {(sidebarOpen || mobileSidebarOpen) && <span className="flex-1 text-left text-sm font-medium">Analiz</span>}
+            </button>
+          )}
+
+          {/* Mail Marketing - for sena, serap, buse, admin */}
+          {['admin@merumy.com','sena@merumy.com','serap@merumy.com','buse@merumy.com'].includes(currentUserEmail) && (
+            <button
+              onClick={() => { setActiveTab('mail-marketing'); setMobileSidebarOpen(false); }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all"
+              style={activeTab === 'mail-marketing' ? {
+                background: 'rgba(249,115,22,0.12)',
+                color: '#fb923c',
+                border: '1px solid rgba(249,115,22,0.2)',
+              } : {
+                color: 'rgba(255,255,255,0.45)',
+                border: '1px solid transparent',
+              }}
+              onMouseEnter={e => { if (activeTab !== 'mail-marketing') { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'rgba(255,255,255,0.85)'; } }}
+              onMouseLeave={e => { if (activeTab !== 'mail-marketing') { e.currentTarget.style.background = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.45)'; } }}
+            >
+              <span className="text-lg flex-shrink-0">📧</span>
+              {(sidebarOpen || mobileSidebarOpen) && <span className="flex-1 text-left text-sm font-medium">Mail Marketing</span>}
+            </button>
+          )}
+
           {/* Activity Log - Only for admin@merumy.com */}
           {currentUserEmail === 'admin@merumy.com' && (!allowedSections || allowedSections.includes('activity')) && (
             <button
@@ -1378,6 +1461,8 @@ export default function AdminDashboard() {
                   {activeTab === 'activity' && 'Yapılan İşlemler'}
                   {activeTab === 'kore-trends' && 'Kore Trendleri'}
                   {activeTab === 'fatura' && 'Fatura Yönetimi'}
+                  {activeTab === 'analytics' && 'Analiz & Raporlar'}
+                  {activeTab === 'mail-marketing' && 'Mail Marketing'}
                 </h1>
                 {currentUserName && (
                   <p className="text-xs hidden sm:block" style={{ color: 'rgba(255,255,255,0.35)' }}>
@@ -1592,12 +1677,15 @@ export default function AdminDashboard() {
                 </div>
                 
                 {/* Pagination */}
-                {orderTotalPages > 1 && (
+                {orderTotal > 0 && (
                   <div className="flex items-center justify-between px-6 py-4 border-t border-slate-700">
-                    <p className="text-slate-400 text-sm">Sayfa {orderPage} / {orderTotalPages} (Toplam {orderTotal})</p>
-                    <div className="flex gap-2">
-                      <button disabled={orderPage === 1} onClick={() => setOrderPage(p => p - 1)} className="px-4 py-2 bg-slate-700 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg text-sm">Önceki</button>
-                      <button disabled={orderPage === orderTotalPages} onClick={() => setOrderPage(p => p + 1)} className="px-4 py-2 bg-slate-700 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg text-sm">Sonraki</button>
+                    <p className="text-slate-400 text-sm">Sayfa <span className="text-white font-medium">{orderPage}</span> / <span className="text-white font-medium">{orderTotalPages || 1}</span> &nbsp;·&nbsp; Toplam <span className="text-white font-medium">{orderTotal}</span> sipariş</p>
+                    <div className="flex items-center gap-2">
+                      <button disabled={orderPage === 1} onClick={() => setOrderPage(1)} className="px-3 py-2 bg-slate-700 hover:bg-slate-600 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-lg text-sm transition-colors">«</button>
+                      <button disabled={orderPage === 1} onClick={() => setOrderPage(p => p - 1)} className="px-4 py-2 bg-slate-700 hover:bg-slate-600 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-lg text-sm transition-colors">Önceki</button>
+                      <span className="text-slate-500 text-sm px-2">{orderPage} / {orderTotalPages || 1}</span>
+                      <button disabled={orderPage === (orderTotalPages || 1)} onClick={() => setOrderPage(p => p + 1)} className="px-4 py-2 bg-slate-700 hover:bg-slate-600 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-lg text-sm transition-colors">Sonraki</button>
+                      <button disabled={orderPage === (orderTotalPages || 1)} onClick={() => setOrderPage(orderTotalPages || 1)} className="px-3 py-2 bg-slate-700 hover:bg-slate-600 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-lg text-sm transition-colors">»</button>
                     </div>
                   </div>
                 )}
@@ -3169,6 +3257,378 @@ export default function AdminDashboard() {
               )}
             </div>
           )}
+          {/* ── ANALYTICS TAB (admin@merumy.com only) ── */}
+          {activeTab === 'analytics' && currentUserEmail === 'admin@merumy.com' && (
+            <div className="space-y-6">
+              {/* Header + Filters */}
+              <div className="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-xl font-bold text-white">Analiz & Raporlar</h2>
+                    <p className="text-slate-400 text-sm mt-0.5">Tarih aralığı seçerek satış verilerini filtreleyin</p>
+                  </div>
+                  <div className="flex flex-wrap gap-2 items-end">
+                    <div>
+                      <label className="block text-xs text-slate-400 mb-1">Başlangıç</label>
+                      <input type="date" value={analyticsDateFrom} onChange={e => setAnalyticsDateFrom(e.target.value)}
+                        className="px-3 py-2 bg-slate-700 border border-slate-600 rounded-xl text-white text-sm focus:ring-2 focus:ring-sky-500" />
+                    </div>
+                    <div>
+                      <label className="block text-xs text-slate-400 mb-1">Bitiş</label>
+                      <input type="date" value={analyticsDateTo} onChange={e => setAnalyticsDateTo(e.target.value)}
+                        className="px-3 py-2 bg-slate-700 border border-slate-600 rounded-xl text-white text-sm focus:ring-2 focus:ring-sky-500" />
+                    </div>
+                    <button onClick={fetchAnalytics} disabled={analyticsLoading}
+                      className="px-5 py-2 bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white rounded-xl text-sm font-medium flex items-center gap-2 transition-colors">
+                      {analyticsLoading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"/> : null}
+                      Filtrele
+                    </button>
+                    {(analyticsDateFrom || analyticsDateTo) && (
+                      <button onClick={() => { setAnalyticsDateFrom(''); setAnalyticsDateTo(''); setTimeout(fetchAnalytics, 50); }}
+                        className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-xl text-sm transition-colors">
+                        Temizle
+                      </button>
+                    )}
+                    {/* Quick presets */}
+                    {[
+                      { label: 'Bugün', df: new Date().toISOString().split('T')[0], dt: new Date().toISOString().split('T')[0] },
+                      { label: 'Bu Hafta', df: (() => { const d = new Date(); d.setDate(d.getDate() - d.getDay() + 1); return d.toISOString().split('T')[0]; })(), dt: new Date().toISOString().split('T')[0] },
+                      { label: 'Bu Ay', df: new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0], dt: new Date().toISOString().split('T')[0] },
+                      { label: 'Son 30 Gün', df: (() => { const d = new Date(); d.setDate(d.getDate() - 30); return d.toISOString().split('T')[0]; })(), dt: new Date().toISOString().split('T')[0] },
+                    ].map(p => (
+                      <button key={p.label}
+                        onClick={() => { setAnalyticsDateFrom(p.df); setAnalyticsDateTo(p.dt); setTimeout(fetchAnalytics, 50); }}
+                        className="px-3 py-2 bg-slate-700 hover:bg-sky-600/30 text-slate-300 hover:text-sky-400 rounded-xl text-xs font-medium transition-colors border border-slate-600 hover:border-sky-500/40">
+                        {p.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {analyticsLoading && !analyticsData ? (
+                <div className="flex items-center justify-center py-20">
+                  <div className="w-10 h-10 border-4 border-sky-500/30 border-t-sky-500 rounded-full animate-spin" />
+                </div>
+              ) : analyticsData ? (
+                <>
+                  {/* Today Highlight */}
+                  <div className="bg-gradient-to-r from-sky-900/40 to-indigo-900/40 rounded-2xl p-5 border border-sky-500/20">
+                    <p className="text-sky-400 text-xs font-semibold uppercase tracking-wider mb-3">Bugün</p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {[
+                        { label: 'Sipariş', value: analyticsData.today.ordersToday, color: '#38bdf8' },
+                        { label: 'Ciro', value: `₺${Number(analyticsData.today.revenueToday).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`, color: '#34d399' },
+                        { label: 'Ürün Satıldı', value: analyticsData.today.itemsToday, color: '#a78bfa' },
+                        { label: 'Kargoya Çıktı', value: analyticsData.today.shippedToday, color: '#fb923c' },
+                      ].map(s => (
+                        <div key={s.label} className="text-center">
+                          <p className="text-3xl font-bold" style={{ color: s.color }}>{s.value}</p>
+                          <p className="text-slate-400 text-sm mt-1">{s.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Summary KPIs */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {[
+                      { label: 'Toplam Ciro', value: `₺${Number(analyticsData.summary.totalRevenue).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`, sub: analyticsDateFrom ? `${analyticsDateFrom} – ${analyticsDateTo || 'bugün'}` : 'Tüm zamanlar', color: '#34d399' },
+                      { label: 'Sipariş Sayısı', value: analyticsData.summary.totalOrders, sub: `${analyticsData.summary.uniqueCustomers} benzersiz müşteri`, color: '#38bdf8' },
+                      { label: 'Satılan Ürün', value: analyticsData.summary.totalItemsSold, sub: `Ort. ₺${Number(analyticsData.summary.avgOrderValue).toLocaleString('tr-TR', { minimumFractionDigits: 0 })} / sipariş`, color: '#a78bfa' },
+                      { label: 'Kargoya Çıkan', value: analyticsData.summary.shippedOrders, sub: `${analyticsData.summary.activeOrders} aktif sipariş`, color: '#fb923c' },
+                    ].map(s => (
+                      <div key={s.label} className="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+                        <p className="text-3xl font-bold" style={{ color: s.color }}>{s.value}</p>
+                        <p className="text-white font-medium mt-1 text-sm">{s.label}</p>
+                        <p className="text-slate-500 text-xs mt-0.5">{s.sub}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Status Breakdown */}
+                  <div className="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+                    <h3 className="text-white font-semibold mb-4">Durum Dağılımı</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
+                      {(analyticsData.statusBreakdown || []).map((s: any) => {
+                        const statusMap: Record<string, { label: string; color: string }> = {
+                          pending: { label: 'Beklemede', color: '#f59e0b' },
+                          processing: { label: 'İşleniyor', color: '#3b82f6' },
+                          confirmed: { label: 'Onaylandı', color: '#6366f1' },
+                          preparing: { label: 'Hazırlanıyor', color: '#f97316' },
+                          shipped: { label: 'Kargoda', color: '#a855f7' },
+                          delivered: { label: 'Teslim', color: '#10b981' },
+                          cancelled: { label: 'İptal', color: '#ef4444' },
+                        };
+                        const info = statusMap[s.status] || { label: s.status, color: '#94a3b8' };
+                        return (
+                          <div key={s.status} className="rounded-xl p-3 text-center" style={{ background: `${info.color}15`, border: `1px solid ${info.color}25` }}>
+                            <p className="text-2xl font-bold" style={{ color: info.color }}>{s.count}</p>
+                            <p className="text-xs mt-1" style={{ color: info.color }}>{info.label}</p>
+                            <p className="text-slate-500 text-xs mt-0.5">₺{Number(s.revenue).toLocaleString('tr-TR', { minimumFractionDigits: 0 })}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Daily Table */}
+                  {analyticsData.daily && analyticsData.daily.length > 0 && (
+                    <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
+                      <div className="p-4 border-b border-slate-700">
+                        <h3 className="text-white font-semibold">Günlük Detay</h3>
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-sm">
+                          <thead>
+                            <tr className="border-b border-slate-700 bg-slate-900/50">
+                              <th className="text-left px-4 py-3 text-slate-400 font-medium">Tarih</th>
+                              <th className="text-center px-4 py-3 text-slate-400 font-medium">Sipariş</th>
+                              <th className="text-right px-4 py-3 text-slate-400 font-medium">Ciro</th>
+                              <th className="text-center px-4 py-3 text-slate-400 font-medium">Satılan Ürün</th>
+                              <th className="text-center px-4 py-3 text-slate-400 font-medium">Kargoya Çıkan</th>
+                              <th className="text-center px-4 py-3 text-slate-400 font-medium">Bekleyen</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-700/50">
+                            {analyticsData.daily.map((row: any) => (
+                              <tr key={row.date} className="hover:bg-slate-700/20 transition-colors">
+                                <td className="px-4 py-3 text-slate-300 font-medium">{new Date(row.date).toLocaleDateString('tr-TR', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</td>
+                                <td className="px-4 py-3 text-center">
+                                  <span className="px-2 py-0.5 rounded-full text-xs font-bold text-sky-400 bg-sky-400/10">{row.orderCount}</span>
+                                </td>
+                                <td className="px-4 py-3 text-right text-emerald-400 font-semibold">₺{Number(row.revenue).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</td>
+                                <td className="px-4 py-3 text-center text-slate-300">{row.itemsSold}</td>
+                                <td className="px-4 py-3 text-center">
+                                  <span className="px-2 py-0.5 rounded-full text-xs font-medium text-orange-400 bg-orange-400/10">{row.shippedCount}</span>
+                                </td>
+                                <td className="px-4 py-3 text-center">
+                                  <span className="px-2 py-0.5 rounded-full text-xs font-medium text-amber-400 bg-amber-400/10">{row.pendingCount}</span>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Top Products */}
+                  {analyticsData.topProducts && analyticsData.topProducts.length > 0 && (
+                    <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
+                      <div className="p-4 border-b border-slate-700">
+                        <h3 className="text-white font-semibold">En Çok Satan Ürünler</h3>
+                      </div>
+                      <div className="divide-y divide-slate-700/50">
+                        {analyticsData.topProducts.map((p: any, i: number) => (
+                          <div key={i} className="px-4 py-3 flex items-center gap-4 hover:bg-slate-700/20 transition-colors">
+                            <span className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0"
+                              style={{ background: i < 3 ? '#f59e0b20' : 'rgba(255,255,255,0.06)', color: i < 3 ? '#f59e0b' : '#94a3b8' }}>
+                              {i + 1}
+                            </span>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-white text-sm font-medium truncate">{p.name}</p>
+                              <p className="text-slate-500 text-xs">{p.brand || '-'}</p>
+                            </div>
+                            <div className="text-right flex-shrink-0">
+                              <p className="text-emerald-400 font-semibold text-sm">₺{Number(p.revenue).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</p>
+                              <p className="text-slate-400 text-xs">{p.qty} adet</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="bg-slate-800 rounded-2xl border border-slate-700 p-16 text-center">
+                  <p className="text-slate-400">Analiz yüklemek için Filtrele butonuna basın veya tarih seçin.</p>
+                  <button onClick={fetchAnalytics} className="mt-4 px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-sm font-medium transition-colors">
+                    Tüm Zamanları Yükle
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── MAIL MARKETING TAB ── */}
+          {activeTab === 'mail-marketing' && ['admin@merumy.com','sena@merumy.com','serap@merumy.com','buse@merumy.com'].includes(currentUserEmail) && (
+            <div className="space-y-5">
+              {/* Header */}
+              <div className="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                  <div>
+                    <h2 className="text-xl font-bold text-white">Mail Marketing</h2>
+                    <p className="text-slate-400 text-sm mt-0.5">Kullanıcıları filtreleyin ve e-posta listelerini dışa aktarın</p>
+                  </div>
+                </div>
+
+                {/* Filters */}
+                <div className="mt-5 space-y-4">
+                  {/* Segment buttons */}
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { value: 'all', label: 'Tüm Kullanıcılar' },
+                      { value: 'with_orders', label: 'Sipariş Verenler' },
+                      { value: 'no_orders', label: 'Hiç Sipariş Vermeyen' },
+                      { value: 'multiple_orders', label: 'Tekrar Alışveriş Yapan' },
+                      { value: 'high_value', label: 'Yüksek Değerli (≥₺1000)' },
+                      { value: 'recent_30', label: 'Son 30 Gün Kayıt' },
+                      { value: 'recent_90', label: 'Son 90 Gün Kayıt' },
+                    ].map(f => (
+                      <button
+                        key={f.value}
+                        onClick={() => setMailFilter(f.value)}
+                        className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all border"
+                        style={mailFilter === f.value ? {
+                          background: 'rgba(249,115,22,0.15)',
+                          color: '#fb923c',
+                          borderColor: 'rgba(249,115,22,0.35)',
+                        } : {
+                          background: 'rgba(255,255,255,0.04)',
+                          color: 'rgba(255,255,255,0.45)',
+                          borderColor: 'rgba(255,255,255,0.08)',
+                        }}
+                      >
+                        {f.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="flex-1 relative">
+                      <input type="text" placeholder="Ad veya e-posta ara..."
+                        value={mailSearch} onChange={e => setMailSearch(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && fetchMailMarketing()}
+                        className="w-full px-4 py-2.5 pl-10 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-slate-500 text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
+                      <svg className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <input type="date" placeholder="Kayıt başlangıç" value={mailDateFrom} onChange={e => setMailDateFrom(e.target.value)}
+                        className="px-3 py-2.5 bg-slate-700 border border-slate-600 rounded-xl text-white text-sm focus:ring-2 focus:ring-orange-500" />
+                    </div>
+                    <div>
+                      <input type="date" placeholder="Kayıt bitiş" value={mailDateTo} onChange={e => setMailDateTo(e.target.value)}
+                        className="px-3 py-2.5 bg-slate-700 border border-slate-600 rounded-xl text-white text-sm focus:ring-2 focus:ring-orange-500" />
+                    </div>
+                    <button onClick={fetchMailMarketing} disabled={mailLoading}
+                      className="px-5 py-2.5 bg-orange-600 hover:bg-orange-700 disabled:opacity-50 text-white rounded-xl text-sm font-medium flex items-center gap-2 transition-colors">
+                      {mailLoading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"/> : null}
+                      Listele
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Results */}
+              {mailLoading ? (
+                <div className="flex items-center justify-center py-20">
+                  <div className="w-10 h-10 border-4 border-orange-500/30 border-t-orange-500 rounded-full animate-spin" />
+                </div>
+              ) : mailUsers.length > 0 ? (
+                <div className="space-y-4">
+                  {/* Action bar */}
+                  <div className="bg-slate-800 rounded-2xl p-4 border border-slate-700 flex flex-wrap items-center justify-between gap-3">
+                    <p className="text-white font-medium">
+                      <span className="text-orange-400 font-bold">{mailTotal}</span> kullanıcı bulundu
+                    </p>
+                    <div className="flex gap-2">
+                      {/* Copy all emails */}
+                      <button
+                        onClick={() => {
+                          const emails = mailUsers.map(u => u.email).join(', ');
+                          navigator.clipboard.writeText(emails);
+                          setMailCopied(true);
+                          setTimeout(() => setMailCopied(false), 2500);
+                        }}
+                        className="px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition-all border"
+                        style={mailCopied ? {
+                          background: 'rgba(52,211,153,0.15)',
+                          color: '#34d399',
+                          borderColor: 'rgba(52,211,153,0.3)',
+                        } : {
+                          background: 'rgba(249,115,22,0.12)',
+                          color: '#fb923c',
+                          borderColor: 'rgba(249,115,22,0.25)',
+                        }}
+                      >
+                        {mailCopied ? (
+                          <><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/></svg> Kopyalandı!</>
+                        ) : (
+                          <><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg> E-postaları Kopyala</>
+                        )}
+                      </button>
+                      {/* CSV Download */}
+                      <button
+                        onClick={() => {
+                          const csv = ['Ad,E-posta,Telefon,Sipariş Sayısı,Toplam Harcama,Kayıt Tarihi', ...mailUsers.map(u =>
+                            [`"${u.name || ''}"`, u.email, u.phone || '', u.orderCount, `₺${Number(u.totalSpent).toFixed(2)}`, new Date(u.created_at).toLocaleDateString('tr-TR')].join(',')
+                          )].join('\n');
+                          const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+                          const url = URL.createObjectURL(blob);
+                          const a = document.createElement('a'); a.href = url;
+                          a.download = `mail-marketing-${new Date().toISOString().split('T')[0]}.csv`;
+                          a.click(); URL.revokeObjectURL(url);
+                        }}
+                        className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-xl text-sm font-medium flex items-center gap-2 border border-slate-600 transition-colors"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        CSV İndir
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Table */}
+                  <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b border-slate-700 bg-slate-900/50">
+                            <th className="text-left px-4 py-3 text-slate-400 font-medium">#</th>
+                            <th className="text-left px-4 py-3 text-slate-400 font-medium">Ad Soyad</th>
+                            <th className="text-left px-4 py-3 text-slate-400 font-medium">E-posta</th>
+                            <th className="text-left px-4 py-3 text-slate-400 font-medium">Telefon</th>
+                            <th className="text-center px-4 py-3 text-slate-400 font-medium">Sipariş</th>
+                            <th className="text-right px-4 py-3 text-slate-400 font-medium">Harcama</th>
+                            <th className="text-left px-4 py-3 text-slate-400 font-medium">Kayıt</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-700/50">
+                          {mailUsers.map((u, i) => (
+                            <tr key={u.id} className="hover:bg-slate-700/20 transition-colors">
+                              <td className="px-4 py-3 text-slate-500 text-xs">{i + 1}</td>
+                              <td className="px-4 py-3 text-white font-medium">{u.name || '—'}</td>
+                              <td className="px-4 py-3">
+                                <span className="text-orange-400 font-mono text-xs">{u.email}</span>
+                              </td>
+                              <td className="px-4 py-3 text-slate-400 text-xs">{u.phone || '—'}</td>
+                              <td className="px-4 py-3 text-center">
+                                <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${Number(u.orderCount) > 0 ? 'bg-emerald-500/15 text-emerald-400' : 'bg-slate-700 text-slate-500'}`}>
+                                  {u.orderCount}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3 text-right font-semibold" style={{ color: Number(u.totalSpent) >= 1000 ? '#fb923c' : Number(u.totalSpent) > 0 ? '#34d399' : '#64748b' }}>
+                                {Number(u.totalSpent) > 0 ? `₺${Number(u.totalSpent).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}` : '—'}
+                              </td>
+                              <td className="px-4 py-3 text-slate-500 text-xs">{new Date(u.created_at).toLocaleDateString('tr-TR')}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-slate-800 rounded-2xl border border-slate-700 p-16 text-center">
+                  <p className="text-slate-400 text-lg">Listelemek için Listele butonuna basın</p>
+                  <p className="text-slate-600 text-sm mt-2">Segment seçin ve kullanıcıları filtreleyin</p>
+                </div>
+              )}
+            </div>
+          )}
+
         </div>
       </main>
 

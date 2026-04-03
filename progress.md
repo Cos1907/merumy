@@ -93,6 +93,32 @@
 
 ---
 
+### 🎨 Admin Panel Yeniden Tasarımı (Nisan 2026)
+
+- [x] **Login sayfası yeniden tasarlandı** — Minimal, kurumsal tasarım; emoji kaldırıldı; gerçek logo; sol brand panel + sağ form
+- [x] **Dashboard sidebar yeniden tasarlandı** — Koyu tema (#0b1117), gerçek logo (filtre kaldırıldı), kullanıcı bilgi kartı, "Admin Panel" badge kaldırıldı
+- [x] **Hoş geldin mesajı** — Giriş yapan kullanıcının adı topbar'da gösteriliyor
+- [x] **Ürün galerisi düzeltildi** — Ürün düzenleme modalında galeri görsellerini yükleme, URL ekleme, ana görsel yapma, silme özellikleri çalışır hale getirildi
+- [x] **Sipariş sayfası pagination** — Her zaman görünür, ilk/son sayfa butonları eklendi
+- [x] **Logo beyaz filtresi kaldırıldı** — Gerçek Merumy yeşili logo artık doğal rengiyle görünüyor
+- [x] **Activity log API düzeltildi** — Pagination formatı, `admin_users` join hatası ve filtre parametreleri düzeltildi
+
+### 📈 Analiz & Mail Marketing (Nisan 2026)
+
+- [x] **Analiz sekmesi** (admin@merumy.com'a özel)
+  - Bugün özeti: sipariş, ciro, satılan ürün, kargoya çıkan
+  - Tarih aralığı filtresi + hızlı önayarlar (Bugün, Bu Hafta, Bu Ay, Son 30 Gün)
+  - Toplam KPI kartları: ciro, sipariş, satılan ürün, kargo
+  - Durum dağılımı (tüm sipariş statüsleri)
+  - Günlük detay tablosu (sipariş, ciro, ürün, kargo, bekleyen)
+  - En çok satan 10 ürün listesi
+- [x] **Mail Marketing sekmesi** (sena, serap, buse, admin'e özel)
+  - Segment filtreleri: Tüm Kullanıcılar / Sipariş Verenler / Hiç Sipariş Vermeyenler / Tekrar Alışveriş Yapanlar / Yüksek Değerli / Son 30-90 Gün Kayıt
+  - Ad/e-posta arama + kayıt tarihi aralığı filtresi
+  - E-posta listesini kopyala (tek tıkla clipboard)
+  - CSV olarak indir (UTF-8 BOM, Excel uyumlu)
+  - Kullanıcı tablosu: ad, e-posta, telefon, sipariş sayısı, toplam harcama, kayıt tarihi
+
 ### 🐛 Çözülen Hatalar
 
 | Tarih | Hata | Çözüm |
@@ -100,6 +126,8 @@
 | Nisan 2026 | Admin login "Geçersiz e-posta veya şifre" hatası | SHA256 yerine bcrypt ile şifre doğrulama; tüm admin şifreleri sıfırlandı (`Merumy2026`) |
 | Nisan 2026 | Admin login sayfasında mağaza UI komponentleri görünüyordu | `CookieConsent`, `CartToast`, `WhatsAppButton`, `AccessibilityWidget` — `/admin` path kontrolü eklendi |
 | Nisan 2026 | Coming soon sayfası istenmedik zamanda aktifti | Nginx config güncellendi, API route'ları çalışmaya devam etti |
+| Nisan 2026 | Activity log "0 kayıt" sorunu | API response formatı düzeltildi (`pagination` objesi), `JOIN users` → `JOIN admin_users`, filtre parametreleri eklendi |
+| Nisan 2026 | Logo beyaz görünüyordu | `brightness(0) invert(1)` CSS filtresi kaldırıldı |
 | Geçmiş | `useEffect` hook rule ihlali (CookieConsent.tsx) | Hook, early return'den önce taşındı |
 
 ---
