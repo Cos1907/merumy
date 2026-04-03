@@ -21,6 +21,9 @@ export default function Header() {
   // Start with enabled: false to prevent flash when topbar is disabled
   const [topbarSettings, setTopbarSettings] = useState<{ enabled: boolean; text: string; bgColor: string; textColor: string }>({ enabled: false, text: '1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO', bgColor: '#000000', textColor: '#ffffff' })
 
+  // DB'den gelen kategori-marka verileri
+  const [dbCategoryBrands, setDbCategoryBrands] = useState<Record<string, string[]>>({})
+
   useEffect(() => {
     fetch('/api/site-settings')
       .then(r => r.json())
@@ -34,6 +37,14 @@ export default function Header() {
         else setTopbarSettings({ enabled: false, text: '1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO', bgColor: '#000000', textColor: '#ffffff' })
       })
       .catch(() => { setTopbarSettings({ enabled: false, text: '1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO', bgColor: '#000000', textColor: '#ffffff' }) })
+  }, [])
+
+  // Kategori markalarını DB'den çek
+  useEffect(() => {
+    fetch('/api/nav-data')
+      .then(r => r.json())
+      .then(d => { if (d.categoryBrands) setDbCategoryBrands(d.categoryBrands) })
+      .catch(() => {})
   }, [])
 
   const [mounted, setMounted] = useState(false)
@@ -126,7 +137,7 @@ export default function Header() {
 
   // Live search helper
   const doSearch = async (q: string, setSuggestions: (v: any[]) => void, setBrands: (v: string[]) => void, setLoading: (v: boolean) => void) => {
-    if (!q || q.length < 2) {
+    if (!q || q.length < 1) {
       setSuggestions([])
       setBrands([])
       return
@@ -150,7 +161,7 @@ export default function Header() {
   useEffect(() => {
     if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current)
     const q = searchValue.trim()
-    if (!q || q.length < 2) {
+    if (!q || q.length < 1) {
       setSearchSuggestions([])
       setSearchBrands([])
       setShowSearchDropdown(false)
@@ -159,7 +170,7 @@ export default function Header() {
     setShowSearchDropdown(true)
     searchDebounceRef.current = setTimeout(() => {
       doSearch(q, setSearchSuggestions, setSearchBrands, setSearchDropdownLoading)
-    }, 300)
+    }, 200)
     return () => { if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current) }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue])
@@ -168,7 +179,7 @@ export default function Header() {
   useEffect(() => {
     if (mobileDebounceRef.current) clearTimeout(mobileDebounceRef.current)
     const q = searchValue.trim()
-    if (!q || q.length < 2) {
+    if (!q || q.length < 1) {
       setMobileSearchSuggestions([])
       setMobileSearchBrands([])
       return
@@ -299,7 +310,7 @@ export default function Header() {
           ))}
         </div>
       )}
-      {!loading && suggestions.length === 0 && brands.length === 0 && searchValue.trim().length >= 2 && (
+      {!loading && suggestions.length === 0 && brands.length === 0 && searchValue.trim().length >= 1 && (
         <div className="p-6 text-center text-gray-400 text-sm">
           <Search size={24} className="mx-auto mb-2 opacity-30" />
           <p>&ldquo;{searchValue}&rdquo; için sonuç bulunamadı</p>
@@ -394,7 +405,7 @@ export default function Header() {
                   />
                 </form>
                 {/* Desktop Search Dropdown */}
-                {showSearchDropdown && searchValue.trim().length >= 2 && (
+                {showSearchDropdown && searchValue.trim().length >= 1 && (
                   <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 overflow-hidden max-h-[480px] overflow-y-auto">
                     <SearchDropdownContent
                       suggestions={searchSuggestions}
@@ -529,7 +540,9 @@ export default function Header() {
               </Link>
               
               {categoryList.map((cat) => {
-                const categoryBrands = Array.from(new Set(products.filter(p => p.category === cat.name).map(p => p.brand))).slice(0, 7)
+                const categoryBrands = (dbCategoryBrands[cat.name] && dbCategoryBrands[cat.name].length > 0)
+                  ? dbCategoryBrands[cat.name].slice(0, 8)
+                  : Array.from(new Set(products.filter(p => p.category === cat.name).map(p => p.brand))).slice(0, 7)
                 return (
                   <div
                     key={cat.slug}
@@ -820,7 +833,7 @@ export default function Header() {
             </form>
 
             {/* Mobile Live Search Results */}
-            {searchValue.trim().length >= 2 && (
+            {searchValue.trim().length >= 1 && (
               <div className="mt-3 bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
                 <SearchDropdownContent
                   suggestions={mobileSearchSuggestions}
@@ -832,7 +845,7 @@ export default function Header() {
             )}
             
             {/* Popular Categories - show when no results yet */}
-            {searchValue.trim().length < 2 && (
+            {searchValue.trim().length < 1 && (
               <div className="mt-6">
                 <p className="text-sm font-semibold text-gray-500 mb-3">Popüler Kategoriler</p>
                 <div className="flex flex-wrap gap-2">

@@ -156,7 +156,7 @@ export default function SiparislerimPage() {
                   <div className="space-y-4">
                     <h2 className="text-xl font-semibold text-gray-900 mb-6">Siparişleriniz ({orders.length})</h2>
                     {orders.map((order) => (
-                      <div key={order.id} className="border border-gray-200 rounded-xl p-5 hover:border-accent/50 transition-colors">
+                      <div key={order.id} className="border border-gray-200 rounded-xl p-5 hover:border-accent/50 transition-colors cursor-pointer" onClick={() => router.push('/hesabim/siparislerim/' + order.orderId)}>
                         <div className="flex items-center justify-between mb-4">
                           <div>
                             <p className="text-sm text-gray-500">Sipariş No</p>
@@ -219,6 +219,12 @@ export default function SiparislerimPage() {
                           </div>
                           <div className="flex items-center space-x-4">
                             <span className="font-bold text-accent">₺{order.total.toFixed(2)}</span>
+                            <Link
+                              href={'/hesabim/siparislerim/' + order.orderId}
+                              className="flex items-center gap-1 px-4 py-2 bg-accent/10 text-accent hover:bg-accent hover:text-white rounded-lg text-sm font-medium transition-colors"
+                            >
+                              Detayı Gör <ChevronRight size={14} />
+                            </Link>
                           </div>
                         </div>
                       </div>

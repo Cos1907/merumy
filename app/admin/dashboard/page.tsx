@@ -149,7 +149,7 @@ export default function AdminDashboard() {
   // Discount codes state
   const [discountCodes, setDiscountCodes] = useState<any[]>([]);
   const [discountLoading, setDiscountLoading] = useState(false);
-  const [discountForm, setDiscountForm] = useState({ code: '', type: 'amount', value: '', minAmount: '', notes: '', expiresAt: '', maxUses: '' });
+  const [discountForm, setDiscountForm] = useState({ code: '', type: 'amount', value: '', minAmount: '', brand: '', notes: '', expiresAt: '', maxUses: '' });
   const [discountSaving, setDiscountSaving] = useState(false);
   const [discountError, setDiscountError] = useState('');
   const [discountSuccess, setDiscountSuccess] = useState('');
@@ -200,6 +200,9 @@ export default function AdminDashboard() {
   
   // Product edit state
   const [editingProduct, setEditingProduct] = useState<DbProduct | null>(null);
+  const [productImages, setProductImages] = useState<any[]>([]);
+  const [productImagesLoading, setProductImagesLoading] = useState(false);
+  const [productImageUploading, setProductImageUploading] = useState(false);
   const [editForm, setEditForm] = useState<ProductEditForm | null>(null);
   const [savingProduct, setSavingProduct] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -493,8 +496,57 @@ export default function AdminDashboard() {
   };
 
   // Product edit handlers
+  const fetchProductImages = async (productId: number) => {
+    setProductImagesLoading(true);
+    try {
+      const res = await fetch(`/api/admin/product-images?productId=${productId}`);
+      const data = await res.json();
+      setProductImages(data.images || []);
+    } catch {
+      setProductImages([]);
+    } finally {
+      setProductImagesLoading(false);
+    }
+  };
+
+  const uploadProductImage = async (file: File, productId: number, isPrimary: boolean) => {
+    setProductImageUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append('image', file);
+      fd.append('productId', String(productId));
+      fd.append('isPrimary', isPrimary ? '1' : '0');
+      const res = await fetch('/api/admin/product-images', { method: 'POST', body: fd });
+      if (res.ok) {
+        await fetchProductImages(productId);
+      } else {
+        const d = await res.json();
+        alert(d.error || 'Görsel yüklenemedi');
+      }
+    } finally {
+      setProductImageUploading(false);
+    }
+  };
+
+  const deleteProductImage = async (imageId: number, productId: number) => {
+    if (!confirm('Bu görseli silmek istiyor musunuz?')) return;
+    await fetch(`/api/admin/product-images?imageId=${imageId}`, { method: 'DELETE' });
+    await fetchProductImages(productId);
+  };
+
+  const setPrimaryImage = async (imageId: number, productId: number) => {
+    await fetch('/api/admin/product-images', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageId, productId }),
+    });
+    await fetchProductImages(productId);
+  };
+
   const openEditModal = (product: DbProduct) => {
     setEditingProduct(product);
+    setProductImages([]);
+    fetchProductImages(product.id);
     setEditForm({
       id: product.id,
       name: product.name || '',
@@ -689,6 +741,7 @@ export default function AdminDashboard() {
           value: parseFloat(discountForm.value),
           minAmount: discountForm.minAmount ? parseFloat(discountForm.minAmount) : 0,
           notes: discountForm.notes || null,
+          brand: discountForm.brand || null,
           expiresAt: discountForm.expiresAt || null,
           maxUses: discountForm.maxUses ? parseInt(discountForm.maxUses) : null,
         }),
@@ -696,7 +749,7 @@ export default function AdminDashboard() {
       const data = await res.json();
       if (res.ok) {
         setDiscountSuccess('Kod başarıyla eklendi!');
-        setDiscountForm({ code: '', type: 'amount', value: '', minAmount: '', notes: '', expiresAt: '', maxUses: '' });
+        setDiscountForm({ code: '', type: 'amount', value: '', minAmount: '', brand: '', notes: '', expiresAt: '', maxUses: '' });
         fetchDiscountCodes();
         setTimeout(() => setDiscountSuccess(''), 3000);
       } else {
@@ -1782,7 +1835,7 @@ export default function AdminDashboard() {
                           {/* Preview */}
                           {slide.desktopImage && (
                             // eslint-disable-next-line @next/next/no-img-element
-                            <img src={slide.desktopImage} alt="desktop" className="w-full h-28 object-cover rounded-xl mb-2 border border-slate-600" onError={(e: any) => { e.target.style.display='none' }} />
+                            <img src={slide.desktopImage} alt="desktop" className="w-full h-28 object-cover rounded-xl mb-2 border border-slate-600" onError={(e: any) => { e.target.onerror=null; e.target.src='data:image/svg+xml,%3Csvg xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" viewBox%3D"0 0 200 100"%3E%3Crect width%3D"200" height%3D"100" fill%3D"%23374151"%2F%3E%3Ctext y%3D"45" x%3D"100" text-anchor%3D"middle" fill%3D"%2392D0AA" font-size%3D"11" font-family%3D"sans-serif"%3EGörsel yüklenemedi%3C%2Ftext%3E%3Ctext y%3D"62" x%3D"100" text-anchor%3D"middle" fill%3D"%23999" font-size%3D"8" font-family%3D"sans-serif"%3EYeniden yükleyin%3C%2Ftext%3E%3C%2Fsvg%3E'; }} />
                           )}
                           {/* Upload Button */}
                           <label className="block mb-2">
@@ -1825,7 +1878,7 @@ export default function AdminDashboard() {
                           {/* Preview */}
                           {slide.mobileImage && (
                             // eslint-disable-next-line @next/next/no-img-element
-                            <img src={slide.mobileImage} alt="mobile" className="w-full h-28 object-cover rounded-xl mb-2 border border-slate-600" onError={(e: any) => { e.target.style.display='none' }} />
+                            <img src={slide.mobileImage} alt="mobile" className="w-full h-28 object-cover rounded-xl mb-2 border border-slate-600" onError={(e: any) => { e.target.onerror=null; e.target.src='data:image/svg+xml,%3Csvg xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" viewBox%3D"0 0 200 100"%3E%3Crect width%3D"200" height%3D"100" fill%3D"%23374151"%2F%3E%3Ctext y%3D"45" x%3D"100" text-anchor%3D"middle" fill%3D"%2392D0AA" font-size%3D"11" font-family%3D"sans-serif"%3EGörsel yüklenemedi%3C%2Ftext%3E%3Ctext y%3D"62" x%3D"100" text-anchor%3D"middle" fill%3D"%23999" font-size%3D"8" font-family%3D"sans-serif"%3EYeniden yükleyin%3C%2Ftext%3E%3C%2Fsvg%3E'; }} />
                           )}
                           {/* Upload Button */}
                           <label className="block mb-2">
@@ -2060,6 +2113,16 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div>
+                    <label className="block text-slate-400 text-sm mb-1">Markaya Özel (boş = tüm markalar)</label>
+                    <input
+                      type="text"
+                      placeholder="örn: ANUA, Medicube..."
+                      value={discountForm.brand}
+                      onChange={(e) => setDiscountForm({ ...discountForm, brand: e.target.value })}
+                      className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                  <div>
                     <label className="block text-slate-400 text-sm mb-1">Bitiş Tarihi (boş = süresiz)</label>
                     <input
                       type="datetime-local"
@@ -2115,6 +2178,7 @@ export default function AdminDashboard() {
                       <thead className="bg-slate-700/50">
                         <tr>
                           <th className="text-left text-slate-400 text-xs font-medium px-4 py-3">KOD</th>
+                          <th className="text-left text-slate-400 text-xs font-medium px-4 py-3">MARKA</th>
                           <th className="text-left text-slate-400 text-xs font-medium px-4 py-3">İNDİRİM</th>
                           <th className="text-left text-slate-400 text-xs font-medium px-4 py-3">MİN. TUTAR</th>
                           <th className="text-left text-slate-400 text-xs font-medium px-4 py-3">KULLANIM</th>
@@ -2129,6 +2193,9 @@ export default function AdminDashboard() {
                             <td className="px-4 py-3">
                               <span className="font-mono font-bold text-white">{dc.code}</span>
                               {dc.notes && <p className="text-slate-500 text-xs mt-0.5">{dc.notes}</p>}
+                            </td>
+                            <td className="px-4 py-3">
+                              <span className="text-slate-400 text-xs">{dc.brand || '-'}</span>
                             </td>
                             <td className="px-4 py-3 text-emerald-400 font-semibold">
                               {dc.type === 'percent' ? `%${dc.value}` : `₺${dc.value}`}
@@ -2518,21 +2585,98 @@ export default function AdminDashboard() {
             </div>
             
             <div className="p-6 space-y-5">
-              {/* Product image preview */}
-              {editingProduct.image && (
-                <div className="flex items-center gap-4">
-                  <img
-                    src={editingProduct.image}
-                    alt={editingProduct.name}
-                    className="w-20 h-20 rounded-xl object-cover bg-slate-700"
-                    onError={(e) => { (e.target as HTMLImageElement).src = '/gorselsizurun.jpg'; }}
-                  />
-                  <div>
-                    <p className="text-slate-400 text-xs">Mevcut Görsel</p>
-                    <p className="text-slate-500 text-xs mt-1 break-all">{editingProduct.image}</p>
+              {/* Product Gallery Section */}
+              <div>
+                <label className="block text-slate-400 text-sm mb-2 font-medium">🖼️ Ürün Görselleri</label>
+                {productImagesLoading ? (
+                  <div className="flex items-center gap-2 text-slate-500 text-sm py-3">
+                    <div className="w-4 h-4 border-2 border-slate-500/30 border-t-slate-500 rounded-full animate-spin" />
+                    Görseller yükleniyor...
                   </div>
-                </div>
-              )}
+                ) : (
+                  <div className="space-y-3">
+                    {/* Existing images */}
+                    {productImages.length > 0 && (
+                      <div className="grid grid-cols-3 gap-2">
+                        {productImages.map((img: any) => (
+                          <div key={img.id} className={`relative rounded-xl overflow-hidden border-2 transition-colors ${img.is_primary ? 'border-emerald-500' : 'border-slate-600'}`}>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={img.image_url}
+                              alt="product"
+                              className="w-full h-24 object-cover bg-slate-700"
+                              onError={(e) => { (e.target as HTMLImageElement).src = '/gorselsizurun.jpg'; }}
+                            />
+                            {img.is_primary && (
+                              <span className="absolute top-1 left-1 bg-emerald-500 text-white text-xs px-1.5 py-0.5 rounded font-bold">Ana</span>
+                            )}
+                            <div className="absolute bottom-0 left-0 right-0 bg-black/60 flex gap-1 p-1">
+                              {!img.is_primary && (
+                                <button
+                                  type="button"
+                                  onClick={() => setPrimaryImage(img.id, editingProduct!.id)}
+                                  className="flex-1 text-emerald-400 text-xs hover:text-emerald-300 font-medium"
+                                  title="Ana görsel yap"
+                                >Ana</button>
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => deleteProductImage(img.id, editingProduct!.id)}
+                                className="text-red-400 text-xs hover:text-red-300 px-1"
+                                title="Sil"
+                              >✕</button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {productImages.length === 0 && !productImagesLoading && (
+                      <p className="text-slate-500 text-xs">Henüz görsel yok</p>
+                    )}
+                    {/* Upload buttons */}
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <label className="flex-1 cursor-pointer">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          disabled={productImageUploading}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file && editingProduct) uploadProductImage(file, editingProduct.id, productImages.length === 0);
+                            e.target.value = '';
+                          }}
+                        />
+                        <span className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl border-2 border-dashed text-sm cursor-pointer transition-all ${productImageUploading ? 'border-emerald-500/50 text-emerald-400 bg-emerald-500/10' : 'border-slate-600 text-slate-400 hover:border-emerald-500 hover:text-emerald-400 hover:bg-emerald-500/5'}`}>
+                          {productImageUploading ? (
+                            <><div className="w-4 h-4 border-2 border-emerald-400/30 border-t-emerald-400 rounded-full animate-spin" />Yükleniyor...</>
+                          ) : (
+                            <>📤 Galeri Görseli Ekle</>
+                          )}
+                        </span>
+                      </label>
+                      {productImages.length === 0 && (
+                        <label className="flex-1 cursor-pointer">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            disabled={productImageUploading}
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file && editingProduct) uploadProductImage(file, editingProduct.id, true);
+                              e.target.value = '';
+                            }}
+                          />
+                          <span className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl border-2 border-emerald-600 text-emerald-400 hover:bg-emerald-500/10 text-sm cursor-pointer transition-all">
+                            ⭐ Ana Görsel Ekle
+                          </span>
+                        </label>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* Name */}
               <div>

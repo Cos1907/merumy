@@ -21,7 +21,7 @@ export type Cart = {
   promoCode?: string
 }
 
-const TTL_MS = 15 * 60 * 1000 // 15 dakika
+const TTL_MS = 30 * 24 * 60 * 60 * 1000 // 30 gün (süresiz)
 const MAX_QUANTITY_PER_ITEM = 10 // Ürün başına maksimum adet
 
 // File-based cart storage for persistence
@@ -76,8 +76,8 @@ export function getCartKey(cartId: string) {
 }
 
 function pruneExpired(lines: CartLine[]) {
-  const now = Date.now()
-  return lines.filter((l) => l.expiresAt > now && l.quantity > 0)
+  // Süre limitini kaldırdık - sadece sıfır miktarlıları temizle
+  return lines.filter((l) => l.quantity > 0)
 }
 
 export function readCart(cartKey: string): Cart {

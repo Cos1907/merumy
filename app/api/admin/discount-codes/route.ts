@@ -30,6 +30,7 @@ async function ensureTable() {
       max_uses INT DEFAULT NULL,
       used_count INT DEFAULT 0,
       is_active TINYINT(1) DEFAULT 1,
+      brand VARCHAR(100) DEFAULT NULL,
       expires_at DATETIME DEFAULT NULL,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       notes VARCHAR(255) DEFAULT NULL
@@ -55,9 +56,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Kod, tip ve değer zorunlu' }, { status: 400 });
   }
   try {
-    await execute(
-      'INSERT INTO discount_codes (code, type, value, min_amount, max_uses, expires_at, notes) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [code.toUpperCase().trim(), type, value, minAmount || 0, maxUses || null, expiresAt || null, notes || null]
+    const { brand } = body;
+  await execute(
+      'INSERT INTO discount_codes (code, type, value, min_amount, max_uses, brand, expires_at, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      [code.toUpperCase().trim(), type, value, minAmount || 0, maxUses || null, brand || null, expiresAt || null, notes || null]
     );
     return NextResponse.json({ success: true });
   } catch (err: any) {
