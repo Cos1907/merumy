@@ -1,9 +1,12 @@
 'use client'
 
 import { useCart } from '../context/CartContext'
+import { usePathname } from 'next/navigation'
 
 export default function CartToast() {
+  const pathname = usePathname()
   const { toast } = useCart()
+  if (pathname?.startsWith('/admin')) return null
   if (!toast) return null
 
   return (

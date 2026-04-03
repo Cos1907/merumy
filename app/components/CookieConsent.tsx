@@ -3,12 +3,15 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { X, Cookie } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 
 export default function CookieConsent() {
+  const pathname = usePathname()
   const [isVisible, setIsVisible] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
 
   useEffect(() => {
+    if (pathname?.startsWith('/admin')) return
     // Check if user has already accepted cookies
     const hasAccepted = localStorage.getItem('cookieConsent')
     if (!hasAccepted) {
@@ -19,7 +22,7 @@ export default function CookieConsent() {
       }, 1500)
       return () => clearTimeout(timer)
     }
-  }, [])
+  }, [pathname])
 
   const acceptCookies = () => {
     localStorage.setItem('cookieConsent', 'accepted')
@@ -35,7 +38,7 @@ export default function CookieConsent() {
     setTimeout(() => setIsVisible(false), 300)
   }
 
-  if (!isVisible) return null
+  if (pathname?.startsWith('/admin') || !isVisible) return null
 
   return (
     <div

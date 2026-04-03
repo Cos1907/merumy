@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { queryOne, execute } from '../../../../lib/db'
+import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 
 export async function POST(request: NextRequest) {
@@ -8,21 +9,35 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { email, username, password } = body
 
-    const loginEmail = email || username
+    const loginEmail = (email || username || '').trim().toLowerCase()
     if (!loginEmail || !password) {
       return NextResponse.json({ error: 'E-posta ve şifre gerekli' }, { status: 400 })
     }
 
-    // Hash the password with SHA256 (same as stored in DB)
-    const passwordHash = crypto.createHash('sha256').update(password).digest('hex')
-
-    // Check admin credentials from DB
+    // Fetch user from DB (case-insensitive email)
     const adminUser = await queryOne<any>(
-      'SELECT * FROM admin_users WHERE email = ? AND password_hash = ? AND is_active = 1',
-      [loginEmail, passwordHash]
+      'SELECT * FROM admin_users WHERE LOWER(email) = ? AND is_active = 1',
+      [loginEmail]
     )
 
     if (!adminUser) {
+      return NextResponse.json({ error: 'Geçersiz e-posta veya şifre' }, { status: 401 })
+    }
+
+    // Support both bcrypt ($2a$/$2b$) and SHA256 (64-char hex)
+    let isValid = false
+    const storedHash: string = adminUser.password_hash || ''
+
+    if (storedHash.startsWith('$2a$') || storedHash.startsWith('$2b$')) {
+      // bcrypt hash
+      isValid = await bcrypt.compare(password, storedHash)
+    } else if (storedHash.length === 64) {
+      // SHA256 hex hash
+      const sha = crypto.createHash('sha256').update(password).digest('hex')
+      isValid = sha === storedHash
+    }
+
+    if (!isValid) {
       return NextResponse.json({ error: 'Geçersiz e-posta veya şifre' }, { status: 401 })
     }
 
