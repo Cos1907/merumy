@@ -2,17 +2,23 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
-import { ChevronDown, ChevronUp } from 'lucide-react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import ProductCardModern from '../../components/ProductCardModern'
 
 export default function BrandPage({ params }: { params: { brand: string } }) {
   const brandSlug = params.brand
-  const [headerHeight, setHeaderHeight] = useState(0)
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [isFilterOpen, setIsFilterOpen] = useState(true)
+  const [allProducts, setAllProducts] = useState<Product[]>([])
+  const [brandName, setBrandName] = useState('')
+  const [isFetching, setIsFetching] = useState(true)
+  const [displayedCount, setDisplayedCount] = useState(PRODUCTS_PER_PAGE)
+  const [isLoading, setIsLoading] = useState(false)
+  const [sortKey, setSortKey] = useState<SortKey>('default')
+  const [isSortOpen, setIsSortOpen] = useState(false)
+  const [headerHeight, setHeaderHeight] = useState(140)
+  const [logoError, setLogoError] = useState(false)
+  const loaderRef = useRef<HTMLDivElement>(null)
+  const sortRef = useRef<HTMLDivElement>(null)
 
   const [brandInfo, setBrandInfo] = useState<{ name: string; logo_url: string | null } | null>(null)
   const [products, setProducts] = useState<any[]>([])
@@ -37,6 +43,9 @@ export default function BrandPage({ params }: { params: { brand: string } }) {
       clearTimeout(t2)
       window.removeEventListener('resize', calculateHeaderHeight)
     }
+    setTimeout(calc, 50)
+    window.addEventListener('resize', calc)
+    return () => window.removeEventListener('resize', calc)
   }, [])
 
   useEffect(() => {
@@ -104,7 +113,17 @@ export default function BrandPage({ params }: { params: { brand: string } }) {
         </div>
       </main>
     )
-  }
+    if (loaderRef.current) observer.observe(loaderRef.current)
+    return () => observer.disconnect()
+  }, [loadMore])
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(e.target as Node)) setIsSortOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
 
   const logoUrl = brandInfo.logo_url
 
@@ -203,7 +222,8 @@ export default function BrandPage({ params }: { params: { brand: string } }) {
                   </div>
                 </div>
               </div>
-            </aside>
+            )}
+          </div>
 
             {/* Products Grid */}
             {filteredProducts.length === 0 ? (
@@ -220,7 +240,6 @@ export default function BrandPage({ params }: { params: { brand: string } }) {
           </div>
         </section>
       </div>
-
       <Footer />
     </main>
   )

@@ -2,13 +2,15 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { getKoreTrendProducts } from '../lib/products'
 
 export default function SpecialOffers() {
-  const [offerProducts, setOfferProducts] = useState(() => getKoreTrendProducts(2))
+  const [offerProducts, setOfferProducts] = useState<any[]>([])
 
   useEffect(() => {
-    setOfferProducts(getKoreTrendProducts(2))
+    fetch('/api/kore-trends?section=kore_trend&limit=2')
+      .then(r => r.json())
+      .then(d => { if (d.products) setOfferProducts(d.products) })
+      .catch(() => {})
   }, [])
 
   if (!offerProducts || offerProducts.length === 0) return null

@@ -156,7 +156,7 @@ export default function SiparislerimPage() {
                   <div className="space-y-4">
                     <h2 className="text-xl font-semibold text-gray-900 mb-6">Siparişleriniz ({orders.length})</h2>
                     {orders.map((order) => (
-                      <div key={order.id} className="border border-gray-200 rounded-xl p-5 hover:border-accent/50 transition-colors">
+                      <div key={order.id} className="border border-gray-200 rounded-xl p-5 hover:border-accent/50 transition-colors cursor-pointer" onClick={() => router.push('/hesabim/siparislerim/' + order.orderId)}>
                         <div className="flex items-center justify-between mb-4">
                           <div>
                             <p className="text-sm text-gray-500">Sipariş No</p>

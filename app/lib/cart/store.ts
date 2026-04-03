@@ -21,7 +21,7 @@ export type Cart = {
   promoCode?: string
 }
 
-const TTL_MS = 15 * 60 * 1000 // 15 dakika
+const TTL_MS = 30 * 24 * 60 * 60 * 1000 // 30 gün (süresiz)
 const MAX_QUANTITY_PER_ITEM = 10 // Ürün başına maksimum adet
 
 // File-based cart storage for persistence
@@ -76,8 +76,8 @@ export function getCartKey(cartId: string) {
 }
 
 function pruneExpired(lines: CartLine[]) {
-  const now = Date.now()
-  return lines.filter((l) => l.expiresAt > now && l.quantity > 0)
+  // Süre limitini kaldırdık - sadece sıfır miktarlıları temizle
+  return lines.filter((l) => l.quantity > 0)
 }
 
 export function readCart(cartKey: string): Cart {
@@ -113,15 +113,17 @@ export function removeLine(cartKey: string, productId: string) {
 }
 
 type Promo =
-  | { code: 'MERUMY250'; type: 'amount'; amount: number }
-  | { code: 'MERUMY10'; type: 'percent'; percent: number }
-  | { code: 'HOSGELDIN10'; type: 'percent'; percent: number; minAmount: number }
+  | { code: string; type: 'amount'; amount: number; minAmount?: number }
+  | { code: string; type: 'percent'; percent: number; minAmount?: number }
 
 function normalizePromo(code: string): Promo | null {
   const c = code.trim().toUpperCase()
   if (c === 'MERUMY250') return { code: 'MERUMY250', type: 'amount', amount: 250 }
   if (c === 'MERUMY10') return { code: 'MERUMY10', type: 'percent', percent: 10 }
   if (c === 'HOSGELDIN10') return { code: 'HOSGELDIN10', type: 'percent', percent: 10, minAmount: 200 }
+  // Bulk codes: 5000 TL minimum, 1000 TL discount
+  const BULK_CODES = new Set(['3HJM1D3E', 'DGZPEO5V', 'CFHYLKGY', 'YL7A90MW', 'GXE8OH2Q', '18KAB4H7', 'PL5VJ9M7', '6YIG4SVZ', '3C6FM50B', '8AENQUBX', 'ORXJIWTI', 'O2DTQYHP', 'ONFIEHDX', 'H8BQCHBF', 'KYTLIYTG', 'LR2C3ZNK', 'BDKWWXF4', 'FLK2CHO7', 'HJ1I7K2T', '4PSWWDMD', 'NRZGCWR2', 'QVFOJXIN', 'JVKUNU3U', 'FSEFICVI', 'AYSO0FPK', 'S8XGHBEK', 'Z6K8IBGH', 'W2OZY4MD', 'Z9I5TPWK', 'O6POP5TC', 'UGCX3QXK', 'CIOVRSZY', 'LTF3P9W9', 'QCIQPM8G', 'RELOU5DD', 'ZNMLCJ74', 'OQVIOQK8', '3SCG954I', 'YKKO2JLQ', 'I5LDQ4VA', '6VW4GHEM', 'H8SCLZTW', 'DBUNML7E', 'M3R5AQSI', 'ZCGT819B', 'O7I4KRTC', '8TY268ML', '5UZW4UPB', 'BLB4K31C', 'GSWP45FF'])
+  if (BULK_CODES.has(c)) return { code: c, type: 'amount', amount: 1000, minAmount: 5000 }
   return null
 }
 

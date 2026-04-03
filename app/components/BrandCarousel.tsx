@@ -107,29 +107,64 @@ export default function BrandCarousel() {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Get unique brands from products
-    const brandMap = new Map<string, number>()
-    
-    products.forEach(product => {
-      if (product.brand && product.brand !== 'Merumy') {
-        const count = brandMap.get(product.brand) || 0
-        brandMap.set(product.brand, count + 1)
-      }
-    })
-
-    // Convert to array and sort by product count
-    const brandsList: Brand[] = Array.from(brandMap.entries())
-      .map(([name, count]) => ({
-        name,
-        logo: getBrandLogoPath(name),
-        slug: slugifyBrand(name),
-        productCount: count,
-      }))
-      .filter(brand => brand.productCount > 0)
-      .sort((a, b) => b.productCount - a.productCount)
-      .slice(0, 20) // Top 20 brands
-
-    setBrands(brandsList)
+    // DB'den marka listesini çek
+    fetch('/api/nav-data')
+      .then(r => r.json())
+      .then(d => {
+        if (d.brands && d.brands.length > 0) {
+          const brandsList: Brand[] = d.brands
+            .filter((b: any) => b.name && b.name !== 'Merumy')
+            .slice(0, 30)
+            .map((b: any) => ({
+              name: b.name,
+              logo: getBrandLogoPath(b.name),
+              slug: slugifyBrand(b.name),
+              productCount: b.count || 0,
+            }))
+          setBrands(brandsList)
+        } else {
+          // Fallback: local products
+          const brandMap = new Map<string, number>()
+          products.forEach(product => {
+            if (product.brand && product.brand !== 'Merumy') {
+              const count = brandMap.get(product.brand) || 0
+              brandMap.set(product.brand, count + 1)
+            }
+          })
+          const brandsList: Brand[] = Array.from(brandMap.entries())
+            .map(([name, count]) => ({
+              name,
+              logo: getBrandLogoPath(name),
+              slug: slugifyBrand(name),
+              productCount: count,
+            }))
+            .filter(brand => brand.productCount > 0)
+            .sort((a, b) => b.productCount - a.productCount)
+            .slice(0, 20)
+          setBrands(brandsList)
+        }
+      })
+      .catch(() => {
+        // Fallback: local products
+        const brandMap = new Map<string, number>()
+        products.forEach(product => {
+          if (product.brand && product.brand !== 'Merumy') {
+            const count = brandMap.get(product.brand) || 0
+            brandMap.set(product.brand, count + 1)
+          }
+        })
+        const brandsList: Brand[] = Array.from(brandMap.entries())
+          .map(([name, count]) => ({
+            name,
+            logo: getBrandLogoPath(name),
+            slug: slugifyBrand(name),
+            productCount: count,
+          }))
+          .filter(brand => brand.productCount > 0)
+          .sort((a, b) => b.productCount - a.productCount)
+          .slice(0, 20)
+        setBrands(brandsList)
+      })
   }, [])
 
   const scrollPositionRef = useRef(0)

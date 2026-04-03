@@ -3,20 +3,22 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { getKoreTrendProducts } from '../lib/products'
+
 import ProductCardModern from './ProductCardModern'
 
 export default function MerumyExclusive() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
-  // Kore Trendleri ürünlerini rastgele getir
-  const [products, setProducts] = useState(() => getKoreTrendProducts(12))
-  
-  // Sayfa yenilendiğinde farklı ürünler göster
+  const [products, setProducts] = useState<any[]>([])
+
   useEffect(() => {
-    setProducts(getKoreTrendProducts(12))
+    fetch('/api/kore-trends?section=kore_trend&limit=12')
+      .then(r => r.json())
+      .then(d => { if (d.products) setProducts(d.products) })
+      .catch(() => {})
   }, [])
+  
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   
   useEffect(() => {

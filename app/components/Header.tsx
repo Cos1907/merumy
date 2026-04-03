@@ -31,6 +31,35 @@ export default function Header() {
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const searchRef = useRef<HTMLDivElement>(null)
   const { cartCount, lastAddedAt } = useCart()
+  // Start with enabled: false to prevent flash when topbar is disabled
+  const [topbarSettings, setTopbarSettings] = useState<{ enabled: boolean; text: string; bgColor: string; textColor: string }>({ enabled: false, text: '1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO', bgColor: '#000000', textColor: '#ffffff' })
+
+  // DB'den gelen kategori-marka verileri
+  const [dbCategoryBrands, setDbCategoryBrands] = useState<Record<string, string[]>>({})
+
+  useEffect(() => {
+    fetch('/api/site-settings')
+      .then(r => r.json())
+      .then(d => {
+        if (d.settings) setTopbarSettings({
+          enabled: d.settings.topbarEnabled !== false,
+          text: d.settings.topbarText || '1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO',
+          bgColor: d.settings.topbarBgColor || '#000000',
+          textColor: d.settings.topbarTextColor || '#ffffff',
+        })
+        else setTopbarSettings({ enabled: false, text: '1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO', bgColor: '#000000', textColor: '#ffffff' })
+      })
+      .catch(() => { setTopbarSettings({ enabled: false, text: '1000 TL VE ÜZERİ ALIŞVERIŞLERDE ÜCRETSİZ KARGO', bgColor: '#000000', textColor: '#ffffff' }) })
+  }, [])
+
+  // Kategori markalarını DB'den çek
+  useEffect(() => {
+    fetch('/api/nav-data')
+      .then(r => r.json())
+      .then(d => { if (d.categoryBrands) setDbCategoryBrands(d.categoryBrands) })
+      .catch(() => {})
+  }, [])
+
   const [mounted, setMounted] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [searchResults, setSearchResults] = useState<any[]>([])
@@ -184,6 +213,93 @@ export default function Header() {
     { id: 5, name: 'Mask Bar', slug: 'mask-bar', brands: [] },
     { id: 6, name: 'Bebek ve Çocuk Bakımı', slug: 'bebek-ve-cocuk-bakimi', brands: [] },
   ]
+
+  // Search dropdown shared UI
+  const SearchDropdownContent = ({ suggestions, brands, loading, onSelect }: { suggestions: any[]; brands: string[]; loading: boolean; onSelect: () => void }) => (
+    <>
+      {loading && (
+        <div className="flex items-center justify-center p-4">
+          <div className="w-5 h-5 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
+          <span className="ml-2 text-sm text-gray-500">Aranıyor...</span>
+        </div>
+      )}
+      {!loading && brands.length > 0 && (
+        <div className="p-3 border-b border-gray-100">
+          <p className="text-xs font-semibold text-gray-400 uppercase mb-2 px-1">Markalar</p>
+          {brands.map((brand: string) => {
+            const logo = getBrandLogo(brand)
+            return (
+              <Link
+                key={brand}
+                href={`/marka/${slugifyBrand(brand)}`}
+                onClick={onSelect}
+                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-accent/5 transition-colors"
+              >
+                {logo ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={logo} alt={brand} className="w-10 h-8 object-contain" onError={(e: any) => { e.target.style.display='none' }} />
+                ) : (
+                  <div className="w-10 h-8 bg-accent/10 rounded flex items-center justify-center">
+                    <span className="text-[9px] font-bold text-accent">{brand.slice(0, 3)}</span>
+                  </div>
+                )}
+                <span className="text-sm font-medium text-gray-800">{brand}</span>
+                <span className="ml-auto text-xs text-accent">Markaya git →</span>
+              </Link>
+            )
+          })}
+        </div>
+      )}
+      {!loading && suggestions.length > 0 && (
+        <div className="p-3">
+          <p className="text-xs font-semibold text-gray-400 uppercase mb-2 px-1">Ürünler</p>
+          {suggestions.map((product: any) => (
+            <Link
+              key={product.id}
+              href={`/product/${product.slug}`}
+              onClick={onSelect}
+              className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-accent/5 transition-colors"
+            >
+              {product.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={product.image.startsWith('/') ? product.image : `/${product.image}`}
+                  alt={product.name}
+                  className="w-10 h-10 object-cover rounded-lg border border-gray-100 flex-shrink-0"
+                  onError={(e: any) => { e.target.src = '/logo.svg' }}
+                />
+              ) : (
+                <div className="w-10 h-10 bg-gray-100 rounded-lg flex-shrink-0" />
+              )}
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-800 truncate">{product.name}</p>
+                {product.brand && <p className="text-xs text-gray-400">{product.brand}</p>}
+              </div>
+              <span className="text-sm font-semibold text-accent whitespace-nowrap">₺{Number(product.price).toFixed(2)}</span>
+            </Link>
+          ))}
+        </div>
+      )}
+      {!loading && suggestions.length === 0 && brands.length === 0 && searchValue.trim().length >= 1 && (
+        <div className="p-6 text-center text-gray-400 text-sm">
+          <Search size={24} className="mx-auto mb-2 opacity-30" />
+          <p>&ldquo;{searchValue}&rdquo; için sonuç bulunamadı</p>
+        </div>
+      )}
+      {!loading && suggestions.length > 0 && (
+        <div className="border-t border-gray-100 p-3">
+          <Link
+            href={`/shop?q=${encodeURIComponent(searchValue)}`}
+            onClick={onSelect}
+            className="flex items-center justify-center gap-2 py-2 text-sm font-medium text-accent hover:bg-accent/5 rounded-lg transition-colors"
+          >
+            <Search size={16} />
+            Tüm sonuçları gör
+          </Link>
+        </div>
+      )}
+    </>
+  )
 
   return (
     <>
@@ -605,10 +721,10 @@ export default function Header() {
 
       {/* Mobile Search Modal */}
       {isMobileSearchOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 bg-white">
+        <div className="lg:hidden fixed inset-0 z-50 bg-white overflow-y-auto">
           <div className="p-4">
             <div className="flex items-center space-x-3 mb-4">
-              <button onClick={() => setIsMobileSearchOpen(false)} className="p-2 -ml-2">
+              <button onClick={() => { setIsMobileSearchOpen(false); setSearchValue('') }} className="p-2 -ml-2">
                 <X size={24} className="text-gray-600" />
               </button>
               <h2 className="text-lg font-semibold">Ürün Ara</h2>
@@ -669,9 +785,6 @@ export default function Header() {
           </div>
         </div>
       )}
-
-      {/* Spacer for fixed bottom nav on mobile */}
-      <div className="lg:hidden h-16"></div>
     </>
   )
 }

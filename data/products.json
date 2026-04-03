@@ -39,7 +39,7 @@
     "id": "00003",
     "code": "00003",
     "slug": "00003-bibimcos-enzyme-powder-wash-80gr",
-    "name": "Bibimcos Enzyme Powder Wash 80gr",
+    "name": "Enzyme Powder Wash (Arındırıcı Toz Temizleyici) 80gr",
     "brand": "Bibimcos",
     "category": "Cilt Bakımı",
     "subcategory": "Temizleyici",
@@ -51,7 +51,8 @@
     "reviews": 153,
     "sold": 693,
     "inStock": true,
-    "description": "Bibimcos Enzyme Powder Wash 80gr - Bibimcos markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Günlük kullanıma uygun, bitkisel enzimler içeren arındırıcı toz temizleyicidir.\n- Enzimatik peeling etkisi ile cildin makyaj, ölü hücre ve kirden nazikçe arındırılmasını sağlamaya yardımcı olur.\n- Papaya meyvesinden elde edilen papain adlı doğal enzimi içerir.\n- Siyah nokta ve gözenek bakımı yapmaya yardımcı olur.\n- Hassas ciltler dahil olmak üzere tüm cilt tiplerine uygundur.\n- Günlük kullanıma uygundur.",
+    "stock": 14
   },
   {
     "id": "00004",
@@ -93,7 +94,7 @@
     "id": "00006",
     "code": "00006",
     "slug": "00006-bibimcos-aha-bha-facial-toner-200ml",
-    "name": "Bibimcos AHA-BHA Facial Toner 200ml",
+    "name": "AHA-BHA Facial Toner (AHA-BHA YüzToniği) 200ml",
     "brand": "Bibimcos",
     "category": "Cilt Bakımı",
     "subcategory": "Tonik",
@@ -105,7 +106,8 @@
     "reviews": 156,
     "sold": 696,
     "inStock": true,
-    "description": "Bibimcos AHA-BHA Facial Toner 200ml - Bibimcos markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Ciltteki ölü derileri, makyaj kalıntılarını ve kirleri peeling yaparak temizlemeye yardımcı toniktir.\n- Cilt yüzeyinde ve gözenekler içinde birikebilen ölü deri ve kirleri nazik bir şekilde giderilmesini sağlar.\n- Cilt dokusunu daha pürüzsüz hale getirmeye yardımcı olurken daha aydınlık bir cilt görünümünü sağlamasına yardımcı olur.\n- Ciltteki sebum denegesini sağlamaya yardımcı olur.\n- 2% Salisilik asit 1% glikolik ve laktik asit içerir.\n- Bitkisel eksraktlar içerir.\n- Fiddy method’a uygundur.\n- Tüm cilt tipleri tercih edebilir.",
+    "stock": 10
   },
   {
     "id": "00007",
@@ -399,9 +401,9 @@
     "id": "00023",
     "code": "00023",
     "slug": "00023-mjcare-glow-collagen-melting-mask-hydrojel-effafla",
-    "name": "Mjcare Glow Collagen Melting Mask - Hydrojel Şeffaflaşan Eriyen Maske",
+    "name": "Glow Collagen Melting Mask (Hydrojel Şeffaflaşan Eriyen Maske) 39gr",
     "brand": "Mjcare",
-    "category": "Cilt Bakımı",
+    "category": "Mask Bar",
     "subcategory": "Maske",
     "price": 295,
     "originalPrice": null,
@@ -411,7 +413,8 @@
     "reviews": 215,
     "sold": 755,
     "inStock": true,
-    "description": "Mjcare Glow Collagen Melting Mask - Hydrojel Şeffaflaşan Eriyen Maske - Mjcare markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Cildiniz için yoğun nem, ışıltı ve sıkılaşmaya yardımcı bakım bir arada!\n- Cilt ısısıyla eriyerek aktif içeriklerini doğrudan cildinize veren, uzun süreli etki sunan yenilikçi bir maske! Yorgun, mat ve nemsiz cildinizi yeniden canlandırmak için Glow Collagen Eriyen Maske ile tanışın.\n- Güzelliğinizin ışığı cildinizden yansısın!",
+    "stock": 14
   },
   {
     "id": "00024",
@@ -4377,9 +4380,9 @@
     "id": "00244",
     "code": "00244",
     "slug": "00244-biodance-refreshing-sea-kelp-real-deep-mask",
-    "name": "BIODANCE Refreshing Sea Kelp Real Deep Mask",
+    "name": "Real Deep Mask Refreshing Sea Kelp (Yoğun Sebum, Leke ve İz Karşıtı Yosunlu Şeffaflaşan Maske) 34gr",
     "brand": "Biodance",
-    "category": "Cilt Bakımı",
+    "category": "",
     "subcategory": "Maske",
     "price": 378,
     "originalPrice": null,
@@ -4389,7 +4392,8 @@
     "reviews": 200,
     "sold": 740,
     "inStock": true,
-    "description": "BIODANCE Refreshing Sea Kelp Real Deep Mask - Biodance markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Cildi stresten uzak tutan, dengeleyici etki.\n- Yenilikçi doku ile şeffaflaşarak aktif içerikleri cilde iletme.\n- Leke ve iz önleyici bakım.\n- Sebum - nem dengesini kontrol etme.\n- Bir şişe ampul emdirilmiş besleyici formül.",
+    "stock": 6
   },
   {
     "id": "00245",
@@ -4467,11 +4471,11 @@
     "id": "00249",
     "code": "00249",
     "slug": "00249-biodance-hydro-cera-nol-real-deep-mask",
-    "name": "Biodance - Hydro Cera-nol Real Deep Mask",
+    "name": "Real Deep Mask Hydro Cera-Nol (Kızarıklık Karşıtı 5 Çeşit Seramidli Şeffaflaşan Maske) 34gr",
     "brand": "Biodance",
-    "category": "Cilt Bakımı",
+    "category": "Mask Bar",
     "subcategory": "Maske",
-    "price": 1698,
+    "price": 378,
     "originalPrice": null,
     "image": "/Ürün Görselleri/Biodance - Hydro Cera-nol Real Deep Mask/1.webp",
     "barcode": "8809937360629",
@@ -4479,7 +4483,8 @@
     "reviews": 205,
     "sold": 745,
     "inStock": true,
-    "description": "Biodance - Hydro Cera-nol Real Deep Mask - Biodance markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Patentli Hydro Cera-nol ile neme & hidrasyona doymuş cilt.\n- Yenilikçi doku ile şeffaflaşarak aktif içerikleri cilde iletme.\n- Kuruluk kaynaklı kızarıklığı önleme & ısıyı düşürme.\n- Dehidrasyondan uzak, berrak ve canlı cilt.\n- Bir şişe ampul emdirilmiş besleyici formül.",
+    "stock": 11
   },
   {
     "id": "00250",
@@ -4647,11 +4652,11 @@
     "id": "00259",
     "code": "00259",
     "slug": "00259-medicube-pdrn-pink-peptide-serum",
-    "name": "[Medicube] PDRN PINK PEPTIDE SERUM",
+    "name": "PDRN Pink Peptide Serum (İnce Çizgi Önleyici Elastikiyet Koruyucu PDRN Peptit Serumu) 30ml",
     "brand": "Medicube",
-    "category": "Cilt Bakımı",
+    "category": "",
     "subcategory": "Cilt Bakım Serumu",
-    "price": 1459,
+    "price": 1181,
     "originalPrice": null,
     "image": "/Ürün Görselleri/Medicube PDRN Pink Peptide Serum/1.jpg",
     "barcode": "8800256108053",
@@ -4659,7 +4664,8 @@
     "reviews": 236,
     "sold": 776,
     "inStock": true,
-    "description": "[Medicube] PDRN PINK PEPTIDE SERUM - Medicube markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- PDRN ile esnek, nemli ve güçlü cilt\n- Peptit Kompleksi ile ince çizgi & kırışıklık bakımı.\n- Çevresel strese karşı cildi savunma.\n- Esnekliği ve sıkılığı koruma.",
+    "stock": 6
   },
   {
     "id": "00260",
@@ -4791,11 +4797,11 @@
     "id": "00267",
     "code": "00267",
     "slug": "00267-medicube-age-r-booster-pro-head-case-pink",
-    "name": "medicube - AGE-R Booster Pro Head Case Pink",
+    "name": "AGE-R Booster Pro Head Case Pink",
     "brand": "Medicube",
-    "category": "Aksesuar",
+    "category": "Cilt Bakımı",
     "subcategory": "Kılıf",
-    "price": 249,
+    "price": 199,
     "originalPrice": null,
     "image": "/Ürün Görselleri/Medicube – Age-R Booster Pro Head Case Pink/1.webp",
     "barcode": "8800256114566",
@@ -4803,7 +4809,8 @@
     "reviews": 265,
     "sold": 805,
     "inStock": true,
-    "description": "medicube - AGE-R Booster Pro Head Case Pink - Medicube markasından kaliteli Aksesuar ürünü."
+    "description": "- AGE-R Booster Pro'nuzu cihazın kafasına tam oturacak şekilde tasarlanmış bu silikon kılıfla örtün ve koruyun! Faydalar: Bu kafa kılıfı AGE-R Booster Pro'ya özeldir.\n- Cihazı safsızlıklardan korumaya ve hasarı önlemeye yardımcı olabilir.",
+    "stock": 1
   },
   {
     "id": "00268",
@@ -5025,11 +5032,11 @@
     "id": "00280",
     "code": "00280",
     "slug": "00280-medicube-kojic-acid-turmeric-brightening-gel-mask",
-    "name": "medicube - Kojic Acid Turmeric Brightening Gel Mask",
+    "name": "Kojic Acid Turmeric Brightening Gel Mask (Parlatıcı ve Leke Önleyici Kojik Asit ve Zerdeçallı Şeffaflaşan Jel Maske) 28g",
     "brand": "Medicube",
-    "category": "Cilt Bakımı",
+    "category": "Mask Bar",
     "subcategory": "Maske",
-    "price": 850,
+    "price": 298,
     "originalPrice": null,
     "image": "/Ürün Görselleri/Medicube – Kojic Acid Turmeric Brightening Gel Mask/1.webp",
     "barcode": "8800256114658",
@@ -5037,17 +5044,18 @@
     "reviews": 320,
     "sold": 860,
     "inStock": true,
-    "description": "medicube - Kojic Acid Turmeric Brightening Gel Mask - Medicube markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Bu jel maske, lekeleri silen ve cilde beyazlatıcı bir etki veren bir Kojik Asit ve Zerdeçal ile formüle edilmiştir.\n- Bir kez kullanılarak ciltte renk pigmentasyonunda %1,712 iyileşme, donuk ve koyu cildin %1 iyileşmesi ve eşit cilt tonunda %3,2 iyileşme.\n- Jel maskenin cilt soğutma etkisi cilt sıcaklığını hemen düşürür.",
+    "stock": 13
   },
   {
     "id": "00281",
     "code": "00281",
     "slug": "00281-medicube-kojic-acid-turmeric-night-wrapping",
-    "name": "medicube - Kojic Acid Turmeric Night Wrapping",
+    "name": "Kojic Acid Turmeric Night Wrapping Mask (Aydınlatıcı Gece Maskesi) 75ml",
     "brand": "Medicube",
-    "category": "Cilt Bakımı",
+    "category": "Mask Bar",
     "subcategory": "Maske",
-    "price": 1459,
+    "price": 1699,
     "originalPrice": null,
     "image": "/Ürün Görselleri/Medicube – Kojic Acid Turmeric Night Wrapping/1.webp",
     "barcode": "8800289474859",
@@ -5055,7 +5063,8 @@
     "reviews": 321,
     "sold": 861,
     "inStock": true,
-    "description": "medicube - Kojic Acid Turmeric Night Wrapping - Medicube markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Bu uyku maskesi ile cildin genç ışıltısını bir gecede geri kazanın.\n- Aydınlatıcı ve yaşlanma karşıtı faydalar için kojik asit, zerdeçal kökü özü ve kolajen ile doludur.\n- Klinik olarak test edilmiş formül hassas ciltler için uygundur.",
+    "stock": 4
   },
   {
     "id": "00282",
@@ -5295,11 +5304,11 @@
     "id": "00295",
     "code": "00295",
     "slug": "00295-medicube-triple-collagen-cream",
-    "name": "medicube - Triple Collagen Cream",
+    "name": "Triple Collagen Cream (Yaşlanma ve Leke Karşıtı Kolajenli Krem) 50ml",
     "brand": "Medicube",
     "category": "Cilt Bakımı",
     "subcategory": "Krem",
-    "price": 900,
+    "price": 1601,
     "originalPrice": null,
     "image": "/Ürün Görselleri/Medicube – Triple Collagen Cream/1.webp",
     "barcode": "8800256114313",
@@ -5307,7 +5316,8 @@
     "reviews": 356,
     "sold": 896,
     "inStock": true,
-    "description": "medicube - Triple Collagen Cream - Medicube markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Neme doymuş, güçlü ve duru cildin sırrı içerik kokteyli.\n- İnce çizgi & kırışıklık karşıtı etki.\n- Cilt elastikiyetini koruma.\n- Yaşlanma belirtilerini yavaşlatmaya destek olma.\n- Cilt susuzluğunu giderme.",
+    "stock": 2
   },
   {
     "id": "00296",
@@ -5673,11 +5683,11 @@
     "id": "00316",
     "code": "00316",
     "slug": "00316-medicube-pdrn-booster-gel",
-    "name": "Medicube] PDRN BOOSTER GEL",
+    "name": "PDRN Booster Gel (İnce Çizgi Önleyici ve Elastikiyet Koruyucu Jel) 300ml",
     "brand": "Medicube",
-    "category": "Cilt Bakımı",
+    "category": "",
     "subcategory": "Temizleyici",
-    "price": 958,
+    "price": 1200,
     "originalPrice": null,
     "image": "/Ürün Görselleri/Medicube PDRN Booster Gel/1.webp",
     "barcode": "8800256114979",
@@ -5685,7 +5695,8 @@
     "reviews": 70,
     "sold": 610,
     "inStock": true,
-    "description": "Medicube] PDRN BOOSTER GEL - Medicube markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Sodyum DNA (PDRN) ile esnek ve sıkı cilt.\n- Age-R BOOSTER-H ve AGE-R Booster Pro ile üst seviye uyum.\n- Sarkma ve ince çizgi & kırışıklık önleyici bakım.\n- Yapışkanlık olmadan nem bariyeri kaplaması.",
+    "stock": 6
   },
   {
     "id": "00317",
@@ -5709,11 +5720,11 @@
     "id": "00318",
     "code": "00318",
     "slug": "00318-pdrn-pink-collagen-gel-mask-48-saat-elastikiyet-ko",
-    "name": "PDRN Pink Collagen Gel Mask - 48 Saat Elastikiyet Koruyucu ve Besleyici Kolajenli",
+    "name": "PDRN Pink Collagen Gel Mask (48 Saat Boyunca Elastikiyet Koruyucu ve Besleyici Kolajenli Jel Maske) 28gr",
     "brand": "Medicube",
-    "category": "Cilt Bakımı",
+    "category": "",
     "subcategory": "Maske",
-    "price": 1720,
+    "price": 249,
     "originalPrice": null,
     "image": "/Ürün Görselleri/PDRN Pink Collagen Gel Mask - 48 Saat Elastikiyet Koruyucu ve Besleyici Kolajenli/1.webp",
     "barcode": "8800256108046",
@@ -5721,7 +5732,8 @@
     "reviews": 72,
     "sold": 612,
     "inStock": true,
-    "description": "PDRN Pink Collagen Gel Mask - 48 Saat Elastikiyet Koruyucu ve Besleyici Kolajenli - Medicube markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Elastikiyet bakımı ile dolgun, nemli ve berrak cilt.\n- Ağırlığı azaltılan maske dokusu ile tam emilim.\n- Tek kullanımda cilt sıcaklığını 7,9 santigrat derece azaltma.\n- Nemlendirerek bariyeri koruma.",
+    "stock": 18
   },
   {
     "id": "00319",
@@ -5763,11 +5775,11 @@
     "id": "00321",
     "code": "00321",
     "slug": "00321-dr-althea-pure-grinding-cleansing-balm",
-    "name": "Dr. Althea - Pure Grinding Cleansing Balm",
+    "name": "Pure Grinding Cleansing Balm (Suya Dayanıklı Makyaj ve Kirleri Arındıran Temizleyici Balm) 50ml",
     "brand": "Dr. Althea",
     "category": "Cilt Bakımı",
     "subcategory": "Balm",
-    "price": 900,
+    "price": 958,
     "originalPrice": null,
     "image": "/Ürün Görselleri/Dr. Althea – Pure Grinding Cleansing Balm/1.webp",
     "barcode": "8809447255071",
@@ -5775,7 +5787,8 @@
     "reviews": 96,
     "sold": 636,
     "inStock": true,
-    "description": "Dr. Althea - Pure Grinding Cleansing Balm - Dr. Althea markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Suya dayanıklı makyajı bile arındıran güçlü formül.\n- Temizlik sonrası cildi nemli, yumuşak ve esnek bırakma.\n- Aynı anda hem temizlik, hem cilt bakımı.\n- Özel paketlemesiyle ürünü her zaman hijyenik tutma.",
+    "stock": 2
   },
   {
     "id": "00322",
@@ -5835,11 +5848,11 @@
     "id": "00325",
     "code": "00325",
     "slug": "00325-to-be-youthfull-eye-serum-gz-serumu",
-    "name": "To Be Youthfull Eye Serum Göz Serumu",
+    "name": "To Be Youthfull Eye Serum (Göz Serumu) 25ml",
     "brand": "Dr. Althea",
-    "category": "Cilt Bakımı",
+    "category": "",
     "subcategory": "Cilt Bakım Serumu",
-    "price": 1200,
+    "price": 798,
     "originalPrice": null,
     "image": "/images/product-placeholder.png",
     "barcode": "8809447254395",
@@ -5847,7 +5860,8 @@
     "reviews": 100,
     "sold": 640,
     "inStock": true,
-    "description": "To Be Youthfull Eye Serum Göz Serumu - Dr. Althea markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Göz çevresindeki cildi korumak için tek adımlı bir çözümdür. Göz çevresindeki kırışıklıkları ve ince çizgileri azaltan ve önleyen, cildin derinliklerine nem ileten, aynı zamanda besin kaybını önleyen ve su tutulmasını destekleyen bir serumdur. Hipoalerjeniktir ve tüm cilt tipleri için uygundur.\n- Kırışıklıklar, cilt hücreleri zamanla bozulmaya başladığı için oluşur. Bu, hücre metabolizmasının ve hücre yenilenmesinin kademeli olarak yavaşlaması ve cildin sarkmaya başlaması anlamına gelir. Bununla mücadele etmek için To Be Youthful Göz Serumu ince çizgileri azaltmak veya hatta önlemek için kullanılabilir. Serumdaki bileşenler olan Adenozin ve Tokoferol, sarkık cildi canlandırmaya yardımcı olur. Ayrıca, dermis boyunca nem ve besin sağlar. Bu, cilt hücrelerinin yenilenmesine ve güzel bir ışıltı oluşmasına yardımcı olur.\n- Göz çevresindeki cilt çok hassas olduğu için cilt kuruluğa ve kırışıklıklara eğilimlidir. To Be Youthful Göz Serumu, yapışkan olmayan, konsantre bir jel olarak formüle edilmiştir.",
+    "stock": 1
   },
   {
     "id": "00326",
@@ -5889,11 +5903,11 @@
     "id": "00328",
     "code": "00328",
     "slug": "00328-soft-melting-lip-balm-dr-althea",
-    "name": "SOFT MELTING LIP BALM DR. ALTHEA",
+    "name": "Soft Melting Lip Balm (Nemlendirici Etkili Dudak Kremi) 4gr",
     "brand": "Dr. Althea",
     "category": "Cilt Bakımı",
     "subcategory": "Balm",
-    "price": 1061,
+    "price": 700,
     "originalPrice": null,
     "image": "/Ürün Görselleri/Soft Melting Lip Balm Dr. Althea/1.webp",
     "barcode": "8809447253824",
@@ -5901,7 +5915,8 @@
     "reviews": 103,
     "sold": 643,
     "inStock": true,
-    "description": "SOFT MELTING LIP BALM DR. ALTHEA - Dr. Althea markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Bu nemlendirici vegan dudak balsamı, ayçiçeği tohumu yağı, kaktüs özü ve shea yağı gibi doğal bileşenlerle formüle edilmiştir.\n- Yapışkan olmayan formül hafif bir yüzey ve uzun ömürlü nem sunar.\n- Gerektiğinde gün boyunca tekrar uygulayın.\n- Dudakların yumuşaklığını ve esnekliğini korurken dudakları nemli tutmak için doğal olarak elde edilen Hyaluronik Asit ve Kayısı Çekirdeği Yağı ile formüle edilmiş besleyici bir dudak balsamı.\n- Enflamasyonu yatıştırırken daha da uzun süreli nem sağlamak için Argania Spinosa Çekirdek Yağı ile zenginleştirilmiştir.\n- Hiperpigmentasyona yardımcı olmak, donuk dudakları aydınlatmak için Rosa Canina Meyve Özü içerir.\n- Dudakları yapışkanlık olmadan hafif bir ışıltı etkisiyle bırakan hafif bir doku.",
+    "stock": 1
   },
   {
     "id": "00329",
@@ -6285,11 +6300,11 @@
     "id": "00350",
     "code": "00350",
     "slug": "00350-noni-calming-radience-30-ml",
-    "name": "noni calming radience 30 ml",
+    "name": "Noni II Ampoule (Canlandırıcı ve Yatıştırıcı Serum) 30ml",
     "brand": "Celimax",
     "category": "Cilt Bakımı",
     "subcategory": "Cilt Bakım Ampulü",
-    "price": 1560,
+    "price": 1361,
     "originalPrice": null,
     "image": "/images/product-placeholder.png",
     "barcode": "8809875907795",
@@ -6297,7 +6312,8 @@
     "reviews": 188,
     "sold": 728,
     "inStock": true,
-    "description": "noni calming radience 30 ml - Celimax markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Cilt bakımında yatıştırıcı ve parlaklık verici etkileriyle öne çıkan bu ampul, yoğun Noni meyvesi özü içeriğiyle cildi rahatlatır ve doğal bir ışıltı kazandırır.\n- Noni meyvesi, antioksidan özellikleri sayesinde ciltteki kızarıklıkları azaltarak donuk ve tahriş olmuş ciltlerin daha canlı ve bakımlı bir görünüm kazanmasına yardımcı olur. İçeriğinde bulunan nano pantenol sayesinde nem bariyerini güçlendiren cildi derinlemesine dolduran bir bileşendir. Bu, özellikle kuru ve nemsiz ciltler için önemli bir avantajdır, çünkü cildin daha pürüzsüz ve dolgun görünmesine katkıda bulunur.\n- Özellikle hassas ciltler için geliştirilmiş formülü, cildi iki kat daha fazla nemlendirir ve su kaybını önler. Bu sayede makyaj ürünleri cilde kolayca yayılır, doğal ve pürüzsüz bir görünüm sağlar\n- Hafif yapısı ile ciltte hızla emilir, yağlı bir his bırakmaz ve cildin daha sıkı, pürüzsüz bir yapıya kavuşmasına destek olur.",
+    "stock": 4
   },
   {
     "id": "00351",
@@ -6357,11 +6373,11 @@
     "id": "00354",
     "code": "00354",
     "slug": "00354-celimax-retinal-shot-tightening-booster-15-ml",
-    "name": "Celimax Retinal Shot Tightening Booster 15 ML",
+    "name": "Retinal Shot Tightening Booster Krem (Cilt Sıkılığını Korumaya ve Elastikiyet Kaybını Önlemeye Yardımcı Retinal Booster Krem) 15ml",
     "brand": "Celimax",
     "category": "Cilt Bakımı",
     "subcategory": "Krem",
-    "price": 1061,
+    "price": 1380,
     "originalPrice": null,
     "image": "/Ürün Görselleri/Celimax Retinal Shot Tightening Booster 15 ML/1.jpg",
     "barcode": "8809700320812",
@@ -6369,7 +6385,8 @@
     "reviews": 192,
     "sold": 732,
     "inStock": true,
-    "description": "Celimax Retinal Shot Tightening Booster 15 ML - Celimax markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Cildinize derinlemesine bakım yapmak için tasarlanmış retinal shot, onarıcı özellikleriyle cilt bütünlüğünü destekler.\n- Tüm cilt tipleri için uygun formülü ile herkes tarafından güvenle kullanılabilir\ncildinizin ihtiyaçlarına özel bir deneyim sunar.\n- Krem formu sayesinde kolay uygulama imkanı sağlar ve hızlı emilim özelliğiyle cildinizde ağırlık hissi bırakmaz.\n- SPF koruması olmayan bu ürün, güneş ışınlarının zararlı etkilerinden cildinizi korumak için ekstra adımlar atmanız gerektiğini hatırlatır.\n- Tüp ambalajıyla pratik kullanım sunarken, içeriğindeki retinal bileşeni ile yaşlanma belirtilerine karşı etkin bir çözüm vaat eder.\n- Paraben içermeyen yapısıyla cilt dostu bir bakım sunarken, hamilelik veya emzirme gibi durumlarda doktorunuza danışarak kullanmanız tavsiye edilir.\n- Cildinizi nazikçe besleyerek daha sıkı ve genç görünmesini sağlayan bu krem, düzenli kullanımda gözle görülür sonuçlar elde etmenize yardımcı olur.",
+    "stock": 13
   },
   {
     "id": "00355",
@@ -7383,11 +7400,11 @@
     "id": "00411",
     "code": "00411",
     "slug": "00411-banobagi-milk-thistle-repair-foam-cleanser",
-    "name": "Banobagi Milk Thistle Repair Foam Cleanser",
+    "name": "Milk Thistle Repair Foam Cleanser ( Hassas Ciltler için Onarıcı Köpük Temizleyici) 120ml",
     "brand": "Banobagi",
     "category": "Cilt Bakımı",
     "subcategory": "Temizleyici",
-    "price": 189,
+    "price": 520,
     "originalPrice": null,
     "image": "/Ürün Görselleri/Banobagi Milk Thistle Repair Foam Cleanser/1.webp",
     "barcode": "8809486365960",
@@ -7395,7 +7412,8 @@
     "reviews": 26,
     "sold": 566,
     "inStock": true,
-    "description": "Banobagi Milk Thistle Repair Foam Cleanser - Banobagi markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Kirleri ve ultra ince parçacıkları giderir.\n- Cildi seven bileşenlerle besler ve nemlendirir.\n- Kabarık köpük cildi yumuşak ve esnek hissettirir.",
+    "stock": 7
   },
   {
     "id": "00412",
@@ -7707,11 +7725,11 @@
     "id": "00429",
     "code": "00429",
     "slug": "00429-cicahae-gne-kremi-50-ml",
-    "name": "Cicahae Güneş Kremi 50 mL",
+    "name": "Cicahae Sunscreen SPF50+ PA++++ (Cicahae Centella Asiatica İçeren Nemlendirici ve Yatıştırıcı Güneş Kremi SPF50+ PA++++) 50ml",
     "brand": "Frankly",
     "category": "Cilt Bakımı",
     "subcategory": "Güneş Kremi",
-    "price": 214,
+    "price": 1131,
     "originalPrice": null,
     "image": "/Ürün Görselleri/Frankly Cicahae Güneş Kremi 50 mL/1.webp",
     "barcode": "8809875906774",
@@ -7719,7 +7737,8 @@
     "reviews": 65,
     "sold": 605,
     "inStock": true,
-    "description": "Cicahae Güneş Kremi 50 mL - Frankly markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Güneşten Korunmanın En Nazik ve En Güçlü Hali\n- Cilt bariyerine dost formülüyle geliştirilen Frankly Cicahae Sunscreen, yalnızca UVA ve UVB ışınlarına değil, aynı zamanda mavi ışık ve çevresel stres faktörlerine karşı da yüksek düzeyde koruma sağlar.\n- Tamamen yeni nesil güneş filtreleriyle formüle edilmiştir\n- Bu sayede foto-stabil, uzun süreli ve etkili bir koruma sunarken, ciltte ağırlık veya beyazlık bırakmaz.\n- Centella Asiatica özü, Madecassoside ve Hyaluronik Asit türevleriyle zenginleştirilen formül, cildi gün boyu nemlendirir, yatıştırır ve cilt ısısını düşürmeye yardımcı olur. Bu sayede özellikle lekelenmeye eğilimli, hassas veya akneye yatkın ciltlerde konforlu bir kullanım sağlar.\n- Komedojenik olmayan yapısıyla gözenekleri tıkamaz, makyaj altında dahi pürüzsüz bir bitiş sunar.",
+    "stock": 29
   },
   {
     "id": "00430",
@@ -7833,11 +7852,11 @@
     "id": "00436",
     "code": "00436",
     "slug": "00436-pdrn-bounce-ball-serum-30-ml",
-    "name": "PDRN Bounce Ball Serum 30 mL",
+    "name": "PDRN Bounce Ball Serum (Cildi Gençleştirmeye Yardımcı Çift Fazlı Esans Serum PDRN Bounce Ball Serum) 30ml",
     "brand": "Frankly",
     "category": "Cilt Bakımı",
     "subcategory": "Cilt Bakım Serumu",
-    "price": 716,
+    "price": 1287,
     "originalPrice": null,
     "image": "/Ürün Görselleri/ Frankly PDRN Bounce Ball Serum 30 mL/1.webp",
     "barcode": "8800250591974",
@@ -7845,7 +7864,8 @@
     "reviews": 93,
     "sold": 633,
     "inStock": true,
-    "description": "PDRN Bounce Ball Serum 30 mL - Frankly markasından kaliteli Cilt Bakımı ürünü."
+    "description": "- Cilt bakımında yeni bir dönem başlıyor. Frankly PDRN Bounce Ball Serum, somon DNA’sından elde edilen PDRN (Sodium DNA) ve besleyici somon yumurtası ekstraktı ile geliştirilmiş özel Bounce Ball teknolojisiyle formüle edilmiş çift fazlı bir formüldür. Her bir serum şişesinde yer alan görünür turuncu PDRN topu, kapsül teknolojisi sayesinde içerikler taze ve etkili şekilde cilde ulaşır. Kullanım öncesi çalkalandığında yağ kapsülleri esans ile birleşerek cilde dolgunluk ve canlılık hissi veren bakım bileşenlerini serbest bırakır. Böylece ilk kullanımdan itibaren cilde yoğun nem, elastikiyet ve parlaklık kazandırır.\n- Bu yenilikçi formül, cildin esnekliğini desteklemeye, yorgun ve mat görünümü azaltmaya yardımcı olur. Düzenli kullanımda cilt daha pürüzsüz, nemli ve sağlıklı bir ışıltıya kavuşur.\n- Ultra hafif, yapışkanlık bırakmayan dokusu sayesinde cilt tarafından hızla emilir. Gündüz makyaj veya güneş kremi öncesinde, gece ise bakım rutininin son adımlarında rahatlıkla kullanılabilir.\n- Dermatolojik olarak test edilmiştir. Hassas ciltler dahil tüm cilt tiplerine uygundur. Parfüm, alerjen ve 20 yaygın tahriş edici bileşen içermez. Dermatolojik testlerde 0.00 tahriş sonucu, hassas ciltlerde güvenle kullanım sunar.\n- Her damlasında tazelenen, ışıldayan bir cilt.",
+    "stock": 30
   },
   {
     "id": "00437",
@@ -10551,9 +10571,9 @@
     "id": "00587",
     "code": "00587",
     "slug": "00587-lilybyred-glassy-layer-fixing-tint--parlak-uzun-sr",
-    "name": "Lilybyred Glassy Layer Fixing Tint / Parlak, Uzun Süre Kalıcı Tint - 03 Kill Me Plum",
+    "name": "Glassy Layer Fixing Tint - 03 Kill Me Plum (Parlak, Uzun Süre Kalıcı Tint - 03 Kill Me Plum)",
     "brand": "Lilybyred",
-    "category": "Renkli Kozmetik",
+    "category": "Makyaj",
     "subcategory": "Tint",
     "price": 1015,
     "originalPrice": null,
@@ -10563,7 +10583,8 @@
     "reviews": 210,
     "sold": 750,
     "inStock": true,
-    "description": "Lilybyred Glassy Layer Fixing Tint / Parlak, Uzun Süre Kalıcı Tint - 03 Kill Me Plum - Lilybyred markasından kaliteli Renkli Kozmetik ürünü."
+    "description": "- Dudaklara canlı renkler ve uzun süre kalıcı parlaklık kazandıran yenilikçi bir dudak ürünüdür. Şeffaf ve katmanlanabilir formülü sayesinde, hafif bir renk dokunuşundan cesur ve belirgin bir görünüme kadar farklı dudak stilleri oluşturmaya olanak tanır. İçeriğindeki hyaluronik asit, Manuka balı ve jojoba tohumu yağı gibi besleyici bileşenler, dudakları nemlendirir ve pürüzsüzleştirir.\n- Dudaklara parlak bir bitiş sağlarken, canlı ve kalıcı renkler sunar. Şeffaf ve katmanlanabilir yapısı sayesinde, hafif bir renk dokunuşundan cesur ve belirgin bir görünüme kadar farklı dudak stilleri oluşturmaya olanak tanır.\n- Dudakları doğal ve enerjik renklerle canlandırır.\n- Dudaklara dolgun bir görünüm kazandırırken ışıltılı bir etki sunar.\n- Canlı renkler, dudaklarda kalıcı bir etki bırakır ve dağılma yapmaz.\n- Su bazlı lip gloss yağı ile dudaklarınızı yoğun bir şekilde nemlendirir. Yapışkanlık hissi bırakmayan hafif dokusu, dudaklarınızda rahat bir kullanım sunar. Dudaklarınıza hem bakım yapar hem de göz alıcı bir parlaklık ve renk kazandırır.\n- Gün boyu kalıcı ve konforlu bir dudak makyajı deneyimi sağlar.",
+    "stock": 9
   },
   {
     "id": "00588",
@@ -10659,9 +10680,9 @@
     "id": "00593",
     "code": "00593",
     "slug": "00593-lilybyred-glassy-layer-fixing-tint--parlak-uzun-sr",
-    "name": "Lilybyred Glassy Layer Fixing Tint / Parlak, Uzun Süre Kalıcı Tint - 13 Lychee Coin",
+    "name": "Glassy Layer Fixing Tint - 13 Lychee Coin (Parlak, Uzun Süre Kalıcı Tint - 13 Lychee Coin)",
     "brand": "Lilybyred",
-    "category": "Renkli Kozmetik",
+    "category": "Makyaj",
     "subcategory": "Tint",
     "price": 1015,
     "originalPrice": null,
@@ -10671,7 +10692,8 @@
     "reviews": 237,
     "sold": 777,
     "inStock": true,
-    "description": "Lilybyred Glassy Layer Fixing Tint / Parlak, Uzun Süre Kalıcı Tint - 13 Lychee Coin - Lilybyred markasından kaliteli Renkli Kozmetik ürünü."
+    "description": "- Dudaklara canlı renkler ve uzun süre kalıcı parlaklık kazandıran yenilikçi bir dudak ürünüdür. Şeffaf ve katmanlanabilir formülü sayesinde, hafif bir renk dokunuşundan cesur ve belirgin bir görünüme kadar farklı dudak stilleri oluşturmaya olanak tanır. İçeriğindeki hyaluronik asit, Manuka balı ve jojoba tohumu yağı gibi besleyici bileşenler, dudakları nemlendirir ve pürüzsüzleştirir.\n- Dudaklara parlak bir bitiş sağlarken, canlı ve kalıcı renkler sunar. Şeffaf ve katmanlanabilir yapısı sayesinde, hafif bir renk dokunuşundan cesur ve belirgin bir görünüme kadar farklı dudak stilleri oluşturmaya olanak tanır.\n- Dudakları doğal ve enerjik renklerle canlandırır.\n- Dudaklara dolgun bir görünüm kazandırırken ışıltılı bir etki sunar.\n- Canlı renkler, dudaklarda kalıcı bir etki bırakır ve dağılma yapmaz.\n- Su bazlı lip gloss yağı ile dudaklarınızı yoğun bir şekilde nemlendirir. Yapışkanlık hissi bırakmayan hafif dokusu, dudaklarınızda rahat bir kullanım sunar. Dudaklarınıza hem bakım yapar hem de göz alıcı bir parlaklık ve renk kazandırır.\n- Gün boyu kalıcı ve konforlu bir dudak makyajı deneyimi sağlar.",
+    "stock": 10
   },
   {
     "id": "00594",
@@ -10767,9 +10789,9 @@
     "id": "00599",
     "code": "00599",
     "slug": "00599-lilybyred-mood-liar-velvet-tint--kadife-bitili-mat",
-    "name": "Lilybyred Mood Liar Velvet Tint / Kadife Bitişli Mat Tint - 05 Immature Cherry",
+    "name": "Mood Liar Velvet Tint - 05 Immature Cherry (Kadife Bitişli Mat Tint - 05 Immature Cherry)",
     "brand": "Lilybyred",
-    "category": "Renkli Kozmetik",
+    "category": "Makyaj",
     "subcategory": "Tint",
     "price": 1015,
     "originalPrice": null,
@@ -10779,7 +10801,8 @@
     "reviews": 243,
     "sold": 783,
     "inStock": true,
-    "description": "Lilybyred Mood Liar Velvet Tint / Kadife Bitişli Mat Tint - 05 Immature Cherry - Lilybyred markasından kaliteli Renkli Kozmetik ürünü."
+    "description": "- Dudaklarınıza yoğun renk ve kadifemsi bir mat doku kazandıran yenilikçi bir dudak ürünüdür. Yüksek pigmentli formülü sayesinde dudaklarınıza canlı ve kalıcı renkler sunar. Kadifemsi mat bitişi, dudaklarınızın pürüzsüz ve doğal görünmesini sağlar.\n- Yumuşak ve yoğun yapısı, dudaklarınıza rahat bir uygulama sağlar ve kadifemsi bir his bırakır. İçeriğindeki nemlendirici bileşenler sayesinde dudaklarınızı kurutmadan yumuşak ve nemli bir his bırakır.\n- Dayanıklı formülü, gün boyu taze ve çekici bir dudak görünümü sağlar. Doğal güzelliğinizi ön plana çıkaran romantik MLBB(My Lips But Better)  tonlarıyla, dudaklarınıza hafif ve doğal bir renk katar.",
+    "stock": 12
   },
   {
     "id": "00600",
@@ -10911,9 +10934,9 @@
     "id": "00607",
     "code": "00607",
     "slug": "00607-lilybyred-bloody-liar-coating-tint--uzun-sre-kalc-",
-    "name": "Lilybyred Bloody Liar Coating Tint / Uzun Süre Kalıcı Parlak Dudak Tinti - 06 Rosy Strawberry",
+    "name": "Bloody Liar Coating Tint - 06 Rosy Strawberry (Uzun Süre Kalıcı Parlak Dudak Tinti - 06 Rosy Strawberry)",
     "brand": "Lilybyred",
-    "category": "Renkli Kozmetik",
+    "category": "Makyaj",
     "subcategory": "Tint",
     "price": 1015,
     "originalPrice": null,
@@ -10923,7 +10946,8 @@
     "reviews": 423,
     "sold": 463,
     "inStock": true,
-    "description": "Lilybyred Bloody Liar Coating Tint / Uzun Süre Kalıcı Parlak Dudak Tinti - 06 Rosy Strawberry - Lilybyred markasından kaliteli Renkli Kozmetik ürünü."
+    "description": "- Dudaklara yoğun renk ve parlaklık kazandıran yenilikçi bir dudak ürünüdür. Bu dudak tinti, hafif yapısı ve cam gibi parlak kaplamasıyla dikkat çeker, dudaklarınıza meyve şurubunu andıran ışıltılı bir görünüm sunar.\n- Yüksek pigmentli formülü sayesinde dudaklara canlı ve kalıcı renkler kazandırır. Parlak bitişi, dudakların dolgun ve ışıltılı görünmesini sağlar.  İçeriğindeki butilen glikol gibi nemlendirici bileşenler sayesinde dudakları nemlendirir ve canlandırır, böylece yumuşak ve pürüzsüz bir his bırakır.\n- Uzun süre kalıcı ve katmanlanabilir formülü sayesinde gün boyu taze ve çekici bir dudak görünümü sağlar. İster tam kapatıcı ister gradyan bir dudak makyajı tercih edin, istediğiniz görünümü kolayca elde edebilirsiniz.\n- Farklı cilt alt tonlarına uyum sağlayacak şekilde geliştirilmiş yeni renk tonlarıyla, tarzınıza ve ruh halinize en uygun rengi seçebilirsiniz.",
+    "stock": 10
   },
   {
     "id": "00608",
@@ -11217,9 +11241,9 @@
     "id": "00624",
     "code": "00624",
     "slug": "00624-lilybyred-sweet-liar-milky-tint--kadife-bitili-nem",
-    "name": "Lilybyred Sweet Liar Milky Tint / Kadife Bitişli, Nemlendiricili Dudak Tinti - 04 Peach Pudding",
+    "name": "Sweet Liar Milky Tint - 04 Peach Pudding (Kadife Bitişli, Nemlendiricili Dudak Tinti - 04 Peach Pudding)",
     "brand": "Lilybyred",
-    "category": "Renkli Kozmetik",
+    "category": "Makyaj",
     "subcategory": "Tint",
     "price": 1015,
     "originalPrice": null,
@@ -11229,7 +11253,8 @@
     "reviews": 482,
     "sold": 522,
     "inStock": true,
-    "description": "Lilybyred Sweet Liar Milky Tint / Kadife Bitişli, Nemlendiricili Dudak Tinti - 04 Peach Pudding - Lilybyred markasından kaliteli Renkli Kozmetik ürünü."
+    "description": "- Dudaklarınıza hafif, kadifemsi ve sütlü bir renk kazandıran özel formüle sahip bir dudak tintidir. Kremsi dokusuyla dudaklara yumuşak bir şekilde yayılır, pürüzsüz bir görünüm sunar ve kurutmadan uzun süre kalıcılık sağlar.\n- Hafif sütlü renkleri sayesinde doğal ve sade bir makyaj görünümü yaratmak isteyenler için mükemmel bir seçenektir.\n- Bu dudak tintinin hafif ve nemlendirici formülü, dudaklara yoğun bir renk vermeden doğal bir ton kazandırır.\n- İçeriğindeki besleyici yağlar ve nemlendirici bileşenler sayesinde dudakları kurutmadan gün boyu konforlu bir his bırakır.\n- Yapışkan olmayan yapısı sayesinde kolayca uygulanır ve ağırlık yapmadan hafif bir bitiş sunar.\n- Yumuşak ve pastel tonlarıyla dudaklara doğal bir canlılık kazandırır.\n- Kadifemsi ve hafif dokusu sayesinde dudaklarda pürüzsüz bir görünüm sağlar ve yumuşak bir his bırakır.\n- Kuruluk hissi oluşturmadan dudakları nemlendirir ve bakımlı görünmelerine yardımcı olur.\n- Gün boyu hafif ve doğal bir renk bırakırken, tazeleme ihtiyacını en aza indirir. Uzun süre kalıcıdır.",
+    "stock": 4
   },
   {
     "id": "00625",
@@ -12285,20 +12310,20 @@
     "id": "00683",
     "code": "00683",
     "slug": "00683-leaders-cilt-bariyer-onarimini-destekleyen-nemlend",
-    "name": "LEADERS CİLT BARİYER ONARIMINI DESTEKLEYEN NEMLENDİRİCİ YÜZ MASKESİ 25ML",
+    "name": "Essential Mask (Cilt Bariyer Onarımını Destekleyen Nemlendirici Yüz Maskesi) 25ml",
     "brand": "LEADERS",
-    "category": "Cilt Bakımı",
+    "category": "Mask Bar",
     "subcategory": "Maske",
-    "price": 1060,
+    "price": 868,
     "originalPrice": null,
     "image": "/images/product-placeholder.png",
     "barcode": "8809672283887",
     "rating": 4.7,
     "reviews": 167,
     "sold": 707,
-    "inStock": false,
-    "description": "LEADERS CİLT BARİYER ONARIMINI DESTEKLEYEN NEMLENDİRİCİ YÜZ MASKESİ 25ML - LEADERS markasından kaliteli Cilt Bakımı ürünü.",
-    "stock": 0
+    "inStock": true,
+    "description": "- Hassas Ciltler İçin Yoğun Nem ve Rahatlama Cildinizin gün içinde maruz kaldığı stres ve yorgunluktan kurtulmasına yardımcı olacak bir çözüm mü arıyorsunuz? Leaders Calming Biotics Essential Maske, hassas ve kuru ciltler için özel olarak formüle edilmiş, derinlemesine nemlendirici ve yatıştırıcı bir maskedir.\n- Cilt bariyerini güçlendirirken aynı zamanda cildinizi yeniler ve korur.\n- Tüm aktif bileşenlerini içeren bu maske, cildinizi derinlemesine nemlendirir ve rahatlatır.\n- Emülsiyon tipi yapısı sayesinde cilt tarafından kolayca emilir ve daha hafif bir his bırakır.",
+    "stock": 12
   },
   {
     "id": "00684",
@@ -12475,20 +12500,20 @@
     "id": "00693",
     "code": "00693",
     "slug": "00693-leaders-green-collagen-nemlendirici-canlandirici-k",
-    "name": "LEADERS GREEN COLLAGEN NEMLENDİRİCİ CANLANDIRICI KREM 50ML",
+    "name": "Green Collagen Moist Firming (Nemlendirici Canlandırıcı Krem) 50ml",
     "brand": "LEADERS",
     "category": "Cilt Bakımı",
     "subcategory": "Krem",
-    "price": 800,
+    "price": 520,
     "originalPrice": null,
     "image": "/images/product-placeholder.png",
     "barcode": "8809672283986",
     "rating": 4.8,
     "reviews": 198,
     "sold": 738,
-    "inStock": false,
-    "description": "LEADERS GREEN COLLAGEN NEMLENDİRİCİ CANLANDIRICI KREM 50ML - LEADERS markasından kaliteli Cilt Bakımı ürünü.",
-    "stock": 0
+    "inStock": true,
+    "description": "- Cildinizi derinlemesine nemlendirirken, sıkılaşmasına ve ışıltılı bir görünüm kazanmasına yardımcı olur.\n- Bitkisel kaynaklı formülü sayesinde cildinizi tahriş etmeden etkili sonuçlar sağlar.\n- Centella Asiatica'dan elde edilen laktobasil ve buğday, bezelye ve mısırdan elde edilen bitkisel kolajen ile cildinizi sağlıklı ve nemli tutar.\n- Derinlemesine Nüfuz Eden U-Oliosome™ Teknolojisi: Lipozomlardan daha etkili olan U-Oliosome™ iletim sistemi, kremin içerisindeki değerli bileşenlerin cildin derinliklerine ulaşmasını sağlar.\n- Kremsi ve hafif dokusu ciltle bütünleşir, ipeksi bir bitiş ve yoğun nem sağlar, yapışkanlık hissi bırakmaz.",
+    "stock": 10
   },
   {
     "id": "00694",
@@ -12551,20 +12576,20 @@
     "id": "00697",
     "code": "00697",
     "slug": "00697-leaders-imphyto-kolajen-ierikli-maske",
-    "name": "LEADERS IMPHYTO KOLAJEN İÇERIKLI MASKE",
+    "name": "ImPHYTO (Kolajen İçerikli Maske 10 Adet) 25ml",
     "brand": "LEADERS",
-    "category": "Cilt Bakımı",
+    "category": "Mask Bar",
     "subcategory": "Maske",
-    "price": 700,
+    "price": 80,
     "originalPrice": null,
     "image": "/Ürün Görselleri/Leaders Imphyto Kolajen İçerikli Maske/1.jpg",
     "barcode": "8809672283542",
     "rating": 4.2,
     "reviews": 202,
     "sold": 742,
-    "inStock": false,
-    "description": "LEADERS IMPHYTO KOLAJEN İÇERIKLI MASKE - LEADERS markasından kaliteli Cilt Bakımı ürünü.",
-    "stock": 0
+    "inStock": true,
+    "description": "- Cildi derinlemesine nemlendirir ve besler.\n- Kırışıklık karşıtı bakım sağlar.\n- Cilde daha sıkı ve genç bir görünüm kazandırmayı destekler.\n- Cildinize ihtiyaç duyduğu besinleri sağlar ve sağlıklı bir görünüm kazandırır.\n- Cildin doğal bariyerini güçlendirerek çevresel faktörlere karşı koruma sağlar.\n- Vegan ve hipoalerjenik formülü ile cildinize nazikçe bakım yapar.\n- Biyolojik olarak çözünebilen maskenin doğaya zarar vermeden geri dönüştürülebilir olmasıyla çevreye duyarlı bir seçim yapmış olursunuz.",
+    "stock": 12
   },
   {
     "id": "00698",
@@ -12798,20 +12823,20 @@
     "id": "00710",
     "code": "00710",
     "slug": "00710-leaders-nature-effect-yulafl-besleyici-maske",
-    "name": "LEADERS NATURE EFFECT YULAFLı BESLEYICI MASKE",
+    "name": "Nature Effect (Yulaflı Besleyici Maske 10 Adet) 21ml",
     "brand": "LEADERS",
-    "category": "Cilt Bakımı",
+    "category": "",
     "subcategory": "Maske",
-    "price": 80,
+    "price": 730,
     "originalPrice": null,
     "image": "/Ürün Görselleri/Leaders Nature Effect Yulaflı Besleyici Maske/1.jpg",
     "barcode": "8809672284082",
     "rating": 4.8,
     "reviews": 408,
     "sold": 448,
-    "inStock": false,
-    "description": "LEADERS NATURE EFFECT YULAFLı BESLEYICI MASKE - LEADERS markasından kaliteli Cilt Bakımı ürünü.",
-    "stock": 0
+    "inStock": true,
+    "description": "- Yulaf özü, cildin doğal mikrobiyomunu düzenleyerek bir denge oluşturur.\n- Doğal içerikler, cilt bariyerini güçlendirmeyi destekler.\n- Cildi çevresel faktörlere karşı korumaya yardımcı olur.\n- Özel formülü cilt tonunu eşitlemeye yardımcı olur.\n- Pantenol, cilde hızlı ve etkili nem sağlayarak uzun süreli hidrasyonu destekler.\n- Günlük kullanıma uygundur.",
+    "stock": 12
   },
   {
     "id": "00711",
@@ -13438,11 +13463,11 @@
     "id": "00744",
     "code": "00744",
     "slug": "00744-2an-topaklanma-olmadan-uzun-sre-tam-kapaticilik-uv",
-    "name": "2AN TOPAKLANMA OLMADAN UZUN SÜRE TAM KAPATICILIK UV KORUMALI FONDÖTEN 30ML #21 LİGHT BEİGE",
+    "name": "No.21 Light Beige (Topaklanma Olmadan Uzun Süre Tam Kapatıcılık UV Korumalı Fondöten) 30ml",
     "brand": "2AN",
-    "category": "Renkli Kozmetik",
+    "category": "Makyaj",
     "subcategory": "Fondöten",
-    "price": 1600,
+    "price": 1740,
     "originalPrice": null,
     "image": "/images/product-placeholder.png",
     "barcode": "8809657121364",
@@ -13450,7 +13475,8 @@
     "reviews": 505,
     "sold": 545,
     "inStock": true,
-    "description": "2AN TOPAKLANMA OLMADAN UZUN SÜRE TAM KAPATICILIK UV KORUMALI FONDÖTEN 30ML #21 LİGHT BEİGE - 2AN markasından kaliteli Renkli Kozmetik ürünü."
+    "description": "- Uzun süre kalıcı yapısıyla gün boyu akmadan, dağılmadan kusursuz bir görünüm sağlar.\n- Tam kapatıcılık + doğal parlak bitiş: Cilde canlı, ışıltılı ve pürüzsüz bir görünüm kazandırır.\n- Vitamin E ile zenginleştirilmiştir: Cildi besler, yumuşatır ve bakım etkisini artırır.\n- Cildi nemlendirir ve nem bariyerini destekler: Gün boyu taze, dolgun ve konforlu bir hissiyat sunar. (İstediğiniz düzenleme yapıldı.)\n- Cildin daha aydınlık, sağlıklı ve eşit tonda görünmesine destek olur.\n- Kırışıklık karşıtı bakım etkisi ile ince çizgi görünümünü azaltmaya yardımcı olur.\n- SPF 30 PA++ geniş spektrumlu koruma ile cildi güneşin zararlı UV ışınlarına karşı korur.",
+    "stock": 6
   },
   {
     "id": "00745",
@@ -13474,11 +13500,11 @@
     "id": "00746",
     "code": "00746",
     "slug": "00746-2an-gzenek-kiriiklik-ve-ince-izgileri-kapatan-effa",
-    "name": "2AN GÖZENEK KIRIŞIKLIK VE İNCE ÇİZGİLERİ KAPATAN ŞEFFAF JEL MAKYAJ BAZI 30ML BEYAZ",
+    "name": "Silky Veil Primer (Gözenek Kırışıklık ve İnce Çizgileri Kapatan Şeffaf Jel Makyaj Bazı) 30ml",
     "brand": "2AN",
-    "category": "Renkli Kozmetik",
+    "category": "Makyaj",
     "subcategory": "Makyaj Bazı",
-    "price": 1300,
+    "price": 1600,
     "originalPrice": null,
     "image": "/images/product-placeholder.png",
     "barcode": "8809657122385",
@@ -13486,7 +13512,8 @@
     "reviews": 507,
     "sold": 547,
     "inStock": true,
-    "description": "2AN GÖZENEK KIRIŞIKLIK VE İNCE ÇİZGİLERİ KAPATAN ŞEFFAF JEL MAKYAJ BAZI 30ML BEYAZ - 2AN markasından kaliteli Renkli Kozmetik ürünü."
+    "description": "- Harika bir makyaj tabanı sağlayan ipeksi bir baz.\n- Pürüzsüz ve berrak bir cilt yaratmak için şeffaf jel formülüyle geliştirilmiştir.\n- Gözenekleri, ince çizgileri ve kırışıklıkları gizlemeye yardımcı olur.\n- Uzun süreli nemlendirme sağlar.\n- Işıltılı bir cilt yaratır.",
+    "stock": 11
   },
   {
     "id": "00747",
@@ -13528,11 +13555,11 @@
     "id": "00749",
     "code": "00749",
     "slug": "00749-2an-yksek-pigmentli--doal-bitili-uzun-sre-kalici-i",
-    "name": "2AN YÜKSEK PİGMENTLİ & DOĞAL BİTİŞLİ UZUN SÜRE KALICI İKİLİ TOZ ALLIK 06 PİNK PETAL",
+    "name": "03 Coco Coral (Yüksek Pigmentli & Doğal Bitişli Uzun Süre Kalıcı İkili Toz Allık ) 4.5gr",
     "brand": "2AN",
-    "category": "Renkli Kozmetik",
+    "category": "Makyaj",
     "subcategory": "Allık",
-    "price": 1960,
+    "price": 1700,
     "originalPrice": null,
     "image": "/images/product-placeholder.png",
     "barcode": "8809864754669",
@@ -13540,7 +13567,8 @@
     "reviews": 10,
     "sold": 550,
     "inStock": true,
-    "description": "2AN YÜKSEK PİGMENTLİ & DOĞAL BİTİŞLİ UZUN SÜRE KALICI İKİLİ TOZ ALLIK 06 PİNK PETAL - 2AN markasından kaliteli Renkli Kozmetik ürünü."
+    "description": "- Yüksek pigmentlidir.\n- Uzun süre kalıcı.\n- Her cilt tonuna uygundur.",
+    "stock": 5
   },
   {
     "id": "00750",
@@ -13564,11 +13592,11 @@
     "id": "00751",
     "code": "00751",
     "slug": "00751-2an-mat-simli-ve-iiltili-renklerden-oluan-11li-far",
-    "name": "2AN MAT SİMLİ VE IŞILTILI RENKLERDEN OLUŞAN 11'Lİ FAR PALETİ ROSELY BLOSSOM",
+    "name": "Daily Blossom (Mat Simli ve Işıltılı Renklerden Oluşan 11'li Far Paleti) 9.5gr",
     "brand": "2AN",
-    "category": "Renkli Kozmetik",
+    "category": "Makyaj",
     "subcategory": "Far Paleti",
-    "price": 1680,
+    "price": 1300,
     "originalPrice": null,
     "image": "/images/product-placeholder.png",
     "barcode": "8809657129285",
@@ -13576,7 +13604,8 @@
     "reviews": 33,
     "sold": 573,
     "inStock": true,
-    "description": "2AN MAT SİMLİ VE IŞILTILI RENKLERDEN OLUŞAN 11'Lİ FAR PALETİ ROSELY BLOSSOM - 2AN markasından kaliteli Renkli Kozmetik ürünü."
+    "description": "- 11 renk / 3 bitiş: Mat, simli ve ışıltılı dokular tek palette.\n- Yumuşak yapı, homojen yayılım ve katlandırılabilir pigment.\n- Günlük “soft glam”dan gece makyajına.\n- Göz çukurunda doğal gölge için ideal.\n- Matların üzerine “topper” gibi uygulanabilir.",
+    "stock": 10
   },
   {
     "id": "00752",
@@ -13618,11 +13647,11 @@
     "id": "00754",
     "code": "00754",
     "slug": "00754-2an-matsimli-ve-iiltili-renklerden-oluan-6li-far-p",
-    "name": "2AN MAT,SİMLİ VE IŞILTILI RENKLERDEN OLUŞAN 6'LI FAR PALETİ 05 DEAR ME",
+    "name": "03 Misty (Mat Simli ve Işıltılı Renklerden Oluşan 6'lı Far Paleti)",
     "brand": "2AN",
-    "category": "Renkli Kozmetik",
+    "category": "Makyaj",
     "subcategory": "Far Paleti",
-    "price": 1100,
+    "price": 1960,
     "originalPrice": null,
     "image": "/images/product-placeholder.png",
     "barcode": "8809968200840",
@@ -13630,17 +13659,18 @@
     "reviews": 36,
     "sold": 576,
     "inStock": true,
-    "description": "2AN MAT,SİMLİ VE IŞILTILI RENKLERDEN OLUŞAN 6'LI FAR PALETİ 05 DEAR ME - 2AN markasından kaliteli Renkli Kozmetik ürünü."
+    "description": "- 3 bitiş bir arada:Mat, simli ve ışıltılı 6 renk.\n- Kolay karışan doku:Homojen, çizgisiz dağılım.\n- Katlandırılabilir pigment:Doğal–belirgin geçişler.\n- Düşük tozutma & uzun süre kalıcılık.\n- Kompakt ve seyahate uyguntasarım.",
+    "stock": 12
   },
   {
     "id": "00755",
     "code": "00755",
     "slug": "00755-2an-eksta-hacim-ekstra-kivrim-veren-gn-boyu-dayani",
-    "name": "2AN EKSTA HACİM EKSTRA KIVRIM VEREN GÜN BOYU DAYANIKLI SUYA DAYANIKLI MASKARA 7.5G VOLUME CURLING",
+    "name": "Volume Curling Mascara (Suya Dayanıklı Maskara) 7.5gr",
     "brand": "2AN",
-    "category": "Renkli Kozmetik",
+    "category": "Mask Bar",
     "subcategory": "Rimel",
-    "price": 1100,
+    "price": 1680,
     "originalPrice": null,
     "image": "/images/product-placeholder.png",
     "barcode": "8809657122484",
@@ -13648,15 +13678,16 @@
     "reviews": 37,
     "sold": 577,
     "inStock": true,
-    "description": "2AN EKSTA HACİM EKSTRA KIVRIM VEREN GÜN BOYU DAYANIKLI SUYA DAYANIKLI MASKARA 7.5G VOLUME CURLING - 2AN markasından kaliteli Renkli Kozmetik ürünü."
+    "description": "- Suya dayanıklı yapıya sahiptir.\n- Uzun süren kalıcılık sağlar.\n- Topaklanma yapmaz.",
+    "stock": 11
   },
   {
     "id": "00756",
     "code": "00756",
     "slug": "00756-2an-ekstra-uzun-kirpik-grnm-veren-gn-boyu-kalici-s",
-    "name": "2AN EKSTRA UZUN KİRPİK GÖRÜNÜMÜ VEREN GÜN BOYU KALICI SUYA DAYANIKLI MASKARA 7.5G LONG LASH",
+    "name": "Long Lash Mascara (Ekstra Uzun Kirpik Görünümü Veren Gün Boyu Kalıcı Suya Dayanıklı Maskara) 7.5gr",
     "brand": "2AN",
-    "category": "Renkli Kozmetik",
+    "category": "Mask Bar",
     "subcategory": "Rimel",
     "price": 1100,
     "originalPrice": null,
@@ -13666,17 +13697,18 @@
     "reviews": 38,
     "sold": 578,
     "inStock": true,
-    "description": "2AN EKSTRA UZUN KİRPİK GÖRÜNÜMÜ VEREN GÜN BOYU KALICI SUYA DAYANIKLI MASKARA 7.5G LONG LASH - 2AN markasından kaliteli Renkli Kozmetik ürünü."
+    "description": "- Suya dayanıklı yapıya sahiptir.\n- Uzun süren kalıcılık sağlar.\n- Topaklanma yapmaz.",
+    "stock": 12
   },
   {
     "id": "00757",
     "code": "00757",
     "slug": "00757-2an-eekstra-uzun-ekstra-youn-kivrim-veren-maskara",
-    "name": "2AN EEKSTRA UZUN EKSTRA YOĞUN KIVRIM VEREN MASKARA",
+    "name": "Long&Curling Mascara Chocobrown (Ekstra Uzun Ekstra Yoğun Kıvrım Veren Maskara) 7.5gr",
     "brand": "2AN",
-    "category": "Renkli Kozmetik",
+    "category": "Mask Bar",
     "subcategory": "Rimel",
-    "price": 900,
+    "price": 1100,
     "originalPrice": null,
     "image": "/images/product-placeholder.png",
     "barcode": "8809657113734",
@@ -13684,7 +13716,8 @@
     "reviews": 39,
     "sold": 579,
     "inStock": true,
-    "description": "2AN EEKSTRA UZUN EKSTRA YOĞUN KIVRIM VEREN MASKARA - 2AN markasından kaliteli Renkli Kozmetik ürünü."
+    "description": "- Çikolata kahvesi renge sahiptir.\n- Uzun süren kalıcılık sağlar.\n- Suya dayanıklı yapıdadır.",
+    "stock": 1
   },
   {
     "id": "00758",
@@ -13762,11 +13795,11 @@
     "id": "00762",
     "code": "00762",
     "slug": "00762-2an-dolgun-przsz-ve-mat-grnm-blur-efekti-veren-nem",
-    "name": "2AN DOLGUN PÜRÜZSÜZ VE MAT GÖRÜNÜM, BLUR EFEKTİ VEREN NEMLENDİRİCİ TİNT RUJ 05",
+    "name": "07 Peach Scoop (Dolgun Pürüzsüz ve Mat Görünüm Veren Tint Ruj)",
     "brand": "2AN",
-    "category": "Renkli Kozmetik",
+    "category": "Makyaj",
     "subcategory": "Ruj",
-    "price": 900,
+    "price": 1100,
     "originalPrice": null,
     "image": "/images/product-placeholder.png",
     "barcode": "8809968205500",
@@ -13774,7 +13807,8 @@
     "reviews": 65,
     "sold": 605,
     "inStock": true,
-    "description": "2AN DOLGUN PÜRÜZSÜZ VE MAT GÖRÜNÜM, BLUR EFEKTİ VEREN NEMLENDİRİCİ TİNT RUJ 05 - 2AN markasından kaliteli Renkli Kozmetik ürünü."
+    "description": "- Dudak çizgilerini yumuşatarak daha dolgun görünüm.\n- Kadifemsi doku, ağırlık yapmadan sabitlenir.\n- Kuruluk hissini minimize etmeye yardımcı formül.\n- Gün boyu taze ve düzenli görünüm.\n- Doğaldan belirgine ayarlanabilen renk.",
+    "stock": 12
   },
   {
     "id": "00763",
@@ -13834,11 +13868,11 @@
     "id": "00766",
     "code": "00766",
     "slug": "00766-2an-lip-gloss--dudak-parlaticisi--nemlendirici--ka",
-    "name": "2AN LİP GLOSS | DUDAK PARLATICISI | NEMLENDİRİCİ | KALICI YÜKSEK PİGMENTLİ PP01 COOL UP",
+    "name": "PP01 Cool Up Lip Gloss (Dudak Parlatıcısı, Nemlendirici, Kalıcı Yüksek Pigmentli) 5gr",
     "brand": "2AN",
-    "category": "Renkli Kozmetik",
+    "category": "Makyaj",
     "subcategory": "Ruj",
-    "price": 240,
+    "price": 900,
     "originalPrice": null,
     "image": "/images/product-placeholder.png",
     "barcode": "8809968206026",
@@ -13846,7 +13880,8 @@
     "reviews": 69,
     "sold": 609,
     "inStock": true,
-    "description": "2AN LİP GLOSS | DUDAK PARLATICISI | NEMLENDİRİCİ | KALICI YÜKSEK PİGMENTLİ PP01 COOL UP - 2AN markasından kaliteli Renkli Kozmetik ürünü."
+    "description": "- Dudaklara ışıltı sağlar.\n- Dudaklara dolgun bir görünüm sağlar.\n- Topaklanma ve bulaşma yapmaz.",
+    "stock": 12
   },
   {
     "id": "00767",

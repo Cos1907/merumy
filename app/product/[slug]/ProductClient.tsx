@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { ChevronLeft, ChevronRight, Minus, Plus, ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Minus, Plus, ChevronDown, ChevronUp, ZoomIn, X } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 import type { Product } from '../../lib/products'
 
@@ -81,6 +81,7 @@ export default function ProductClient({ product, relatedProducts }: ProductClien
   const [galleryImages, setGalleryImages] = useState<string[]>([])
   const [descExpanded, setDescExpanded] = useState(false)
   const [brandLogoError, setBrandLogoError] = useState(false)
+  const [isZoomed, setIsZoomed] = useState(false)
 
   const brandLogoPath = getBrandLogoPath(product.brand)
   const displayImages = galleryImages.length ? galleryImages : product.image ? [product.image] : []
@@ -116,6 +117,7 @@ export default function ProductClient({ product, relatedProducts }: ProductClien
   }, [product.image, product.slug])
 
   return (
+    <>
     <div style={{ marginTop: `${headerHeight}px` }}>
       <div className="mx-[175px] max-2xl:mx-24 max-xl:mx-12 max-lg:mx-6 max-md:mx-4">
         {/* ── Product Detail ── */}
@@ -129,9 +131,19 @@ export default function ProductClient({ product, relatedProducts }: ProductClien
                 <img
                   src={encodeImagePath(displayImages[selectedImage] || product.image)}
                   alt={product.name}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain cursor-zoom-in"
+                  onClick={() => setIsZoomed(true)}
                   onError={(e) => { e.currentTarget.src = '/images/product-placeholder.png' }}
                 />
+                {/* Zoom icon hint */}
+                <button
+                  type="button"
+                  onClick={() => setIsZoomed(true)}
+                  className="absolute top-4 right-4 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all"
+                  aria-label="Görseli büyüt"
+                >
+                  <ZoomIn size={20} className="text-gray-600" />
+                </button>
 
                 {product.inStock === false && (
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -207,8 +219,7 @@ export default function ProductClient({ product, relatedProducts }: ProductClien
 
               {/* Product name */}
               <h1
-                className="mt-4 font-grift font-bold uppercase leading-tight text-2xl lg:text-3xl"
-                style={{ color: '#92D0AA' }}
+                className="mt-4 font-grift font-bold leading-tight text-2xl lg:text-3xl" style={{ textTransform: 'capitalize', color: '#92D0AA' }}
               >
                 {product.name}
               </h1>
@@ -322,6 +333,52 @@ export default function ProductClient({ product, relatedProducts }: ProductClien
         )}
       </div>
     </div>
+
+    {/* Lightbox / Zoom Modal */}
+    {isZoomed && (
+      <div
+        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4"
+        onClick={() => setIsZoomed(false)}
+      >
+        <button
+          type="button"
+          onClick={() => setIsZoomed(false)}
+          className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 text-white rounded-full p-3 transition-colors"
+        >
+          <X size={28} />
+        </button>
+        {displayImages.length > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); setSelectedImage((p) => (p - 1 + displayImages.length) % displayImages.length) }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white rounded-full p-3 transition-colors"
+            >
+              <ChevronLeft size={28} />
+            </button>
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); setSelectedImage((p) => (p + 1) % displayImages.length) }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white rounded-full p-3 transition-colors"
+            >
+              <ChevronRight size={28} />
+            </button>
+          </>
+        )}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={encodeImagePath(displayImages[selectedImage] || product.image)}
+          alt={product.name}
+          className="max-w-full max-h-[90vh] object-contain rounded-xl"
+          onClick={(e) => e.stopPropagation()}
+          onError={(e) => { e.currentTarget.src = '/images/product-placeholder.png' }}
+        />
+        <div className="absolute bottom-4 text-white/60 text-sm">
+          Kapatmak için dışarıya tıklayın
+        </div>
+      </div>
+    )}
+    </>
   )
 }
 
