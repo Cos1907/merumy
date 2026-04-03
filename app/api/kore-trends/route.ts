@@ -7,11 +7,14 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const section = searchParams.get('section') || 'kore-trendleri'
+    const limit = Math.min(parseInt(searchParams.get('limit') || '20', 10), 50)
 
     // Map section names to tag values in the database
     const sectionTagMap: Record<string, string> = {
       'kore-trendleri': 'kore-trendleri',
+      'kore_trend': 'kore_trend',
       'bestsellers': 'bestseller',
+      'bestseller': 'bestseller',
       'new-arrivals': 'new-arrival',
       'exclusive': 'exclusive',
       'special-offers': 'special-offer',
@@ -30,7 +33,7 @@ export async function GET(request: NextRequest) {
        LEFT JOIN brands b ON b.id = p.brand_id
        WHERE p.is_active = 1 AND (p.tags LIKE ? OR FIND_IN_SET(?, p.tags))
        ORDER BY CASE WHEN p.stock_status = 'out_of_stock' THEN 1 ELSE 0 END ASC, p.id DESC
-       LIMIT 20`,
+       LIMIT ${limit}`,
       [`%${tag}%`, tag]
     )
 
@@ -47,7 +50,7 @@ export async function GET(request: NextRequest) {
            LEFT JOIN brands b ON b.id = p.brand_id
            WHERE p.is_active = 1 AND p.is_featured = 1
            ORDER BY CASE WHEN p.stock_status = 'out_of_stock' THEN 1 ELSE 0 END ASC, p.id DESC
-           LIMIT 12`
+           LIMIT ${limit}`
         )
       } else {
         products = await query<any[]>(
@@ -60,7 +63,7 @@ export async function GET(request: NextRequest) {
            LEFT JOIN brands b ON b.id = p.brand_id
            WHERE p.is_active = 1
            ORDER BY CASE WHEN p.stock_status = 'out_of_stock' THEN 1 ELSE 0 END ASC, p.id DESC
-           LIMIT 12`
+           LIMIT ${limit}`
         )
       }
     }

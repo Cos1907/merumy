@@ -20,15 +20,29 @@ async function checkAdminSession(): Promise<boolean> {
   }
 }
 
+// Map DB row (snake_case) → frontend object (camelCase)
+function mapSlide(row: any) {
+  return {
+    id: row.id,
+    title: row.title || '',
+    subtitle: '',
+    buttonText: '',
+    buttonLink: row.link || '',
+    desktopImage: row.desktop_image || '',
+    mobileImage: row.mobile_image || '',
+    sortOrder: row.slide_order ?? 0,
+    isActive: row.is_active === 1 || row.is_active === true,
+  }
+}
+
 export async function GET() {
   try {
-    // Try DB first
     const slides = await query<any[]>(
-      `SELECT id, title, subtitle, button_text, button_link, desktop_image, mobile_image, sort_order, is_active
+      `SELECT id, title, desktop_image, mobile_image, link, slide_order, is_active
        FROM hero_slides
-       ORDER BY sort_order ASC, id ASC`
+       ORDER BY slide_order ASC, id ASC`
     )
-    return NextResponse.json({ slides })
+    return NextResponse.json({ slides: (slides as any[]).map(mapSlide) })
   } catch (error) {
     console.error('Hero slides GET error:', error)
     return NextResponse.json({ slides: [] })
@@ -46,7 +60,7 @@ export async function POST(request: NextRequest) {
       // Image upload
       const formData = await request.formData()
       const file = formData.get('file') as File | null
-      const type = (formData.get('type') as string) || 'desktop' // desktop | mobile
+      const type = (formData.get('type') as string) || 'desktop'
 
       if (!file) return NextResponse.json({ error: 'Dosya bulunamadı' }, { status: 400 })
 
@@ -63,25 +77,22 @@ export async function POST(request: NextRequest) {
     } else {
       // Create / update slide record
       const body = await request.json()
-      const { id, title, subtitle, buttonText, buttonLink, desktopImage, mobileImage, sortOrder, isActive } = body
+      const { id, title, buttonLink, desktopImage, mobileImage, sortOrder, isActive } = body
 
       if (id) {
-        // Update
         await execute(
-          `UPDATE hero_slides SET title=?, subtitle=?, button_text=?, button_link=?,
-           desktop_image=?, mobile_image=?, sort_order=?, is_active=?, updated_at=NOW()
+          `UPDATE hero_slides SET title=?, link=?, desktop_image=?, mobile_image=?, slide_order=?, is_active=?, updated_at=NOW()
            WHERE id=?`,
-          [title || null, subtitle || null, buttonText || null, buttonLink || null,
-           desktopImage || null, mobileImage || null, sortOrder ?? 0, isActive ?? true, id]
+          [title || null, buttonLink || null, desktopImage || null, mobileImage || null,
+           sortOrder ?? 0, isActive ?? true, id]
         )
         return NextResponse.json({ success: true })
       } else {
-        // Insert
         const result = await execute(
-          `INSERT INTO hero_slides (title, subtitle, button_text, button_link, desktop_image, mobile_image, sort_order, is_active)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-          [title || null, subtitle || null, buttonText || null, buttonLink || null,
-           desktopImage || null, mobileImage || null, sortOrder ?? 0, isActive ?? true]
+          `INSERT INTO hero_slides (title, link, desktop_image, mobile_image, slide_order, is_active)
+           VALUES (?, ?, ?, ?, ?, ?)`,
+          [title || null, buttonLink || null, desktopImage || null, mobileImage || null,
+           sortOrder ?? 0, isActive ?? true]
         )
         return NextResponse.json({ success: true, id: result.insertId })
       }
