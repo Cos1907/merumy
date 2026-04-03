@@ -128,7 +128,32 @@ export async function GET(request: NextRequest) {
       items: itemsByOrderId[o.id] || [],
     }))
 
-    return NextResponse.json({ orders, total, page, limit })
+    // Global stats (all orders, no filter)
+    const statsRows = await query<any[]>(
+      `SELECT status, COUNT(*) as cnt, COALESCE(SUM(total),0) as rev FROM orders GROUP BY status`,
+      []
+    )
+    const stats: Record<string, number> = {}
+    let statsTotal = 0
+    let totalRevenue = 0
+    for (const row of (statsRows || [])) {
+      stats[row.status] = Number(row.cnt)
+      statsTotal += Number(row.cnt)
+      if (row.status !== 'cancelled') totalRevenue += Number(row.rev)
+    }
+    const orderStats = {
+      total: statsTotal,
+      pending: stats['pending'] || 0,
+      processing: stats['processing'] || 0,
+      confirmed: stats['confirmed'] || 0,
+      preparing: stats['preparing'] || 0,
+      shipped: stats['shipped'] || 0,
+      delivered: stats['delivered'] || 0,
+      cancelled: stats['cancelled'] || 0,
+      totalRevenue,
+    }
+
+    return NextResponse.json({ orders, total, page, limit, stats: orderStats })
   } catch (error) {
     console.error('Admin orders GET error:', error)
     return NextResponse.json({ error: 'Veritabanı hatası' }, { status: 500 })

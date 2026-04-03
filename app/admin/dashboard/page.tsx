@@ -455,7 +455,7 @@ export default function AdminDashboard() {
       const data = await res.json();
       if (data.orders) setOrders(data.orders);
       if (data.stats) setOrderStats(data.stats);
-      if (data.pagination) setOrderTotal(data.pagination.total);
+      if (data.total !== undefined) setOrderTotal(Number(data.total));
     } catch (error) {
       console.error('Error fetching orders:', error);
     }
