@@ -13,6 +13,7 @@
     "@types/nodemailer": "^7.0.2",
     "iconv-lite": "^0.7.2",
     "lucide-react": "^0.294.0",
+    "mysql2": "^3.20.0",
     "next": "14.0.4",
     "nodemailer": "^7.0.9",
     "react": "^18",

@@ -6,28 +6,9 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { products } from '../lib/products'
 import ProductCardModern from '../components/ProductCardModern'
 
 const PRODUCTS_PER_PAGE = 15
-
-// Türkçe karakterleri normalize et (arama için)
-const normalizeText = (text: string): string => {
-  return text
-    .toLowerCase()
-    .replace(/ı/g, 'i')
-    .replace(/İ/g, 'i')
-    .replace(/ş/g, 's')
-    .replace(/Ş/g, 's')
-    .replace(/ğ/g, 'g')
-    .replace(/Ğ/g, 'g')
-    .replace(/ü/g, 'u')
-    .replace(/Ü/g, 'u')
-    .replace(/ö/g, 'o')
-    .replace(/Ö/g, 'o')
-    .replace(/ç/g, 'c')
-    .replace(/Ç/g, 'c')
-}
 
 const CATEGORIES = [
   { slug: 'cilt-bakimi', name: 'Cilt Bakımı' },
@@ -42,6 +23,9 @@ export default function ShopPage() {
   const [headerHeight, setHeaderHeight] = useState(0)
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [products, setProducts] = useState<any[]>([])
+  const [brands, setBrands] = useState<any[]>([])
+  const [fetchLoading, setFetchLoading] = useState(true)
   const [displayedCount, setDisplayedCount] = useState(PRODUCTS_PER_PAGE)
   const [isLoading, setIsLoading] = useState(false)
   const searchParams = useSearchParams()
@@ -51,22 +35,18 @@ export default function ShopPage() {
     const calculateHeaderHeight = () => {
       const headerContainer = document.querySelector('.fixed.top-0.left-0.right-0.z-50')
       if (headerContainer) {
-        const height = (headerContainer as HTMLElement).offsetHeight
-        setHeaderHeight(height)
+        setHeaderHeight((headerContainer as HTMLElement).offsetHeight)
       } else {
-        // Mobil için varsayılan değer
         setHeaderHeight(window.innerWidth < 768 ? 90 : 140)
       }
     }
-    // Hemen hesapla
     calculateHeaderHeight()
-    // Kısa bir gecikme ile tekrar hesapla (font yüklenmesi vs için)
-    const timer1 = setTimeout(calculateHeaderHeight, 100)
-    const timer2 = setTimeout(calculateHeaderHeight, 500)
+    const t1 = setTimeout(calculateHeaderHeight, 100)
+    const t2 = setTimeout(calculateHeaderHeight, 500)
     window.addEventListener('resize', calculateHeaderHeight)
     return () => {
-      clearTimeout(timer1)
-      clearTimeout(timer2)
+      clearTimeout(t1)
+      clearTimeout(t2)
       window.removeEventListener('resize', calculateHeaderHeight)
     }
   }, [])
@@ -79,56 +59,62 @@ export default function ShopPage() {
     if (category) setSelectedCategory(category)
   }, [searchParams])
 
-  const brandList = useMemo(() => 
-    Array.from(new Set(products.map((p) => p.brand))).filter(Boolean).sort()
-  , [])
+  // Fetch from DB
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setFetchLoading(true)
+      try {
+        const params = new URLSearchParams({ limit: '200' })
+        if (selectedBrand) params.set('brand', selectedBrand)
+        if (selectedCategory) params.set('category', selectedCategory)
+        const q = searchParams?.get('q')
+        if (q) params.set('q', q)
 
-  const filtered = useMemo(() => {
-    let list = [...products]
-    if (selectedBrand) list = list.filter((p) => p.brand === selectedBrand)
-    if (selectedCategory) list = list.filter((p) => p.category === selectedCategory)
-    return list
-  }, [selectedBrand, selectedCategory])
+        const res = await fetch(`/api/products/search?${params.toString()}`)
+        const data = await res.json()
+        setProducts(data.products || [])
+        if (data.brands) setBrands(data.brands)
+      } catch {
+        setProducts([])
+      } finally {
+        setFetchLoading(false)
+      }
+    }
+    fetchProducts()
+    setDisplayedCount(PRODUCTS_PER_PAGE)
+  }, [selectedBrand, selectedCategory, searchParams])
 
   // Infinite scroll
   const loadMore = useCallback(() => {
-    if (isLoading || displayedCount >= filtered.length) return
+    if (isLoading || displayedCount >= products.length) return
     setIsLoading(true)
     setTimeout(() => {
-      setDisplayedCount((prev) => Math.min(prev + PRODUCTS_PER_PAGE, filtered.length))
+      setDisplayedCount((prev) => Math.min(prev + PRODUCTS_PER_PAGE, products.length))
       setIsLoading(false)
     }, 300)
-  }, [isLoading, displayedCount, filtered.length])
+  }, [isLoading, displayedCount, products.length])
 
-  // Intersection Observer
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadMore()
-        }
-      },
+      (entries) => { if (entries[0].isIntersecting) loadMore() },
       { threshold: 0.1 }
     )
-
-    if (loaderRef.current) {
-      observer.observe(loaderRef.current)
-    }
-
+    if (loaderRef.current) observer.observe(loaderRef.current)
     return () => observer.disconnect()
   }, [loadMore])
 
-  // Reset displayed count when filter changes
-  useEffect(() => {
-    setDisplayedCount(PRODUCTS_PER_PAGE)
-  }, [selectedBrand, selectedCategory])
-
-  const displayedProducts = filtered.slice(0, displayedCount)
+  const displayedProducts = products.slice(0, displayedCount)
 
   const clearAll = () => {
     setSelectedBrand(null)
     setSelectedCategory(null)
   }
+
+  const brandList = useMemo(() => {
+    // Use brands from API if available, otherwise derive from products
+    if (brands.length > 0) return brands.map((b: any) => b.name).sort()
+    return Array.from(new Set(products.map((p: any) => p.brand))).filter(Boolean).sort() as string[]
+  }, [brands, products])
 
   return (
     <main className="min-h-screen bg-white">
@@ -141,13 +127,11 @@ export default function ShopPage() {
         <div className="md:hidden relative w-full bg-[#92D0AA]/10">
           <div className="flex items-center">
             <div className="px-4 py-3">
-              <h1 className="text-xl font-bold font-grift uppercase text-[#92D0AA]">
-                TÜM ÜRÜNLER
-              </h1>
+              <h1 className="text-xl font-bold font-grift uppercase text-[#92D0AA]">TÜM ÜRÜNLER</h1>
             </div>
             <div className="flex-1">
-              <img 
-                src="/mobilkategorislider.png" 
+              <img
+                src="/mobilkategorislider.png"
                 alt="Tüm Ürünler"
                 className="w-full h-auto max-h-[150px] object-contain"
                 style={{ maxWidth: '393px', marginLeft: 'auto' }}
@@ -213,20 +197,20 @@ export default function ShopPage() {
                     Tüm Kategoriler
                   </button>
                   {CATEGORIES.map((c) => (
-                    <Link
+                    <button
                       key={c.slug}
-                      href={`/shop/${c.slug}`}
-                      className="block px-3 py-2 rounded-lg text-sm hover:bg-gray-50 transition-colors"
+                      onClick={() => setSelectedCategory(c.name)}
+                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${selectedCategory === c.name ? 'bg-[#92D0AA]/20 text-[#92D0AA] font-medium' : 'hover:bg-gray-50'}`}
                     >
                       {c.name}
-                    </Link>
+                    </button>
                   ))}
                 </div>
               </div>
 
               {(selectedBrand || selectedCategory) && (
-                <button 
-                  onClick={clearAll} 
+                <button
+                  onClick={clearAll}
                   className="w-full rounded-xl border border-[#92D0AA] text-[#92D0AA] px-4 py-3 text-sm hover:bg-[#92D0AA]/10 transition-colors"
                 >
                   Filtreleri Temizle
@@ -236,36 +220,49 @@ export default function ShopPage() {
 
             {/* Product Grid */}
             <div>
-              <p className="text-sm text-gray-500 mb-4">
-                {filtered.length} ürün bulundu
-              </p>
-
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
-                {displayedProducts.map((p) => (
-                  <ProductCardModern key={p.id} product={p} />
-                ))}
-              </div>
-
-              {/* Loader */}
-              {displayedCount < filtered.length && (
-                <div ref={loaderRef} className="flex justify-center py-8">
-                  {isLoading ? (
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#92D0AA]"></div>
-                  ) : (
-                    <button
-                      onClick={loadMore}
-                      className="px-6 py-3 bg-[#92D0AA] text-white rounded-xl hover:bg-[#7bb896] transition-colors"
-                    >
-                      Daha Fazla Göster ({filtered.length - displayedCount} ürün kaldı)
-                    </button>
-                  )}
+              {fetchLoading ? (
+                <div className="flex justify-center items-center py-24">
+                  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#92D0AA]" />
                 </div>
-              )}
+              ) : (
+                <>
+                  <p className="text-sm text-gray-500 mb-4">{products.length} ürün bulundu</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+                    {displayedProducts.map((p) => (
+                      <ProductCardModern key={p.id || p.slug} product={p} />
+                    ))}
+                  </div>
 
-              {displayedCount >= filtered.length && filtered.length > 0 && (
-                <p className="text-center text-gray-400 py-8">
-                  Tüm ürünler gösterildi
-                </p>
+                  {displayedCount < products.length && (
+                    <div ref={loaderRef} className="flex justify-center py-8">
+                      {isLoading ? (
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#92D0AA]" />
+                      ) : (
+                        <button
+                          onClick={loadMore}
+                          className="px-6 py-3 bg-[#92D0AA] text-white rounded-xl hover:bg-[#7bb896] transition-colors"
+                        >
+                          Daha Fazla Göster ({products.length - displayedCount} ürün kaldı)
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                  {displayedCount >= products.length && products.length > 0 && (
+                    <p className="text-center text-gray-400 py-8">Tüm ürünler gösterildi</p>
+                  )}
+
+                  {products.length === 0 && !fetchLoading && (
+                    <div className="text-center py-16 text-gray-400">
+                      <p className="text-lg">Ürün bulunamadı</p>
+                      {(selectedBrand || selectedCategory) && (
+                        <button onClick={clearAll} className="mt-4 text-[#92D0AA] hover:underline">
+                          Filtreleri temizle
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>

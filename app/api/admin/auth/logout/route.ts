@@ -1,36 +1,23 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { execute } from '../../../../lib/db';
-import { serialize } from 'cookie';
-import { cookies } from 'next/headers';
-
-const SESSION_COOKIE_NAME = 'admin_session';
+import { NextRequest, NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
+import { execute } from '../../../../lib/db'
 
 export async function POST(request: NextRequest) {
   try {
-    const cookieStore = cookies();
-    const sessionToken = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+    const cookieStore = await cookies()
+    const sessionToken = cookieStore.get('admin_session')?.value
 
     if (sessionToken) {
-      // Delete session from database
-      await execute('DELETE FROM admin_sessions WHERE session_token = ?', [sessionToken]);
+      try {
+        await execute('DELETE FROM admin_sessions WHERE session_token = ?', [sessionToken])
+      } catch {
+        // Ignore DB error
+      }
+      cookieStore.delete('admin_session')
     }
 
-    // Clear the session cookie
-    const cookie = serialize(SESSION_COOKIE_NAME, '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 0, // Expire immediately
-    });
-
-    return NextResponse.json({ success: true }, {
-      headers: {
-        'Set-Cookie': cookie,
-      },
-    });
+    return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Admin logout error:', error);
-    return NextResponse.json({ success: false, error: 'Çıkış sırasında hata oluştu' }, { status: 500 });
+    return NextResponse.json({ error: 'Çıkış hatası' }, { status: 500 })
   }
 }

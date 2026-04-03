@@ -1,90 +1,52 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { query, execute, queryOne } from '../../../../lib/db';
-import { serialize } from 'cookie';
-import crypto from 'crypto';
-import bcrypt from 'bcryptjs';
-
-const SESSION_COOKIE_NAME = 'admin_session';
+import { NextRequest, NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
+import { queryOne, execute } from '../../../../lib/db'
+import crypto from 'crypto'
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json();
+    const body = await request.json()
+    const { username, password } = body
 
-    if (!email || !password) {
-      return NextResponse.json({ error: 'E-posta ve şifre gerekli' }, { status: 400 });
+    if (!username || !password) {
+      return NextResponse.json({ error: 'Kullanıcı adı ve şifre gerekli' }, { status: 400 })
     }
 
-    // Find admin user
-    const user = await queryOne<any>(
-      'SELECT id, uuid, email, password_hash, name, role FROM users WHERE email = ? AND role = "admin"',
-      [email]
-    );
+    // Check admin credentials from environment or hardcoded
+    const adminUsername = process.env.ADMIN_USERNAME || 'admin'
+    const adminPassword = process.env.ADMIN_PASSWORD || 'Merumy2024!'
 
-    if (!user) {
-      return NextResponse.json({ error: 'Geçersiz kimlik bilgileri' }, { status: 401 });
+    if (username !== adminUsername || password !== adminPassword) {
+      return NextResponse.json({ error: 'Geçersiz kullanıcı adı veya şifre' }, { status: 401 })
     }
 
-    // Check password using bcrypt (secure comparison)
-    const isValidPassword = await bcrypt.compare(password, user.password_hash);
-    if (!isValidPassword) {
-      return NextResponse.json({ error: 'Geçersiz kimlik bilgileri' }, { status: 401 });
+    // Create session token
+    const sessionToken = crypto.randomBytes(32).toString('hex')
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
+
+    // Try to store session in DB
+    try {
+      await execute(
+        `INSERT INTO admin_sessions (session_token, expires_at, created_at) VALUES (?, ?, NOW())`,
+        [sessionToken, expiresAt.toISOString().slice(0, 19).replace('T', ' ')]
+      )
+    } catch (dbError) {
+      console.error('Failed to store admin session in DB:', dbError)
+      // Continue anyway - session stored in cookie
     }
 
-    // Generate session token
-    const sessionToken = crypto.randomUUID();
-    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
-
-    // Get IP address safely (handle long X-Forwarded-For headers)
-    let ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
-    // X-Forwarded-For can contain multiple IPs, take the first one
-    if (ipAddress.includes(',')) {
-      ipAddress = ipAddress.split(',')[0].trim();
-    }
-    // Truncate to 250 chars max to prevent database errors
-    ipAddress = ipAddress.substring(0, 250);
-
-    // Store session in database
-    await execute(
-      `INSERT INTO admin_sessions (session_token, user_id, ip_address, expires_at)
-       VALUES (?, ?, ?, ?)`,
-      [
-        sessionToken,
-        user.id,
-        ipAddress,
-        expiresAt
-      ]
-    );
-
-    // Update last login
-    await execute('UPDATE users SET last_login = NOW() WHERE id = ?', [user.id]);
-
-    // Set session cookie
-    const cookie = serialize(SESSION_COOKIE_NAME, sessionToken, {
+    const cookieStore = await cookies()
+    cookieStore.set('admin_session', sessionToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60,
       path: '/',
-      maxAge: 24 * 60 * 60, // 24 hours
-    });
+    })
 
-    return NextResponse.json(
-      { 
-        success: true, 
-        user: {
-          id: user.uuid,
-          email: user.email,
-          name: user.name,
-          role: user.role
-        }
-      },
-      {
-        headers: {
-          'Set-Cookie': cookie,
-        },
-      }
-    );
+    return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Admin login error:', error);
-    return NextResponse.json({ error: 'Giriş sırasında bir hata oluştu' }, { status: 500 });
+    console.error('Admin login error:', error)
+    return NextResponse.json({ error: 'Giriş hatası' }, { status: 500 })
   }
 }

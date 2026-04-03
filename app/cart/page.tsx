@@ -8,13 +8,6 @@ import { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
-function formatRemaining(ms: number) {
-  const totalSec = Math.max(0, Math.floor(ms / 1000))
-  const m = Math.floor(totalSec / 60)
-  const s = totalSec % 60
-  return `${m}:${String(s).padStart(2, '0')}`
-}
-
 export default function CartPage() {
   const {
     items,
@@ -29,16 +22,10 @@ export default function CartPage() {
     clearPromoCode,
   } = useCart()
   const router = useRouter()
-  const [now, setNow] = useState(Date.now())
   const [promoOpen, setPromoOpen] = useState(false)
   const [promoInput, setPromoInput] = useState('')
   const [promoError, setPromoError] = useState<string | null>(null)
   const [headerHeight, setHeaderHeight] = useState(140)
-
-  useEffect(() => {
-    const t = setInterval(() => setNow(Date.now()), 1000)
-    return () => clearInterval(t)
-  }, [])
 
   useEffect(() => {
     const calculateHeaderHeight = () => {
@@ -122,10 +109,7 @@ export default function CartPage() {
                           ₺{item.product.price.toFixed(2)}
                         </div>
 
-                        <div className="mt-3 text-xs text-gray-500">
-                          Sepette kalma süresi:{' '}
-                          <span className="font-semibold">{formatRemaining(item.expiresAt - now)}</span>
-                        </div>
+
                       </div>
 
                       <button
