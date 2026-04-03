@@ -2209,7 +2209,21 @@ export default function AdminDashboard() {
                       🔄 Yenile
                     </button>
                     <button
-                      onClick={() => setFaturaSettingsOpen(true)}
+                      onClick={async () => {
+                        try {
+                          const res = await fetch('/api/admin/fatura?action=settings');
+                          const data = await res.json();
+                          if (data.settings) setFaturaSettings({
+                            username: data.settings.username || '',
+                            password: data.settings.password || '',
+                            vkn: data.settings.vkn || '',
+                            erpKodu: data.settings.erpKodu || '',
+                            userServiceUrl: data.settings.userServiceUrl || '',
+                            earsivServiceUrl: data.settings.earsivServiceUrl || '',
+                          });
+                        } catch {}
+                        setFaturaSettingsOpen(true);
+                      }}
                       className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-xl text-sm transition-colors"
                       title="e-Arşiv Bağlantı Ayarları"
                     >

@@ -11,14 +11,29 @@ export async function GET(request: NextRequest) {
     if (!sessionToken) {
       return NextResponse.json({ error: 'Yetkisiz' }, { status: 401 })
     }
+
     const session = await queryOne<any>(
-      'SELECT * FROM admin_sessions WHERE session_token = ? AND expires_at > NOW()',
+      `SELECT s.*, u.email, u.name, u.role, u.allowed_sections
+       FROM admin_sessions s
+       LEFT JOIN admin_users u ON u.id = s.user_id
+       WHERE s.session_token = ? AND s.expires_at > NOW()`,
       [sessionToken]
     )
+
     if (!session) {
       return NextResponse.json({ error: 'Yetkisiz' }, { status: 401 })
     }
-    return NextResponse.json({ ok: true })
+
+    return NextResponse.json({
+      ok: true,
+      user: {
+        id: session.user_id,
+        email: session.email || '',
+        name: session.name || '',
+        role: session.role || 'admin',
+        allowedSections: session.allowed_sections ? JSON.parse(session.allowed_sections) : null,
+      }
+    })
   } catch {
     return NextResponse.json({ error: 'Sunucu hatası' }, { status: 500 })
   }
