@@ -300,6 +300,16 @@
 
 ---
 
+### 🐛 Çözülen Hatalar (4 Nisan 2026 — Gece 3 / Sipariş Durumu & Carousel)
+
+| Hata | Neden | Çözüm |
+|---|---|---|
+| Kullanıcı dashboardunda sipariş "Hazırlanıyor" görünüyor, admin panelinde "İptal" | `app/api/orders/route.ts` merge yaparken JSON siparişleri önce ekliyordu; aynı `orderId` DB'de de varsa JSON'un eski statüsü kazanıyordu | Merge sırası tersine çevrildi: **DB siparişleri önce** eklenir, JSON yalnızca DB'de bulunmayan siparişler için fallback olarak kullanılır |
+| Sipariş detay sayfası (`/api/orders/[orderId]`) da yalnızca JSON'a bakıyordu | Rota sadece `orders.json` dosyasında arama yapıyor, DB'ye hiç sorgu atmıyordu | Rota yeniden yazıldı: önce DB'den `queryOne` ile sipariş ve `order_items` çekiliyor; bulunamazsa JSON fallback kullanılıyor |
+| EN ÇOK SATANLAR ve MERUMY.COM'A ÖZEL carousel her yüklemede aynı ürünleri gösteriyor | `kore_trend_products` tablosunda `bestsellers` ve `exclusive` section kaydı yok; tag-based ve last-resort fallback sorgularda `RAND()` yoktu, hep aynı sırayla geliyordu | Tag-based ve last-resort fallback sorgulara `ORDER BY RAND()` eklendi; her sayfa yüklemesinde farklı ürünler gelir |
+
+---
+
 ## 🔄 Şu Anki Durum
 
 ### Aktif Mod: **Coming Soon**

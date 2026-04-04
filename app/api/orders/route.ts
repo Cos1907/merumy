@@ -158,20 +158,20 @@ export async function GET(request: NextRequest) {
       console.error('Failed to fetch orders from DB:', dbErr)
     }
 
-    // 3. Merge JSON and DB orders - deduplicate by orderId
+    // 3. Merge JSON and DB orders - DB takes priority (status is always up-to-date in DB)
     const seenOrderIds = new Set<string>()
     const mergedOrders: any[] = []
-    
-    // Add JSON orders first
-    for (const o of userOrders) {
+
+    // DB orders first — status, tracking etc. are always updated here
+    for (const o of dbOrders) {
       if (!seenOrderIds.has(o.orderId)) {
         seenOrderIds.add(o.orderId)
         mergedOrders.push(o)
       }
     }
-    
-    // Add DB orders that aren't already in JSON
-    for (const o of dbOrders) {
+
+    // JSON orders only if not already covered by DB
+    for (const o of userOrders) {
       if (!seenOrderIds.has(o.orderId)) {
         seenOrderIds.add(o.orderId)
         mergedOrders.push(o)

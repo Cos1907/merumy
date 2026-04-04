@@ -58,13 +58,13 @@ export async function GET(request: NextRequest) {
          FROM products p
          LEFT JOIN brands b ON b.id = p.brand_id
          WHERE p.is_active = 1 AND (p.tags LIKE ? OR FIND_IN_SET(?, p.tags))
-         ORDER BY CASE WHEN p.stock_status = 'out_of_stock' THEN 1 ELSE 0 END ASC, p.id DESC
+         ORDER BY CASE WHEN p.stock_status = 'out_of_stock' THEN 1 ELSE 0 END ASC, RAND()
          LIMIT ${limit}`,
         [`%${tag}%`, tag]
       )
     }
 
-    // Last resort: return featured or latest products
+    // Last resort: return random active products (so each page load differs)
     if (!products || products.length === 0) {
       products = await query<any[]>(
         `SELECT p.barcode, p.name, b.name as brand, b.logo_url as brandLogo,
@@ -75,8 +75,7 @@ export async function GET(request: NextRequest) {
          FROM products p
          LEFT JOIN brands b ON b.id = p.brand_id
          WHERE p.is_active = 1
-         ORDER BY CASE WHEN p.stock_status = 'out_of_stock' THEN 1 ELSE 0 END ASC,
-                  p.is_featured DESC, p.id DESC
+         ORDER BY CASE WHEN p.stock_status = 'out_of_stock' THEN 1 ELSE 0 END ASC, RAND()
          LIMIT ${limit}`
       )
     }
