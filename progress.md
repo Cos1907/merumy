@@ -1,6 +1,6 @@
 # 📋 Merumy — Geliştirme İlerleme Raporu
 
-> Son güncelleme: 4 Nisan 2026
+> Son güncelleme: 4 Nisan 2026 (Akşam)
 
 ---
 
@@ -182,6 +182,39 @@
 | Nisan 2026 | Activity log "0 kayıt" sorunu | API response formatı düzeltildi (`pagination` objesi), `JOIN users` → `JOIN admin_users`, filtre parametreleri eklendi |
 | Nisan 2026 | Logo beyaz görünüyordu | `brightness(0) invert(1)` CSS filtresi kaldırıldı |
 | Geçmiş | `useEffect` hook rule ihlali (CookieConsent.tsx) | Hook, early return'den önce taşındı |
+
+---
+
+### 🛠️ Ürün Detay & Carousel Güncellemeleri (4 Nisan 2026 — Akşam)
+
+- [x] **İLGİLİ ÜRÜNLER tamamen DB'den** — `app/product/[slug]/page.tsx`
+  - JSON fallback tamamen kaldırıldı; ürün sadece veritabanında aranıyor
+  - DB'de bulunamazsa `notFound()` (404) döndürülüyor — JSON'dan gösterilmiyor
+  - Görsel sorgusu iyileştirildi: önce `is_primary=1` görseli, yoksa herhangi bir görsel (`COALESCE` ile)
+  - İlgili ürünler (`getRelatedFromDB`) aynı iyileştirme uygulandı
+  - `generateMetadata` da artık sadece DB'den çekiyor
+- [x] **Admin paneli layout düzeltildi** — `app/admin/dashboard/page.tsx`
+  - `👤 Admin Kullanıcı Yönetimi` ve `🎟️ İndirim Kodu Yönetimi` sekmeleri `p-4 md:p-6 max-w-5xl mx-auto` ile sarılıyordu
+  - Dış container'ın `p-3 md:p-6`'sıyla çift padding oluşturup sağa kayma yaratan fazla sınıflar kaldırıldı
+- [x] **Carousel ürünleri her yüklemede değişiyor** — `app/api/kore-trends/route.ts`
+  - `ORDER BY k.added_at DESC` → `ORDER BY RAND()` olarak değiştirildi
+  - KORE TRENDLERİ, EN ÇOK SATANLAR, MERUMY.COM'A ÖZEL her açılışta rastgele ürün sırası gösteriyor
+- [x] **Hero slider cache sorunu giderildi** — `app/components/Hero.tsx`
+  - `useEffect` ile `/api/hero?t=timestamp` endpoint'inden `cache: 'no-store'` seçeneğiyle taze veri çekiyor
+  - Sayfa HTML'i CDN/Nginx tarafından cache'lense bile slider verileri her zaman güncel DB'den geliyor
+  - Admin link veya görsel güncellediğinde canlıda anında yansıyor
+
+---
+
+### 🐛 Çözülen Hatalar (4 Nisan 2026 — Akşam)
+
+| Hata | Çözüm |
+|---|---|
+| Ürün görseli görünmüyordu (is_primary=1 olan görsel yoksa boş geliyordu) | `COALESCE` ile önce primary, sonra herhangi bir görsel alınıyor |
+| JSON'dan gelen ürünler görselsiz görünüyordu | Ürün sayfası tamamen DB'ye bağlandı, JSON fallback kaldırıldı |
+| Admin Kullanıcı & İndirim Kodu sekmeleri PC'de sağa kayıyordu | Çift padding (`p-4 md:p-6 max-w-5xl mx-auto`) kaldırıldı |
+| Hero yönetiminde güncellenen link/görsel canlıya yansımıyordu | Hero bileşeni client-side API fetch ile cache bypass yapıyor |
+| Carousel ürünleri her açılışta aynı sırada görünüyordu | `RAND()` sıralama eklendi |
 
 ---
 
