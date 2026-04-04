@@ -415,7 +415,7 @@ function RelatedProductCard({ product: p, compact = false }: { product: Product;
             {p.name}
           </div>
           <div className={`mt-1 font-bold ${compact ? 'text-xs' : 'text-sm'}`} style={{ color: '#92D0AA' }}>
-            ₺{p.price.toFixed(2)}
+            ₺{Number(p.price).toFixed(2)}
           </div>
         </div>
       </Link>

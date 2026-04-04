@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     // Email content
     const mailOptions = {
       from: FROM_EMAIL,
-      to: 'info@merumy.com',
+      to: ['info@merumy.com', 'huseyinkulekci0@gmail.com'],
       subject: `📩 Yeni İletişim Formu - ${name}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">

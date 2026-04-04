@@ -167,15 +167,15 @@ export default function Frankly() {
                           {product.originalPrice && product.originalPrice > product.price ? (
                             <>
                               <span className="text-gray-400 line-through">
-                                ₺{product.originalPrice.toFixed(2)}
+                                ₺{Number(product.originalPrice).toFixed(2)}
                               </span>
                               <span className="text-red-500 font-semibold">
-                                ₺{product.price.toFixed(2)}
+                                ₺{Number(product.price).toFixed(2)}
                               </span>
                             </>
                           ) : (
                             <span className="text-gray-600">
-                              ₺{product.price.toFixed(2)}
+                              ₺{Number(product.price).toFixed(2)}
                             </span>
                           )}
                         </div>

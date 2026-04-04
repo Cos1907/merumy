@@ -5,7 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { execute } from '../../../lib/db'
+import { execute, queryOne as dbQueryOne } from '../../../lib/db'
 import { 
   ThreeDSTamamla,
   extractThreeDSResult
@@ -167,7 +167,7 @@ export async function POST(request: NextRequest) {
           }).catch(console.error)
         }
         
-        // Siparişi kalıcı olarak kaydet
+        // Siparişi kalıcı olarak kaydet (JSON + Database)
         try {
           const ordersPath = path.join(process.cwd(), 'data', 'orders.json')
           let orders: any[] = []
@@ -194,7 +194,73 @@ export async function POST(request: NextRequest) {
           
           orders.push(newOrder)
           fs.writeFileSync(ordersPath, JSON.stringify(orders, null, 2))
-          console.log('Order saved:', newOrder.orderId)
+          console.log('Order saved to JSON:', newOrder.orderId)
+
+          // Save to database as well
+          try {
+            const addr = orderData.address || ''
+            const addrParts = addr.split(',').map((s: string) => s.trim())
+            const shippingAddress = addrParts[0] || addr
+            const shippingCity = addrParts[1] || ''
+            const shippingDistrict = addrParts[2] || ''
+
+            // Check if order already exists in DB
+            const existingDbOrder = await dbQueryOne<any>(
+              'SELECT id FROM orders WHERE order_id = ?',
+              [siparisId || '']
+            )
+
+            if (!existingDbOrder) {
+              await execute(
+                `INSERT INTO orders (order_id, dekont_id, customer_name, customer_email, customer_phone,
+                  shipping_address, shipping_city, shipping_district,
+                  subtotal, shipping_cost, discount_amount, total,
+                  status, payment_method, payment_status, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'processing', 'credit_card', 'paid', NOW(), NOW())`,
+                [
+                  siparisId || '',
+                  result.Dekont_ID || '',
+                  orderData.customerName || '',
+                  orderData.customerEmail || '',
+                  orderData.customerPhone || '',
+                  shippingAddress,
+                  shippingCity,
+                  shippingDistrict,
+                  orderData.subtotal || orderData.total || 0,
+                  orderData.shipping || 0,
+                  orderData.promoDiscount || 0,
+                  orderData.total || 0,
+                ]
+              )
+
+              // Get the inserted order ID
+              const insertedOrder = await dbQueryOne<any>(
+                'SELECT id FROM orders WHERE order_id = ? ORDER BY id DESC LIMIT 1',
+                [siparisId || '']
+              )
+
+              if (insertedOrder && orderData.items && orderData.items.length > 0) {
+                for (const item of orderData.items) {
+                  await execute(
+                    `INSERT INTO order_items (order_id, product_name, quantity, unit_price, total_price, product_barcode, product_snapshot)
+                     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                    [
+                      insertedOrder.id,
+                      item.name || '',
+                      item.quantity || 1,
+                      Number(item.price) || 0,
+                      Number(item.price) * (item.quantity || 1),
+                      item.barcode || item.id || '',
+                      JSON.stringify(item),
+                    ]
+                  )
+                }
+              }
+              console.log('Order saved to database:', siparisId)
+            }
+          } catch (dbErr) {
+            console.error('Failed to save order to database (JSON backup exists):', dbErr)
+          }
           
           // Decrement stock for each ordered item
           try {

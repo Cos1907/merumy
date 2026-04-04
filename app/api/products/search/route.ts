@@ -108,7 +108,7 @@ export async function GET(request: NextRequest) {
       brandLogo: p.brandLogo || null,
       category: p.category || '',
       price: Number(p.price) || 0,
-      originalPrice: Number(p.compare_price) || 0,
+      originalPrice: p.compare_price && Number(p.compare_price) > 0 ? Number(p.compare_price) : null,
       image: p.image || '',
       slug: p.slug || String(p.barcode),
       description: p.description || '',

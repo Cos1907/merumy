@@ -116,7 +116,7 @@ const ITEMS_PER_PAGE = 15;
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'users' | 'reports' | 'hero' | 'activity' | 'kore-trends' | 'fatura' | 'analytics' | 'mail-marketing'>('orders');
+  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'users' | 'reports' | 'hero' | 'activity' | 'kore-trends' | 'fatura' | 'analytics' | 'mail-marketing' | 'admin-users' | 'coupons'>('orders');
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -164,7 +164,7 @@ export default function AdminDashboard() {
   const [bulkFaturaProcessing, setBulkFaturaProcessing] = useState(false);
 
   // Kore Trendleri management state
-  const [koreSection, setKoreSection] = useState<'kore_trend' | 'makeup'>('kore_trend');
+  const [koreSection, setKoreSection] = useState<'kore_trend' | 'makeup' | 'bestsellers' | 'exclusive'>('kore_trend');
   const [koreTrendProducts, setKoreTrendProducts] = useState<any[]>([]);
   const [koreLoading, setKoreLoading] = useState(false);
   const [koreSearch, setKoreSearch] = useState('');
@@ -232,6 +232,37 @@ export default function AdminDashboard() {
   const [mailDateFrom, setMailDateFrom] = useState('');
   const [mailDateTo, setMailDateTo] = useState('');
 
+  // Admin users state
+  const [adminUsers, setAdminUsers] = useState<any[]>([]);
+  const [adminUsersLoading, setAdminUsersLoading] = useState(false);
+  const [showNewAdminUserForm, setShowNewAdminUserForm] = useState(false);
+  const [newAdminUserForm, setNewAdminUserForm] = useState({ name: '', email: '', password: '', role: 'admin', allowedSections: [] as string[] });
+  const [adminUserMsg, setAdminUserMsg] = useState<{type:'success'|'error';text:string}|null>(null);
+  const [editingAdminUser, setEditingAdminUser] = useState<any|null>(null);
+  const [newPasswordForUser, setNewPasswordForUser] = useState('');
+  const [adminUserEditSections, setAdminUserEditSections] = useState<string[]>([]);
+  const [adminUserEditRole, setAdminUserEditRole] = useState('admin');
+  const [savingAdminUser, setSavingAdminUser] = useState(false);
+
+  // Must change password state
+  const [mustChangePassword, setMustChangePassword] = useState(false);
+  const [changePasswordValue, setChangePasswordValue] = useState('');
+  const [changePasswordConfirm, setChangePasswordConfirm] = useState('');
+  const [changingPassword, setChangingPassword] = useState(false);
+  const [changePasswordError, setChangePasswordError] = useState('');
+
+  // Coupons state
+  const [coupons, setCoupons] = useState<any[]>([]);
+  const [couponsLoading, setCouponsLoading] = useState(false);
+  const [showNewCouponForm, setShowNewCouponForm] = useState(false);
+  const [couponMsg, setCouponMsg] = useState<{type:'success'|'error';text:string}|null>(null);
+  const [newCouponForm, setNewCouponForm] = useState({
+    code: '', description: '', discountType: 'fixed', discountValue: '',
+    minOrderAmount: '5000', maxDiscountAmount: '', usageLimit: '',
+    brandId: '', userId: '', expiresAt: '', isActive: true,
+  });
+  const [savingCoupon, setSavingCoupon] = useState(false);
+
   // New product form state
   const [showNewProductForm, setShowNewProductForm] = useState(false);
   const [newProductForm, setNewProductForm] = useState({
@@ -279,10 +310,12 @@ export default function AdminDashboard() {
     else if (activeTab === 'reports') fetchAllOrdersForReport();
     else if (activeTab === 'hero') fetchHeroSlides();
     else if (activeTab === 'activity') fetchActivityLogs();
-    else if (activeTab === 'kore-trends') fetchKoreTrendProducts(koreSection as 'kore_trend' | 'makeup');
+    else if (activeTab === 'kore-trends') fetchKoreTrendProducts(koreSection as 'kore_trend' | 'makeup' | 'bestsellers' | 'exclusive');
     else if (activeTab === 'fatura') fetchFaturaOrders();
     else if (activeTab === 'analytics') fetchAnalytics();
     else if (activeTab === 'mail-marketing') fetchMailMarketing();
+    else if (activeTab === 'admin-users') fetchAdminUsers();
+    else if (activeTab === 'coupons') fetchCoupons();
   }, [activeTab, orderPage, orderStatusFilter, userPage, userSort, dbProductsPage]);
 
   // Clear selection when changing filters
@@ -302,6 +335,9 @@ export default function AdminDashboard() {
           setCurrentUserName(data.user.name || '');
           if (data.user.allowedSections) {
             setAllowedSections(data.user.allowedSections);
+          }
+          if (data.user.mustChangePassword) {
+            setMustChangePassword(true);
           }
         }
         setLoading(false);
@@ -1050,7 +1086,185 @@ export default function AdminDashboard() {
     finally { setMailLoading(false); }
   };
 
-  const fetchKoreTrendProducts = async (section: 'kore_trend' | 'makeup') => {
+  const fetchAdminUsers = async () => {
+    setAdminUsersLoading(true);
+    try {
+      const res = await fetch('/api/admin/admin-users');
+      const data = await res.json();
+      if (data.users) setAdminUsers(data.users);
+    } catch (e) { console.error('fetchAdminUsers error:', e); }
+    finally { setAdminUsersLoading(false); }
+  };
+
+  const fetchCoupons = async () => {
+    setCouponsLoading(true);
+    try {
+      const res = await fetch('/api/admin/coupons');
+      const data = await res.json();
+      if (data.coupons) setCoupons(data.coupons);
+    } catch (e) { console.error('fetchCoupons error:', e); }
+    finally { setCouponsLoading(false); }
+  };
+
+  const handleCreateAdminUser = async () => {
+    if (!newAdminUserForm.name || !newAdminUserForm.email || !newAdminUserForm.password) {
+      setAdminUserMsg({ type: 'error', text: 'Ad, e-posta ve şifre zorunludur' });
+      return;
+    }
+    setSavingAdminUser(true);
+    try {
+      const res = await fetch('/api/admin/admin-users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newAdminUserForm),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setAdminUserMsg({ type: 'success', text: '✅ Kullanıcı oluşturuldu!' });
+        setShowNewAdminUserForm(false);
+        setNewAdminUserForm({ name: '', email: '', password: '', role: 'admin', allowedSections: [] });
+        fetchAdminUsers();
+      } else {
+        setAdminUserMsg({ type: 'error', text: `❌ ${data.error}` });
+      }
+    } catch { setAdminUserMsg({ type: 'error', text: '❌ Bağlantı hatası' }); }
+    finally { setSavingAdminUser(false); }
+  };
+
+  const handleUpdateAdminUserPassword = async (userId: number) => {
+    if (!newPasswordForUser || newPasswordForUser.length < 6) {
+      setAdminUserMsg({ type: 'error', text: 'Şifre en az 6 karakter olmalıdır' });
+      return;
+    }
+    setSavingAdminUser(true);
+    try {
+      const res = await fetch('/api/admin/admin-users', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: userId, action: 'update_password', newPassword: newPasswordForUser }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setAdminUserMsg({ type: 'success', text: '✅ Şifre güncellendi!' });
+        setEditingAdminUser(null);
+        setNewPasswordForUser('');
+      } else {
+        setAdminUserMsg({ type: 'error', text: `❌ ${data.error}` });
+      }
+    } catch { setAdminUserMsg({ type: 'error', text: '❌ Bağlantı hatası' }); }
+    finally { setSavingAdminUser(false); }
+  };
+
+  const handleUpdateAdminUserPermissions = async (userId: number) => {
+    setSavingAdminUser(true);
+    try {
+      const res = await fetch('/api/admin/admin-users', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: userId, action: 'update_permissions', allowedSections: adminUserEditSections.length > 0 ? adminUserEditSections : null, role: adminUserEditRole }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setAdminUserMsg({ type: 'success', text: '✅ İzinler güncellendi!' });
+        setEditingAdminUser(null);
+        fetchAdminUsers();
+      } else {
+        setAdminUserMsg({ type: 'error', text: `❌ ${data.error}` });
+      }
+    } catch { setAdminUserMsg({ type: 'error', text: '❌ Bağlantı hatası' }); }
+    finally { setSavingAdminUser(false); }
+  };
+
+  const handleDeleteAdminUser = async (userId: number) => {
+    if (!confirm('Bu admin kullanıcısını silmek istediğinizden emin misiniz?')) return;
+    try {
+      const res = await fetch(`/api/admin/admin-users?id=${userId}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (res.ok) {
+        setAdminUserMsg({ type: 'success', text: '✅ Kullanıcı silindi' });
+        fetchAdminUsers();
+      } else {
+        setAdminUserMsg({ type: 'error', text: `❌ ${data.error}` });
+      }
+    } catch { setAdminUserMsg({ type: 'error', text: '❌ Bağlantı hatası' }); }
+  };
+
+  const handleOwnPasswordChange = async () => {
+    if (changePasswordValue.length < 6) { setChangePasswordError('Şifre en az 6 karakter olmalıdır'); return; }
+    if (changePasswordValue !== changePasswordConfirm) { setChangePasswordError('Şifreler eşleşmiyor'); return; }
+    setChangingPassword(true);
+    setChangePasswordError('');
+    try {
+      const res = await fetch('/api/admin/admin-users', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'change_own_password', newPassword: changePasswordValue }),
+      });
+      if (res.ok) {
+        setMustChangePassword(false);
+        setChangePasswordValue('');
+        setChangePasswordConfirm('');
+      } else {
+        const data = await res.json();
+        setChangePasswordError(data.error || 'Şifre değiştirilemedi');
+      }
+    } catch { setChangePasswordError('Bağlantı hatası'); }
+    finally { setChangingPassword(false); }
+  };
+
+  const handleCreateCoupon = async () => {
+    if (!newCouponForm.code || !newCouponForm.discountValue) {
+      setCouponMsg({ type: 'error', text: 'Kod ve indirim değeri zorunludur' });
+      return;
+    }
+    setSavingCoupon(true);
+    try {
+      const res = await fetch('/api/admin/coupons', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...newCouponForm,
+          discountValue: Number(newCouponForm.discountValue),
+          minOrderAmount: newCouponForm.minOrderAmount ? Number(newCouponForm.minOrderAmount) : null,
+          maxDiscountAmount: newCouponForm.maxDiscountAmount ? Number(newCouponForm.maxDiscountAmount) : null,
+          usageLimit: newCouponForm.usageLimit ? Number(newCouponForm.usageLimit) : null,
+          brandId: newCouponForm.brandId ? Number(newCouponForm.brandId) : null,
+          userId: newCouponForm.userId ? Number(newCouponForm.userId) : null,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setCouponMsg({ type: 'success', text: '✅ Kupon oluşturuldu!' });
+        setShowNewCouponForm(false);
+        setNewCouponForm({ code: '', description: '', discountType: 'fixed', discountValue: '', minOrderAmount: '5000', maxDiscountAmount: '', usageLimit: '', brandId: '', userId: '', expiresAt: '', isActive: true });
+        fetchCoupons();
+      } else {
+        setCouponMsg({ type: 'error', text: `❌ ${data.error}` });
+      }
+    } catch { setCouponMsg({ type: 'error', text: '❌ Bağlantı hatası' }); }
+    finally { setSavingCoupon(false); }
+  };
+
+  const handleToggleCoupon = async (id: number, isActive: boolean) => {
+    try {
+      await fetch('/api/admin/coupons', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, isActive: !isActive }),
+      });
+      fetchCoupons();
+    } catch {}
+  };
+
+  const handleDeleteCoupon = async (id: number) => {
+    if (!confirm('Bu kuponu silmek istediğinizden emin misiniz?')) return;
+    try {
+      await fetch(`/api/admin/coupons?id=${id}`, { method: 'DELETE' });
+      fetchCoupons();
+    } catch {}
+  };
+
+  const fetchKoreTrendProducts = async (section: 'kore_trend' | 'makeup' | 'bestsellers' | 'exclusive') => {
     setKoreLoading(true);
     try {
       const res = await fetch(`/api/admin/kore-trends?section=${section}`);
@@ -1074,7 +1288,7 @@ export default function AdminDashboard() {
     setKoreSearchLoading(false);
   };
 
-  const addToKoreTrends = async (productId: number, section: 'kore_trend' | 'makeup') => {
+  const addToKoreTrends = async (productId: number, section: 'kore_trend' | 'makeup' | 'bestsellers' | 'exclusive') => {
     try {
       const res = await fetch('/api/admin/kore-trends', {
         method: 'POST',
@@ -1091,7 +1305,7 @@ export default function AdminDashboard() {
     }
   };
 
-  const removeFromKoreTrends = async (curatedId: number, section: 'kore_trend' | 'makeup') => {
+  const removeFromKoreTrends = async (curatedId: number, section: 'kore_trend' | 'makeup' | 'bestsellers' | 'exclusive') => {
     try {
       const res = await fetch(`/api/admin/kore-trends?id=${curatedId}`, { method: 'DELETE' });
       if (res.ok) fetchKoreTrendProducts(section);
@@ -1241,7 +1455,7 @@ export default function AdminDashboard() {
             </button>
           </div>
         </div>
-
+        
         {/* User Info */}
         {(sidebarOpen || mobileSidebarOpen) && (currentUserName || currentUserEmail) && (
           <div className="mx-3 mt-3 px-3 py-3 rounded-xl" style={{ background: 'rgba(146,208,170,0.06)', border: '1px solid rgba(146,208,170,0.12)' }}>
@@ -1355,6 +1569,48 @@ export default function AdminDashboard() {
             </button>
           )}
 
+          {/* Admin Users - Only for super admins */}
+          {(currentUserEmail === 'admin@merumy.com' || currentUserEmail === 'huseyin@merumy.com') && (
+            <button
+              onClick={() => { setActiveTab('admin-users'); setMobileSidebarOpen(false); }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all"
+              style={activeTab === 'admin-users' ? {
+                background: 'rgba(251,191,36,0.12)',
+                color: '#fbbf24',
+                border: '1px solid rgba(251,191,36,0.2)',
+              } : {
+                color: 'rgba(255,255,255,0.45)',
+                border: '1px solid transparent',
+              }}
+              onMouseEnter={e => { if (activeTab !== 'admin-users') { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'rgba(255,255,255,0.85)'; } }}
+              onMouseLeave={e => { if (activeTab !== 'admin-users') { e.currentTarget.style.background = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.45)'; } }}
+            >
+              <span className="text-lg flex-shrink-0">👤</span>
+              {(sidebarOpen || mobileSidebarOpen) && <span className="flex-1 text-left text-sm font-medium">Admin Kullanıcılar</span>}
+            </button>
+          )}
+
+          {/* Coupons - for duygu, buse, sena, serap */}
+          {(!allowedSections || allowedSections.includes('coupons') || ['admin@merumy.com','duygu@merumy.com','buse@merumy.com','sena@merumy.com','serap@merumy.com','huseyin@merumy.com'].includes(currentUserEmail)) && (
+            <button
+              onClick={() => { setActiveTab('coupons'); setMobileSidebarOpen(false); }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all"
+              style={activeTab === 'coupons' ? {
+                background: 'rgba(168,85,247,0.12)',
+                color: '#c084fc',
+                border: '1px solid rgba(168,85,247,0.2)',
+              } : {
+                color: 'rgba(255,255,255,0.45)',
+                border: '1px solid transparent',
+              }}
+              onMouseEnter={e => { if (activeTab !== 'coupons') { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'rgba(255,255,255,0.85)'; } }}
+              onMouseLeave={e => { if (activeTab !== 'coupons') { e.currentTarget.style.background = ''; e.currentTarget.style.color = 'rgba(255,255,255,0.45)'; } }}
+            >
+              <span className="text-lg flex-shrink-0">🎟️</span>
+              {(sidebarOpen || mobileSidebarOpen) && <span className="flex-1 text-left text-sm font-medium">İndirim Kodları</span>}
+            </button>
+          )}
+
           {/* Activity Log - Only for admin@merumy.com */}
           {currentUserEmail === 'admin@merumy.com' && (!allowedSections || allowedSections.includes('activity')) && (
             <button
@@ -1463,13 +1719,15 @@ export default function AdminDashboard() {
                   {activeTab === 'fatura' && 'Fatura Yönetimi'}
                   {activeTab === 'analytics' && 'Analiz & Raporlar'}
                   {activeTab === 'mail-marketing' && 'Mail Marketing'}
-                </h1>
+                  {activeTab === 'admin-users' && 'Admin Kullanıcılar'}
+                  {activeTab === 'coupons' && 'İndirim Kodları'}
+              </h1>
                 {currentUserName && (
                   <p className="text-xs hidden sm:block" style={{ color: 'rgba(255,255,255,0.35)' }}>
                     Hoş geldin, <span style={{ color: '#92D0AA' }}>{currentUserName}</span> 👋
                   </p>
                 )}
-              </div>
+            </div>
             </div>
 
             <div className="flex items-center gap-2 flex-shrink-0">
@@ -1615,7 +1873,7 @@ export default function AdminDashboard() {
               {/* Orders Table */}
               <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full">
+                  <table className="w-full min-w-[800px]">
                     <thead>
                       <tr className="border-b border-slate-700">
                         <th className="py-4 px-4 text-slate-400">
@@ -1852,7 +2110,7 @@ export default function AdminDashboard() {
               {/* Products Table */}
               <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full">
+                  <table className="w-full min-w-[700px]">
                     <thead>
                       <tr className="border-b border-slate-700">
                         <th className="text-left py-3 px-4 text-slate-400 font-medium text-sm w-16">Görsel</th>
@@ -2011,7 +2269,7 @@ export default function AdminDashboard() {
 
               <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full">
+                  <table className="w-full min-w-[600px]">
                     <thead>
                       <tr className="border-b border-slate-700">
                         <th className="text-left py-4 px-6 text-slate-400 font-medium text-sm">Kullanıcı</th>
@@ -2130,7 +2388,7 @@ export default function AdminDashboard() {
               {/* Report Table */}
               <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full">
+                  <table className="w-full min-w-[600px]">
                     <thead>
                       <tr className="border-b border-slate-700">
                         <th className="text-left py-4 px-4 text-slate-400 font-medium text-sm">#</th>
@@ -2394,16 +2652,28 @@ export default function AdminDashboard() {
               <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
                 <h2 className="text-xl font-bold text-white mb-4">🌸 Kore Trendleri Yönetimi</h2>
                 <p className="text-slate-400 text-sm mb-5">Anasayfadaki Kore Trendleri, En Çok Satanlar ve Merumy.com'a Özel bölümlerinde gösterilecek ürünleri seçin. Her sayfa yenilemesinde bu listeden rastgele ürünler gösterilir.</p>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3">
                   <button
                     onClick={() => { setKoreSection('kore_trend'); fetchKoreTrendProducts('kore_trend'); setKoreSearch(''); setKoreSearchResults([]); }}
-                    className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all ${koreSection === 'kore_trend' ? 'bg-emerald-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+                    className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all ${koreSection === 'kore_trend' ? 'bg-emerald-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
                   >
-                    🌸 Kore Trendleri / En Çok Satanlar / Özel
+                    🌸 Kore Trendleri
+                  </button>
+                  <button
+                    onClick={() => { setKoreSection('bestsellers'); fetchKoreTrendProducts('bestsellers'); setKoreSearch(''); setKoreSearchResults([]); }}
+                    className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all ${koreSection === 'bestsellers' ? 'bg-amber-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+                  >
+                    🏆 En Çok Satanlar
+                  </button>
+                  <button
+                    onClick={() => { setKoreSection('exclusive'); fetchKoreTrendProducts('exclusive'); setKoreSearch(''); setKoreSearchResults([]); }}
+                    className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all ${koreSection === 'exclusive' ? 'bg-indigo-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+                  >
+                    ⭐ Merumy.com'a Özel
                   </button>
                   <button
                     onClick={() => { setKoreSection('makeup'); fetchKoreTrendProducts('makeup'); setKoreSearch(''); setKoreSearchResults([]); }}
-                    className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all ${koreSection === 'makeup' ? 'bg-pink-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+                    className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all ${koreSection === 'makeup' ? 'bg-pink-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
                   >
                     💄 Korean Make Up
                   </button>
@@ -2453,7 +2723,7 @@ export default function AdminDashboard() {
               <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
                 <div className="p-5 border-b border-slate-700 flex items-center justify-between">
                   <h3 className="text-white font-semibold">
-                    {koreSection === 'kore_trend' ? '🌸 Kore Trendleri Listesi' : '💄 Makyaj Ürünleri Listesi'}
+                    {koreSection === 'kore_trend' ? '🌸 Kore Trendleri Listesi' : koreSection === 'bestsellers' ? '🏆 En Çok Satanlar Listesi' : koreSection === 'exclusive' ? '⭐ Merumy.com\'a Özel Listesi' : '💄 Makyaj Ürünleri Listesi'}
                     <span className="ml-2 text-slate-400 text-sm font-normal">({koreTrendProducts.length} ürün)</span>
                   </h3>
                   <button onClick={() => fetchKoreTrendProducts(koreSection)} className="text-slate-400 hover:text-white text-sm">🔄 Yenile</button>
@@ -2669,7 +2939,7 @@ export default function AdminDashboard() {
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
+                    <table className="w-full min-w-[700px] text-sm">
                       <thead>
                         <tr className="border-b border-slate-700 bg-slate-750">
                           <th className="px-3 py-3">
@@ -3379,7 +3649,7 @@ export default function AdminDashboard() {
                         <h3 className="text-white font-semibold">Günlük Detay</h3>
                       </div>
                       <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
+                        <table className="w-full min-w-[600px] text-sm">
                           <thead>
                             <tr className="border-b border-slate-700 bg-slate-900/50">
                               <th className="text-left px-4 py-3 text-slate-400 font-medium">Tarih</th>
@@ -3583,7 +3853,7 @@ export default function AdminDashboard() {
                   {/* Table */}
                   <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
                     <div className="overflow-x-auto">
-                      <table className="w-full text-sm">
+                      <table className="w-full min-w-[600px] text-sm">
                         <thead>
                           <tr className="border-b border-slate-700 bg-slate-900/50">
                             <th className="text-left px-4 py-3 text-slate-400 font-medium">#</th>
@@ -3971,10 +4241,10 @@ export default function AdminDashboard() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   type="button"
-                  onClick={() => setEditForm({ ...editForm, isActive: !editForm.isActive })}
+                    onClick={() => setEditForm({ ...editForm, isActive: !editForm.isActive })}
                   className="flex items-center gap-3 rounded-xl p-4 flex-1 text-left transition-all"
                   style={{ background: editForm.isActive ? 'rgba(146,208,170,0.08)' : 'rgba(255,255,255,0.04)', border: `1px solid ${editForm.isActive ? 'rgba(146,208,170,0.2)' : 'rgba(255,255,255,0.07)'}` }}
-                >
+                  >
                   <div className={`w-11 h-6 rounded-full transition-colors relative flex-shrink-0 ${editForm.isActive ? 'bg-[#92D0AA]' : ''}`}
                     style={!editForm.isActive ? { background: 'rgba(255,255,255,0.15)' } : {}}>
                     <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${editForm.isActive ? 'translate-x-6' : 'translate-x-1'}`} />
@@ -3986,10 +4256,10 @@ export default function AdminDashboard() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setEditForm({ ...editForm, isFeatured: !editForm.isFeatured })}
+                    onClick={() => setEditForm({ ...editForm, isFeatured: !editForm.isFeatured })}
                   className="flex items-center gap-3 rounded-xl p-4 flex-1 text-left transition-all"
                   style={{ background: editForm.isFeatured ? 'rgba(251,191,36,0.08)' : 'rgba(255,255,255,0.04)', border: `1px solid ${editForm.isFeatured ? 'rgba(251,191,36,0.2)' : 'rgba(255,255,255,0.07)'}` }}
-                >
+                  >
                   <div className={`w-11 h-6 rounded-full transition-colors relative flex-shrink-0`}
                     style={{ background: editForm.isFeatured ? '#f59e0b' : 'rgba(255,255,255,0.15)' }}>
                     <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${editForm.isFeatured ? 'translate-x-6' : 'translate-x-1'}`} />
@@ -4082,7 +4352,7 @@ export default function AdminDashboard() {
                         }
                       }}
                     />
-                  </label>
+                </label>
 
                   {/* URL input */}
                   <div className="flex gap-2">
@@ -4144,6 +4414,362 @@ export default function AdminDashboard() {
                     Kaydet
                   </>
                 )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── ADMIN USERS TAB ── */}
+      {activeTab === 'admin-users' && (
+        <div className="p-4 md:p-6 space-y-6 max-w-5xl mx-auto">
+          <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-xl font-bold text-white">👤 Admin Kullanıcı Yönetimi</h2>
+                <p className="text-slate-400 text-sm mt-1">Admin paneline erişen kullanıcıları yönetin.</p>
+              </div>
+              <button
+                onClick={() => { setShowNewAdminUserForm(true); setAdminUserMsg(null); }}
+                className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-medium transition-colors"
+              >+ Yeni Admin</button>
+            </div>
+            {adminUserMsg && (
+              <div className={`mb-4 px-4 py-3 rounded-xl text-sm font-medium ${adminUserMsg.type === 'success' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25' : 'bg-red-500/15 text-red-400 border border-red-500/25'}`}>
+                {adminUserMsg.text}
+              </div>
+            )}
+
+            {/* New Admin User Form */}
+            {showNewAdminUserForm && (
+              <div className="mb-6 bg-slate-700 rounded-xl p-5 border border-slate-600">
+                <h3 className="text-white font-semibold mb-4">Yeni Admin Oluştur</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                  <input type="text" placeholder="Ad Soyad" value={newAdminUserForm.name}
+                    onChange={e => setNewAdminUserForm({...newAdminUserForm, name: e.target.value})}
+                    className="px-3 py-2.5 bg-slate-600 border border-slate-500 rounded-xl text-white placeholder-slate-400 text-sm focus:outline-none focus:border-amber-400" />
+                  <input type="email" placeholder="E-posta" value={newAdminUserForm.email}
+                    onChange={e => setNewAdminUserForm({...newAdminUserForm, email: e.target.value})}
+                    className="px-3 py-2.5 bg-slate-600 border border-slate-500 rounded-xl text-white placeholder-slate-400 text-sm focus:outline-none focus:border-amber-400" />
+                  <input type="text" placeholder="Başlangıç Şifresi" value={newAdminUserForm.password}
+                    onChange={e => setNewAdminUserForm({...newAdminUserForm, password: e.target.value})}
+                    className="px-3 py-2.5 bg-slate-600 border border-slate-500 rounded-xl text-white placeholder-slate-400 text-sm focus:outline-none focus:border-amber-400" />
+                  <select value={newAdminUserForm.role}
+                    onChange={e => setNewAdminUserForm({...newAdminUserForm, role: e.target.value, allowedSections: e.target.value === 'super_admin' ? [] : newAdminUserForm.allowedSections})}
+                    className="px-3 py-2.5 bg-slate-600 border border-slate-500 rounded-xl text-white text-sm focus:outline-none focus:border-amber-400">
+                    <option value="admin">Admin</option>
+                    <option value="super_admin">Super Admin (Tam Yetki)</option>
+                  </select>
+                </div>
+                {newAdminUserForm.role !== 'super_admin' && (
+                  <div className="mb-4">
+                    <p className="text-slate-400 text-xs mb-2">Erişim İzinleri (boş = tüm bölümler):</p>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        {id:'orders',label:'Siparişler'},{id:'products',label:'Ürün Yönetimi'},
+                        {id:'users',label:'Kullanıcılar'},{id:'reports',label:'Satış Raporu'},
+                        {id:'hero',label:'Hero Yönetimi'},{id:'kore-trends',label:'Kore Trendleri'},
+                        {id:'fatura',label:'Fatura'},{id:'analytics',label:'Analiz'},
+                        {id:'mail-marketing',label:'Mail Marketing'},{id:'coupons',label:'İndirim Kodları'},
+                      ].map(s => (
+                        <button key={s.id} type="button"
+                          onClick={() => {
+                            const cur = newAdminUserForm.allowedSections;
+                            setNewAdminUserForm({...newAdminUserForm, allowedSections: cur.includes(s.id) ? cur.filter(x => x !== s.id) : [...cur, s.id]});
+                          }}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${newAdminUserForm.allowedSections.includes(s.id) ? 'bg-amber-500 text-white' : 'bg-slate-600 text-slate-300 hover:bg-slate-500'}`}
+                        >{s.label}</button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div className="flex gap-2 justify-end">
+                  <button onClick={() => setShowNewAdminUserForm(false)} className="px-4 py-2 bg-slate-600 text-slate-300 rounded-xl text-sm hover:bg-slate-500 transition-colors">İptal</button>
+                  <button onClick={handleCreateAdminUser} disabled={savingAdminUser} className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-medium transition-colors disabled:opacity-50">
+                    {savingAdminUser ? 'Kaydediliyor...' : 'Oluştur'}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Admin Users List */}
+            {adminUsersLoading ? (
+              <div className="flex justify-center py-12"><div className="w-8 h-8 border-2 border-amber-500/30 border-t-amber-500 rounded-full animate-spin" /></div>
+            ) : (
+              <div className="space-y-3">
+                {adminUsers.map((u: any) => (
+                  <div key={u.id} className="bg-slate-700 rounded-xl p-4 border border-slate-600">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-white font-semibold text-sm">{u.name}</span>
+                          <span className={`px-2 py-0.5 rounded-full text-[11px] font-medium ${u.role === 'super_admin' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-slate-600 text-slate-300'}`}>
+                            {u.role === 'super_admin' ? '⭐ Super Admin' : '🔧 Admin'}
+                          </span>
+                          {u.must_change_password === 1 && (
+                            <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-orange-500/20 text-orange-400 border border-orange-500/30">🔑 Şifre Değiştirilmeli</span>
+                          )}
+                        </div>
+                        <p className="text-slate-400 text-xs mt-1">{u.email}</p>
+                        <div className="flex flex-wrap gap-1.5 mt-2">
+                          {u.allowedSections ? (
+                            u.allowedSections.map((s: string) => (
+                              <span key={s} className="px-2 py-0.5 bg-slate-600 text-slate-300 rounded text-[10px]">{s}</span>
+                            ))
+                          ) : (
+                            <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-[10px]">Tüm bölümler</span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex gap-2 flex-shrink-0">
+                        <button
+                          onClick={() => {
+                            setEditingAdminUser({...u, mode: 'password'});
+                            setNewPasswordForUser('');
+                            setAdminUserEditSections(u.allowedSections || []);
+                            setAdminUserEditRole(u.role || 'admin');
+                          }}
+                          className="px-3 py-1.5 bg-slate-600 hover:bg-slate-500 text-slate-300 rounded-lg text-xs transition-colors"
+                        >🔑 Şifre</button>
+                        <button
+                          onClick={() => {
+                            setEditingAdminUser({...u, mode: 'permissions'});
+                            setAdminUserEditSections(u.allowedSections || []);
+                            setAdminUserEditRole(u.role || 'admin');
+                          }}
+                          className="px-3 py-1.5 bg-slate-600 hover:bg-slate-500 text-slate-300 rounded-lg text-xs transition-colors"
+                        >✏️ İzinler</button>
+                        <button
+                          onClick={() => handleDeleteAdminUser(u.id)}
+                          className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-xs transition-colors"
+                        >🗑️</button>
+                      </div>
+                    </div>
+
+                    {/* Inline edit for this user */}
+                    {editingAdminUser?.id === u.id && editingAdminUser.mode === 'password' && (
+                      <div className="mt-4 pt-4 border-t border-slate-600">
+                        <p className="text-slate-400 text-xs mb-2">Yeni şifre:</p>
+                        <div className="flex gap-2">
+                          <input type="text" placeholder="Yeni şifre (min 6 karakter)" value={newPasswordForUser}
+                            onChange={e => setNewPasswordForUser(e.target.value)}
+                            className="flex-1 px-3 py-2 bg-slate-600 border border-slate-500 rounded-xl text-white placeholder-slate-400 text-sm focus:outline-none focus:border-amber-400" />
+                          <button onClick={() => handleUpdateAdminUserPassword(u.id)} disabled={savingAdminUser}
+                            className="px-3 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-medium transition-colors disabled:opacity-50">
+                            {savingAdminUser ? '...' : 'Kaydet'}
+                          </button>
+                          <button onClick={() => setEditingAdminUser(null)} className="px-3 py-2 bg-slate-600 text-slate-300 rounded-xl text-sm hover:bg-slate-500 transition-colors">İptal</button>
+                        </div>
+                      </div>
+                    )}
+
+                    {editingAdminUser?.id === u.id && editingAdminUser.mode === 'permissions' && (
+                      <div className="mt-4 pt-4 border-t border-slate-600">
+                        <div className="mb-3">
+                          <p className="text-slate-400 text-xs mb-2">Rol:</p>
+                          <select value={adminUserEditRole} onChange={e => setAdminUserEditRole(e.target.value)}
+                            className="px-3 py-2 bg-slate-600 border border-slate-500 rounded-xl text-white text-sm focus:outline-none focus:border-amber-400">
+                            <option value="admin">Admin</option>
+                            <option value="super_admin">Super Admin (Tam Yetki)</option>
+                          </select>
+                        </div>
+                        {adminUserEditRole !== 'super_admin' && (
+                          <div className="mb-3">
+                            <p className="text-slate-400 text-xs mb-2">Erişim İzinleri (boş = tüm bölümler):</p>
+                            <div className="flex flex-wrap gap-2">
+                              {[
+                                {id:'orders',label:'Siparişler'},{id:'products',label:'Ürün Yönetimi'},
+                                {id:'users',label:'Kullanıcılar'},{id:'reports',label:'Satış Raporu'},
+                                {id:'hero',label:'Hero Yönetimi'},{id:'kore-trends',label:'Kore Trendleri'},
+                                {id:'fatura',label:'Fatura'},{id:'analytics',label:'Analiz'},
+                                {id:'mail-marketing',label:'Mail Marketing'},{id:'coupons',label:'İndirim Kodları'},
+                              ].map(s => (
+                                <button key={s.id} type="button"
+                                  onClick={() => setAdminUserEditSections(prev => prev.includes(s.id) ? prev.filter(x => x !== s.id) : [...prev, s.id])}
+                                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${adminUserEditSections.includes(s.id) ? 'bg-amber-500 text-white' : 'bg-slate-600 text-slate-300 hover:bg-slate-500'}`}
+                                >{s.label}</button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        <div className="flex gap-2">
+                          <button onClick={() => handleUpdateAdminUserPermissions(u.id)} disabled={savingAdminUser}
+                            className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-medium transition-colors disabled:opacity-50">
+                            {savingAdminUser ? 'Kaydediliyor...' : 'İzinleri Kaydet'}
+                          </button>
+                          <button onClick={() => setEditingAdminUser(null)} className="px-4 py-2 bg-slate-600 text-slate-300 rounded-xl text-sm hover:bg-slate-500 transition-colors">İptal</button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ── COUPONS TAB ── */}
+      {activeTab === 'coupons' && (
+        <div className="p-4 md:p-6 space-y-6 max-w-5xl mx-auto">
+          <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-xl font-bold text-white">🎟️ İndirim Kodu Yönetimi</h2>
+                <p className="text-slate-400 text-sm mt-1">Kampanya kodları oluşturun ve yönetin.</p>
+              </div>
+              <button
+                onClick={() => { setShowNewCouponForm(true); setCouponMsg(null); }}
+                className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-xl text-sm font-medium transition-colors"
+              >+ Yeni Kod</button>
+            </div>
+
+            {couponMsg && (
+              <div className={`mb-4 px-4 py-3 rounded-xl text-sm font-medium ${couponMsg.type === 'success' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25' : 'bg-red-500/15 text-red-400 border border-red-500/25'}`}>
+                {couponMsg.text}
+              </div>
+            )}
+
+            {/* New Coupon Form */}
+            {showNewCouponForm && (
+              <div className="mb-6 bg-slate-700 rounded-xl p-5 border border-slate-600">
+                <h3 className="text-white font-semibold mb-4">Yeni İndirim Kodu</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                  <div>
+                    <label className="text-slate-400 text-xs mb-1 block">Kupon Kodu *</label>
+                    <input type="text" placeholder="ör: MERUMY2026" value={newCouponForm.code}
+                      onChange={e => setNewCouponForm({...newCouponForm, code: e.target.value.toUpperCase()})}
+                      className="w-full px-3 py-2.5 bg-slate-600 border border-slate-500 rounded-xl text-white placeholder-slate-400 text-sm focus:outline-none focus:border-purple-400 uppercase" />
+                  </div>
+                  <div>
+                    <label className="text-slate-400 text-xs mb-1 block">Açıklama</label>
+                    <input type="text" placeholder="ör: 5000 TL üzeri 1000 TL indirim" value={newCouponForm.description}
+                      onChange={e => setNewCouponForm({...newCouponForm, description: e.target.value})}
+                      className="w-full px-3 py-2.5 bg-slate-600 border border-slate-500 rounded-xl text-white placeholder-slate-400 text-sm focus:outline-none focus:border-purple-400" />
+                  </div>
+                  <div>
+                    <label className="text-slate-400 text-xs mb-1 block">İndirim Tipi *</label>
+                    <select value={newCouponForm.discountType}
+                      onChange={e => setNewCouponForm({...newCouponForm, discountType: e.target.value})}
+                      className="w-full px-3 py-2.5 bg-slate-600 border border-slate-500 rounded-xl text-white text-sm focus:outline-none focus:border-purple-400">
+                      <option value="fixed">Sabit Tutar (₺)</option>
+                      <option value="percentage">Yüzde (%)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-slate-400 text-xs mb-1 block">İndirim Değeri *</label>
+                    <input type="number" placeholder={newCouponForm.discountType === 'fixed' ? 'ör: 1000' : 'ör: 20'} value={newCouponForm.discountValue}
+                      onChange={e => setNewCouponForm({...newCouponForm, discountValue: e.target.value})}
+                      className="w-full px-3 py-2.5 bg-slate-600 border border-slate-500 rounded-xl text-white placeholder-slate-400 text-sm focus:outline-none focus:border-purple-400" />
+                  </div>
+                  <div>
+                    <label className="text-slate-400 text-xs mb-1 block">Minimum Sepet Tutarı (₺)</label>
+                    <input type="number" placeholder="ör: 5000" value={newCouponForm.minOrderAmount}
+                      onChange={e => setNewCouponForm({...newCouponForm, minOrderAmount: e.target.value})}
+                      className="w-full px-3 py-2.5 bg-slate-600 border border-slate-500 rounded-xl text-white placeholder-slate-400 text-sm focus:outline-none focus:border-purple-400" />
+                  </div>
+                  <div>
+                    <label className="text-slate-400 text-xs mb-1 block">Max İndirim Limiti (₺, yüzde için)</label>
+                    <input type="number" placeholder="ör: 500" value={newCouponForm.maxDiscountAmount}
+                      onChange={e => setNewCouponForm({...newCouponForm, maxDiscountAmount: e.target.value})}
+                      className="w-full px-3 py-2.5 bg-slate-600 border border-slate-500 rounded-xl text-white placeholder-slate-400 text-sm focus:outline-none focus:border-purple-400" />
+                  </div>
+                  <div>
+                    <label className="text-slate-400 text-xs mb-1 block">Kullanım Limiti (boş = sınırsız)</label>
+                    <input type="number" placeholder="ör: 100" value={newCouponForm.usageLimit}
+                      onChange={e => setNewCouponForm({...newCouponForm, usageLimit: e.target.value})}
+                      className="w-full px-3 py-2.5 bg-slate-600 border border-slate-500 rounded-xl text-white placeholder-slate-400 text-sm focus:outline-none focus:border-purple-400" />
+                  </div>
+                  <div>
+                    <label className="text-slate-400 text-xs mb-1 block">Son Kullanma Tarihi</label>
+                    <input type="date" value={newCouponForm.expiresAt}
+                      onChange={e => setNewCouponForm({...newCouponForm, expiresAt: e.target.value})}
+                      className="w-full px-3 py-2.5 bg-slate-600 border border-slate-500 rounded-xl text-white text-sm focus:outline-none focus:border-purple-400" />
+                  </div>
+                </div>
+                <div className="flex gap-2 justify-end">
+                  <button onClick={() => setShowNewCouponForm(false)} className="px-4 py-2 bg-slate-600 text-slate-300 rounded-xl text-sm hover:bg-slate-500 transition-colors">İptal</button>
+                  <button onClick={handleCreateCoupon} disabled={savingCoupon} className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-xl text-sm font-medium transition-colors disabled:opacity-50">
+                    {savingCoupon ? 'Kaydediliyor...' : 'Oluştur'}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Coupons List */}
+            {couponsLoading ? (
+              <div className="flex justify-center py-12"><div className="w-8 h-8 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" /></div>
+            ) : coupons.length === 0 ? (
+              <div className="text-center py-12 text-slate-500">
+                <p className="text-4xl mb-3">🎟️</p>
+                <p>Henüz indirim kodu oluşturulmamış</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {coupons.map((c: any) => {
+                  const isExpired = c.expires_at && new Date(c.expires_at) < new Date();
+                  const isActive = c.is_active && !isExpired;
+                  return (
+                    <div key={c.id} className={`rounded-xl p-4 border ${isActive ? 'bg-slate-700 border-slate-600' : 'bg-slate-800 border-slate-700 opacity-60'}`}>
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-white font-bold text-base font-mono tracking-wider">{c.code}</span>
+                            <span className={`px-2 py-0.5 rounded-full text-[11px] font-medium ${isActive ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-600 text-slate-400'}`}>
+                              {isExpired ? '⏰ Süresi Dolmuş' : isActive ? '✅ Aktif' : '❌ Pasif'}
+                            </span>
+                            {c.brand_name && <span className="px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded-full text-[11px]">🏷️ {c.brand_name}</span>}
+                          </div>
+                          <p className="text-slate-400 text-xs mt-1">{c.description || '-'}</p>
+                          <div className="flex flex-wrap gap-3 mt-2 text-xs text-slate-400">
+                            <span>💰 {c.discount_type === 'fixed' ? `₺${Number(c.discount_value).toFixed(0)} indirim` : `%${c.discount_value} indirim`}</span>
+                            {c.min_order_amount && <span>🛒 Min ₺{Number(c.min_order_amount).toFixed(0)}</span>}
+                            {c.usage_limit && <span>📊 {c.used_count || 0}/{c.usage_limit} kullanım</span>}
+                            {c.expires_at && <span>📅 {new Date(c.expires_at).toLocaleDateString('tr-TR')}</span>}
+                          </div>
+                        </div>
+                        <div className="flex gap-2 flex-shrink-0">
+                          <button
+                            onClick={() => handleToggleCoupon(c.id, c.is_active)}
+                            className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${c.is_active ? 'bg-red-500/10 hover:bg-red-500/20 text-red-400' : 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400'}`}
+                          >{c.is_active ? 'Pasif Yap' : 'Aktif Yap'}</button>
+                          <button onClick={() => handleDeleteCoupon(c.id)} className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-xs transition-colors">🗑️</button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ── MUST CHANGE PASSWORD MODAL ── */}
+      {mustChangePassword && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div className="bg-slate-800 rounded-2xl p-8 w-full max-w-md mx-4 border border-amber-500/30 shadow-2xl">
+            <div className="text-center mb-6">
+              <span className="text-5xl">🔑</span>
+              <h2 className="text-xl font-bold text-white mt-3">Şifrenizi Değiştirin</h2>
+              <p className="text-slate-400 text-sm mt-2">İlk girişinizde şifrenizi değiştirmeniz gerekmektedir.</p>
+            </div>
+            {changePasswordError && (
+              <div className="mb-4 px-4 py-3 bg-red-500/15 text-red-400 border border-red-500/25 rounded-xl text-sm">
+                {changePasswordError}
+              </div>
+            )}
+            <div className="space-y-3">
+              <input type="password" placeholder="Yeni Şifre (min 6 karakter)" value={changePasswordValue}
+                onChange={e => setChangePasswordValue(e.target.value)}
+                className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-slate-400 text-sm focus:outline-none focus:border-amber-400" />
+              <input type="password" placeholder="Şifreyi Tekrar Girin" value={changePasswordConfirm}
+                onChange={e => setChangePasswordConfirm(e.target.value)}
+                className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-slate-400 text-sm focus:outline-none focus:border-amber-400"
+                onKeyDown={e => { if (e.key === 'Enter') handleOwnPasswordChange(); }} />
+              <button onClick={handleOwnPasswordChange} disabled={changingPassword}
+                className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-medium text-sm transition-colors disabled:opacity-50">
+                {changingPassword ? 'Değiştiriliyor...' : 'Şifremi Değiştir'}
               </button>
             </div>
           </div>

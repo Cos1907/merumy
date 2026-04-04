@@ -218,7 +218,7 @@ export default function SiparislerimPage() {
                             )}
                           </div>
                           <div className="flex items-center space-x-4">
-                            <span className="font-bold text-accent">₺{order.total.toFixed(2)}</span>
+                            <span className="font-bold text-accent">₺{Number(order.total).toFixed(2)}</span>
                             <Link
                               href={`/hesabim/siparislerim/${order.orderId}`}
                               className="flex items-center text-sm font-medium text-accent hover:underline"

@@ -413,9 +413,7 @@ export default function Header() {
                       >
                         <X size={15} />
                       </button>
-                    ) : (
-                      <kbd className="text-[11px] text-gray-400 border border-gray-200 rounded px-1.5 py-0.5 font-mono bg-gray-50">⌘/</kbd>
-                    )}
+                    ) : null}
                   </div>
                 </form>
 

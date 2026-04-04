@@ -109,7 +109,7 @@ export default function CartPage() {
                         )}
 
                         <div className="mt-3 text-base font-bold" style={{ color: '#92D0AA' }}>
-                          ₺{item.product.price.toFixed(2)}
+                          ₺{Number(item.product.price).toFixed(2)}
                         </div>
 
 

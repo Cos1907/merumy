@@ -33,12 +33,12 @@ async function applyLivePrices(payload: any): Promise<any> {
         ...item,
         product: {
           ...item.product,
-          price: live.price,
-          originalPrice: (live.originalPrice && live.originalPrice > 0)
-            ? live.originalPrice
-            : item.product.originalPrice,
+          price: Number(live.price) || 0,
+          originalPrice: (live.originalPrice && Number(live.originalPrice) > 0)
+            ? Number(live.originalPrice)
+            : Number(item.product.originalPrice) || 0,
           inStock: live.stockStatus !== 'out_of_stock',
-          stock: live.stock,
+          stock: Number(live.stock) || 0,
         },
       }
     })

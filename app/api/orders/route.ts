@@ -83,22 +83,106 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ orders: [] })
     }
     
+    // 1. JSON'dan siparişleri al
     const orders = getOrders()
-    
-    // userId veya email ile eşleşen siparişleri getir
     const userOrders = orders.filter(o => {
-      // userId eşleşmesi
       if (userId && o.userId === userId) return true
-      // Email eşleşmesi (hem userId hem de email ile kontrol et)
       if (userEmail && o.customerEmail && o.customerEmail.toLowerCase() === userEmail.toLowerCase()) return true
       return false
     })
+
+    // 2. Veritabanından da siparişleri al
+    let dbOrders: any[] = []
+    try {
+      const conditions: string[] = []
+      const params: any[] = []
+      if (userEmail) {
+        conditions.push('o.customer_email = ?')
+        params.push(userEmail)
+      }
+      if (conditions.length > 0) {
+        const ordersRaw = await query<any[]>(
+          `SELECT o.id, o.order_id, o.dekont_id, o.customer_name, o.customer_email,
+                  o.customer_phone, o.shipping_address, o.shipping_city, o.shipping_district,
+                  o.subtotal, o.shipping_cost, o.discount_amount, o.total,
+                  o.status, o.created_at
+           FROM orders o WHERE ${conditions.join(' AND ')}
+           ORDER BY o.created_at DESC LIMIT 50`,
+          params
+        )
+        if (ordersRaw && ordersRaw.length > 0) {
+          const orderIds = ordersRaw.map((o: any) => o.id)
+          let itemsByOrderId: Record<number, any[]> = {}
+          if (orderIds.length > 0) {
+            const placeholders = orderIds.map(() => '?').join(',')
+            const items = await query<any[]>(
+              `SELECT oi.order_id, oi.product_name, oi.quantity, oi.unit_price,
+                      oi.product_barcode, oi.product_snapshot
+               FROM order_items oi WHERE oi.order_id IN (${placeholders})`,
+              orderIds
+            )
+            for (const item of (items || [])) {
+              if (!itemsByOrderId[item.order_id]) itemsByOrderId[item.order_id] = []
+              let snapshot: any = {}
+              try { snapshot = typeof item.product_snapshot === 'string' ? JSON.parse(item.product_snapshot) : (item.product_snapshot || {}) } catch {}
+              itemsByOrderId[item.order_id].push({
+                name: item.product_name,
+                quantity: item.quantity,
+                price: Number(item.unit_price),
+                barcode: item.product_barcode,
+                image: snapshot.image || snapshot.imageUrl || '',
+                brand: snapshot.brand || '',
+                slug: snapshot.slug || '',
+              })
+            }
+          }
+          dbOrders = ordersRaw.map((o: any) => ({
+            id: o.id,
+            orderId: o.order_id,
+            dekontId: o.dekont_id,
+            userId: userEmail || '',
+            customerName: o.customer_name,
+            customerEmail: o.customer_email,
+            customerPhone: o.customer_phone,
+            address: [o.shipping_address, o.shipping_city, o.shipping_district].filter(Boolean).join(', '),
+            subtotal: Number(o.subtotal),
+            shipping: Number(o.shipping_cost || 0),
+            total: Number(o.total),
+            status: o.status,
+            items: itemsByOrderId[o.id] || [],
+            createdAt: o.created_at,
+          }))
+        }
+      }
+    } catch (dbErr) {
+      console.error('Failed to fetch orders from DB:', dbErr)
+    }
+
+    // 3. Merge JSON and DB orders - deduplicate by orderId
+    const seenOrderIds = new Set<string>()
+    const mergedOrders: any[] = []
+    
+    // Add JSON orders first
+    for (const o of userOrders) {
+      if (!seenOrderIds.has(o.orderId)) {
+        seenOrderIds.add(o.orderId)
+        mergedOrders.push(o)
+      }
+    }
+    
+    // Add DB orders that aren't already in JSON
+    for (const o of dbOrders) {
+      if (!seenOrderIds.has(o.orderId)) {
+        seenOrderIds.add(o.orderId)
+        mergedOrders.push(o)
+      }
+    }
     
     // En yeni siparişler önce
-    userOrders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    mergedOrders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 
     // Enrich items with images from DB where missing
-    const enrichedOrders = await Promise.all(userOrders.map(async (order) => {
+    const enrichedOrders = await Promise.all(mergedOrders.map(async (order) => {
       if (!order.items || order.items.length === 0) return order
       const enrichedItems = await Promise.all(order.items.map(async (item: any) => {
         if (item.image && item.image !== 'null' && item.image !== '') return item

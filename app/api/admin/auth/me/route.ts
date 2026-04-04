@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     }
 
     const session = await queryOne<any>(
-      `SELECT s.*, u.email, u.name, u.role, u.allowed_sections
+      `SELECT s.*, u.email, u.name, u.role, u.allowed_sections, u.must_change_password
        FROM admin_sessions s
        LEFT JOIN admin_users u ON u.id = s.user_id
        WHERE s.session_token = ? AND s.expires_at > NOW()`,
@@ -32,6 +32,7 @@ export async function GET(request: NextRequest) {
         name: session.name || '',
         role: session.role || 'admin',
         allowedSections: session.allowed_sections ? JSON.parse(session.allowed_sections) : null,
+        mustChangePassword: session.must_change_password === 1,
       }
     })
   } catch {

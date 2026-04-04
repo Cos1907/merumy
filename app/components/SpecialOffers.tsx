@@ -45,7 +45,7 @@ export default function SpecialOffers() {
                     {p.name}
                   </p>
                   <p className="font-grift text-[#92D0AA] text-sm font-bold">
-                    ₺{p.price.toFixed(2)}
+                    ₺{Number(p.price).toFixed(2)}
                   </p>
                   <button
                     className="mt-2 font-grift font-bold uppercase text-white rounded-lg px-5 py-2 w-fit bg-[#92D0AA] hover:bg-[#7bb896] transition-colors text-xs"
@@ -82,7 +82,7 @@ export default function SpecialOffers() {
                     Merumy.com&apos;a Özel
                   </p>
                   <p className="font-grift mb-5 text-[#92D0AA] text-base font-bold">
-                    ₺{p.price.toFixed(2)}
+                    ₺{Number(p.price).toFixed(2)}
                   </p>
                   <button
                     className="font-grift font-bold uppercase text-white rounded-lg px-6 py-3 w-fit transition-colors bg-[#92D0AA] hover:bg-[#7bb896] text-sm lg:text-base"

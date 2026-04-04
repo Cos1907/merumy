@@ -722,7 +722,7 @@ export default function CheckoutPage() {
                       <div className="flex-1 min-w-0">
                         <h3 className="font-medium text-gray-800 line-clamp-2 text-sm">{item.product.name}</h3>
                         <p className="text-gray-500 text-sm mt-1">{item.quantity} adet</p>
-                        <p className="font-semibold text-accent mt-1">₺{(item.product.price * item.quantity).toFixed(2)}</p>
+                        <p className="font-semibold text-accent mt-1">₺{(Number(item.product.price) * item.quantity).toFixed(2)}</p>
                       </div>
                     </div>
                   ))}

@@ -71,7 +71,7 @@ export default function NewInStore() {
                   </h3>
                   <div className="flex items-center space-x-2 mb-2">
                     <span className="cs_fs_18 text-accent font-medium">
-                      ₺{product.price.toFixed(2)}
+                      ₺{Number(product.price).toFixed(2)}
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">

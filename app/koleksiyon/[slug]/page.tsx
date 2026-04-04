@@ -23,7 +23,7 @@ const collectionConfig: Record<string, { title: string; description: string; api
   'merumy-com-a-ozel': {
     title: "MERUMY.COM'A ÖZEL",
     description: "Sadece Merumy'de bulabileceğiniz özel ürünler",
-    apiSection: 'merumy_exclusive',
+    apiSection: 'exclusive',
   },
 }
 
