@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import fs from 'fs'
 import path from 'path'
+import { query } from '../../../lib/db'
 
 const ORDERS_PATH = path.join(process.cwd(), 'data', 'orders.json')
 const SESSIONS_PATH = path.join(process.cwd(), 'data', 'sessions.json')
@@ -49,7 +50,7 @@ export async function GET(
     const { orderId } = params
     const orders = getOrders()
 
-    const order = orders.find(
+    let order = orders.find(
       (o) =>
         o.orderId === orderId ||
         o.id === orderId
@@ -68,6 +69,27 @@ export async function GET(
       if (!isOwner) {
         return NextResponse.json({ error: 'Yetkisiz erişim' }, { status: 403 })
       }
+    }
+
+    // Enrich items with images from DB where missing
+    if (order.items && order.items.length > 0) {
+      const enrichedItems = await Promise.all(order.items.map(async (item: any) => {
+        if (item.image && item.image !== 'null' && item.image !== '') return item
+        try {
+          const rows = await query<any[]>(
+            `SELECT pi.image_url FROM products p
+             LEFT JOIN product_images pi ON pi.product_id = p.id AND pi.is_primary = 1
+             WHERE p.name = ? OR p.barcode = ?
+             LIMIT 1`,
+            [item.name || '', item.barcode || item.id || '']
+          )
+          if (rows && rows.length > 0 && rows[0].image_url) {
+            return { ...item, image: rows[0].image_url }
+          }
+        } catch { /* ignore */ }
+        return item
+      }))
+      order = { ...order, items: enrichedItems }
     }
 
     return NextResponse.json({ order })

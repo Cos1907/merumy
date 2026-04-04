@@ -65,6 +65,7 @@ export default function Header() {
   const [searchResults, setSearchResults] = useState<any[]>([])
   const [searchLoading, setSearchLoading] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [recentSearches, setRecentSearches] = useState<string[]>([])
   const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const router = useRouter()
   const pathname = usePathname()
@@ -94,6 +95,14 @@ export default function Header() {
   }
 
   useEffect(() => { setMounted(true) }, [])
+
+  // Load recent searches from localStorage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('merumy_recent_searches')
+      if (stored) setRecentSearches(JSON.parse(stored))
+    } catch { /* ignore */ }
+  }, [])
 
   useEffect(() => {
     if (!lastAddedAt) return
@@ -197,9 +206,30 @@ export default function Header() {
     }
   }, [searchValue])
 
+  function saveRecentSearch(q: string) {
+    try {
+      const updated = [q, ...recentSearches.filter(r => r !== q)].slice(0, 5)
+      setRecentSearches(updated)
+      localStorage.setItem('merumy_recent_searches', JSON.stringify(updated))
+    } catch { /* ignore */ }
+  }
+
+  function clearRecentSearches() {
+    setRecentSearches([])
+    try { localStorage.removeItem('merumy_recent_searches') } catch { /* ignore */ }
+  }
+
   function doSearch() {
     const q = searchValue.trim()
     if (!q) return
+    saveRecentSearch(q)
+    setSearchOpen(false)
+    setIsMobileSearchOpen(false)
+    router.push(`/shop?q=${encodeURIComponent(q)}`)
+  }
+
+  function doRecentSearch(q: string) {
+    saveRecentSearch(q)
     setSearchOpen(false)
     setIsMobileSearchOpen(false)
     router.push(`/shop?q=${encodeURIComponent(q)}`)
@@ -363,109 +393,95 @@ export default function Header() {
                   className="relative"
                   onSubmit={(e) => { e.preventDefault(); doSearch() }}
                 >
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#92D0AA] pointer-events-none">
-                    <Search size={18} />
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                    <Search size={17} />
                   </div>
                   <input
                     type="text"
-                    placeholder="Ürün, marka veya kategori ara..."
+                    placeholder="Ara..."
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
-                    onFocus={() => { if (searchResults.length > 0 || searchValue.trim()) setSearchOpen(true) }}
-                    className="w-full pl-11 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-full text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-[#92D0AA] focus:ring-2 focus:ring-[#92D0AA]/20 transition-all"
+                    onFocus={() => setSearchOpen(true)}
+                    className="w-full pl-11 pr-16 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-gray-300 focus:ring-2 focus:ring-gray-100 transition-all shadow-sm"
                   />
-                  {searchValue && (
-                    <button
-                      type="button"
-                      onClick={() => { setSearchValue(''); setSearchOpen(false); setSearchResults([]) }}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                      <X size={16} />
-                    </button>
-                  )}
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none">
+                    {searchValue ? (
+                      <button
+                        type="button"
+                        className="pointer-events-auto text-gray-400 hover:text-gray-600 transition-colors"
+                        onClick={() => { setSearchValue(''); setSearchOpen(true); setSearchResults([]) }}
+                      >
+                        <X size={15} />
+                      </button>
+                    ) : (
+                      <kbd className="text-[11px] text-gray-400 border border-gray-200 rounded px-1.5 py-0.5 font-mono bg-gray-50">⌘/</kbd>
+                    )}
+                  </div>
                 </form>
 
-                {/* Search Dropdown - Full overlay below */}
-                {searchOpen && searchValue.trim() && (
-                  <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-white rounded-2xl shadow-2xl border border-gray-100 z-[999] overflow-hidden">
-                    {searchLoading ? (
-                      <div className="flex items-center justify-center gap-3 py-8 text-gray-500">
-                        <div className="w-5 h-5 border-2 border-[#92D0AA]/30 border-t-[#92D0AA] rounded-full animate-spin" />
+                {/* Search Dropdown */}
+                {searchOpen && (
+                  <div className="absolute top-[calc(100%+6px)] left-0 right-0 bg-white rounded-2xl shadow-xl border border-gray-100 z-[999] overflow-hidden">
+
+                    {/* State: typing + loading */}
+                    {searchValue.trim() && searchLoading && (
+                      <div className="flex items-center justify-center gap-3 py-8 text-gray-400">
+                        <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-500 rounded-full animate-spin" />
                         <span className="text-sm">Aranıyor...</span>
                       </div>
-                    ) : searchResults.length === 0 ? (
-                      <div className="py-10 text-center">
-                        <Search size={32} className="mx-auto mb-3 text-gray-200" />
-                        <p className="text-gray-500 text-sm font-medium">&ldquo;{searchValue}&rdquo; için sonuç bulunamadı</p>
-                        <p className="text-gray-400 text-xs mt-1">Farklı anahtar kelimeler deneyin</p>
-                      </div>
-                    ) : (
-                      <>
-                        {/* Results header */}
-                        <div className="px-4 py-3 border-b border-gray-50 flex items-center justify-between">
-                          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                            {searchResults.length} sonuç bulundu
-                          </span>
-                          <button
-                            onClick={doSearch}
-                            className="text-xs font-semibold text-[#92D0AA] hover:underline"
-                          >
-                            Tümünü gör →
-                          </button>
-                        </div>
+                    )}
 
-                        {/* Product results */}
-                        <div className="max-h-[380px] overflow-y-auto">
+                    {/* State: typing + results */}
+                    {searchValue.trim() && !searchLoading && searchResults.length > 0 && (
+                      <>
+                        {/* Recent section (if any) */}
+                        {recentSearches.length > 0 && (
+                          <div className="px-4 pt-4 pb-2 border-b border-gray-100">
+                            <div className="flex items-center justify-between mb-2">
+                              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Son Aramalar</p>
+                              <button onClick={clearRecentSearches} className="text-[11px] text-gray-400 hover:text-gray-600 transition-colors">Temizle</button>
+                            </div>
+                            <div className="flex flex-wrap gap-1.5">
+                              {recentSearches.map((r) => (
+                                <button
+                                  key={r}
+                                  onClick={() => doRecentSearch(r)}
+                                  className="text-xs px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-gray-600 transition-colors"
+                                >
+                                  {r}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* All products section */}
+                        <div className="px-4 pt-3 pb-1">
+                          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Tüm Ürünler</p>
+                        </div>
+                        <div className="max-h-[340px] overflow-y-auto">
                           {searchResults.map((p: any, idx: number) => (
                             <Link
                               key={p.id || p.slug}
                               href={`/product/${p.slug}`}
-                              onClick={() => { setSearchOpen(false); setSearchValue('') }}
-                              className={`flex items-center gap-4 px-4 py-3.5 hover:bg-[#92D0AA]/5 transition-colors group ${idx < searchResults.length - 1 ? 'border-b border-gray-50' : ''}`}
+                              onClick={() => { saveRecentSearch(searchValue.trim()); setSearchOpen(false); setSearchValue('') }}
+                              className={`flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors group ${idx < searchResults.length - 1 ? 'border-b border-gray-50' : ''}`}
                             >
-                              {/* Product image */}
-                              <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-50 border border-gray-100 flex-shrink-0">
+                              <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 border border-gray-100 flex-shrink-0">
                                 {p.image ? (
-                                  <img
-                                    src={p.image}
-                                    alt={p.name}
-                                    className="w-full h-full object-cover"
-                                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-                                  />
+                                  <img src={p.image} alt={p.name} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
                                 ) : (
-                                  <div className="w-full h-full bg-gradient-to-br from-[#92D0AA]/20 to-[#92D0AA]/5 flex items-center justify-center">
-                                    <Search size={16} className="text-[#92D0AA]/40" />
+                                  <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                                    <Search size={13} className="text-gray-300" />
                                   </div>
                                 )}
                               </div>
-
-                              {/* Product info */}
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-[#92D0AA] transition-colors">
-                                  {p.name}
-                                </p>
-                                <div className="flex items-center gap-2 mt-0.5">
-                                  {p.brandLogo && (
-                                    <img
-                                      src={p.brandLogo}
-                                      alt={p.brand}
-                                      className="h-3.5 w-8 object-contain opacity-70"
-                                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-                                    />
-                                  )}
-                                  <p className="text-xs text-gray-400">{p.brand}</p>
-                                  {p.category && (
-                                    <>
-                                      <span className="text-gray-200">·</span>
-                                      <p className="text-xs text-gray-400">{p.category}</p>
-                                    </>
-                                  )}
-                                </div>
+                                <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-[#92D0AA] transition-colors">{p.name}</p>
+                                <p className="text-xs text-gray-400">{p.brand}</p>
                               </div>
-
-                              {/* Price */}
                               <div className="text-right flex-shrink-0">
-                                <p className="text-sm font-bold text-[#92D0AA]">₺{Number(p.price).toFixed(0)}</p>
+                                <p className="text-sm font-bold text-gray-800">₺{Number(p.price).toFixed(0)}</p>
                                 {p.originalPrice && p.originalPrice > p.price && (
                                   <p className="text-xs text-gray-400 line-through">₺{Number(p.originalPrice).toFixed(0)}</p>
                                 )}
@@ -473,16 +489,65 @@ export default function Header() {
                             </Link>
                           ))}
                         </div>
-
-                        {/* Footer CTA */}
-                        <div className="px-4 py-3 border-t border-gray-50 bg-gray-50/50">
+                        <div className="border-t border-gray-100 px-4 py-2.5">
                           <button
                             onClick={doSearch}
-                            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#92D0AA] text-white text-sm font-semibold hover:bg-[#7BC496] transition-colors"
+                            className="text-sm text-[#92D0AA] font-medium hover:underline"
                           >
-                            <Search size={15} />
-                            &ldquo;{searchValue}&rdquo; için tüm sonuçları gör
+                            &ldquo;{searchValue}&rdquo; için tüm sonuçları gör →
                           </button>
+                        </div>
+                      </>
+                    )}
+
+                    {/* State: typing + no results */}
+                    {searchValue.trim() && !searchLoading && searchResults.length === 0 && (
+                      <div className="py-10 text-center px-4">
+                        <p className="text-gray-500 text-sm font-medium">&ldquo;{searchValue}&rdquo; için sonuç bulunamadı</p>
+                        <p className="text-gray-400 text-xs mt-1">Farklı anahtar kelimeler deneyin</p>
+                      </div>
+                    )}
+
+                    {/* State: empty input - show recent + categories */}
+                    {!searchValue.trim() && (
+                      <>
+                        {recentSearches.length > 0 && (
+                          <div className="px-4 pt-4 pb-3 border-b border-gray-100">
+                            <div className="flex items-center justify-between mb-3">
+                              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Son Aramalar</p>
+                              <button onClick={clearRecentSearches} className="text-[11px] text-gray-400 hover:text-gray-600 transition-colors">Temizle</button>
+                            </div>
+                            {recentSearches.map((r) => (
+                              <button
+                                key={r}
+                                onClick={() => doRecentSearch(r)}
+                                className="flex items-center gap-3 w-full px-2 py-2.5 rounded-lg hover:bg-gray-50 transition-colors text-left"
+                              >
+                                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+                                  <Search size={13} className="text-gray-400" />
+                                </div>
+                                <span className="text-sm text-gray-700 font-medium">{r}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                        <div className="px-4 py-3">
+                          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Kategoriler</p>
+                          <div className="space-y-0.5">
+                            {categoryList.map((cat) => (
+                              <Link
+                                key={cat.slug}
+                                href={`/shop/${cat.slug}`}
+                                onClick={() => setSearchOpen(false)}
+                                className="flex items-center gap-3 px-2 py-2.5 rounded-lg hover:bg-gray-50 transition-colors"
+                              >
+                                <div className="w-8 h-8 rounded-full bg-[#92D0AA]/10 flex items-center justify-center flex-shrink-0">
+                                  <span className="text-[10px] font-bold text-[#92D0AA]">{cat.name.slice(0, 2).toUpperCase()}</span>
+                                </div>
+                                <span className="text-sm text-gray-700 font-medium">{cat.name}</span>
+                              </Link>
+                            ))}
+                          </div>
                         </div>
                       </>
                     )}
@@ -637,11 +702,8 @@ export default function Header() {
                           <Link
                             key={brand.name}
                             href={`/shop/${cat.slug}?brand=${encodeURIComponent(brand.name)}`}
-                            className="flex items-center gap-2 text-gray-700 hover:text-accent text-sm py-1"
+                            className="block text-gray-700 hover:text-accent text-sm py-1 transition-colors"
                           >
-                            {brand.logo_url && (
-                              <img src={brand.logo_url} alt={brand.name} className="h-4 w-8 object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
-                            )}
                             {brand.name}
                           </Link>
                         ))}
@@ -809,16 +871,16 @@ export default function Header() {
               <X size={22} />
             </button>
             <form onSubmit={(e) => { e.preventDefault(); doSearch() }} className="flex-1 relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#92D0AA] pointer-events-none">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
                 <Search size={17} />
               </div>
               <input
                 type="text"
-                placeholder="Ürün, marka veya kategori ara..."
+                placeholder="Ara..."
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 autoFocus
-                className="w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-full text-sm focus:outline-none focus:border-[#92D0AA] focus:ring-2 focus:ring-[#92D0AA]/20 focus:bg-white transition-all"
+                className="w-full pl-10 pr-10 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-gray-300 focus:ring-2 focus:ring-gray-100 transition-all shadow-sm"
               />
               {searchValue && (
                 <button
@@ -837,58 +899,66 @@ export default function Header() {
             {/* Loading */}
             {searchLoading && (
               <div className="flex items-center justify-center gap-3 py-12 text-gray-400">
-                <div className="w-5 h-5 border-2 border-[#92D0AA]/30 border-t-[#92D0AA] rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-500 rounded-full animate-spin" />
                 <span className="text-sm">Aranıyor...</span>
               </div>
             )}
 
-            {/* Results */}
-            {!searchLoading && searchResults.length > 0 && (
+            {/* Results when typing */}
+            {!searchLoading && searchValue.trim() && searchResults.length > 0 && (
               <div>
-                <div className="px-4 py-3 flex items-center justify-between border-b border-gray-50">
-                  <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                    {searchResults.length} ürün bulundu
-                  </span>
-                  <button
-                    onClick={doSearch}
-                    className="text-xs font-semibold text-[#92D0AA]"
-                  >
-                    Tümünü gör →
-                  </button>
+                {/* Recent searches pills when also searching */}
+                {recentSearches.length > 0 && (
+                  <div className="px-4 py-3 border-b border-gray-100">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Son Aramalar</p>
+                      <button onClick={clearRecentSearches} className="text-[11px] text-gray-400">Temizle</button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {recentSearches.map((r) => (
+                        <button key={r} onClick={() => doRecentSearch(r)} className="text-xs px-3 py-1.5 bg-gray-100 rounded-full text-gray-600">
+                          {r}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="px-4 pt-3 pb-1">
+                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Tüm Ürünler</p>
                 </div>
                 {searchResults.map((p: any, idx: number) => (
                   <Link
                     key={p.id || p.slug}
                     href={`/product/${p.slug}`}
-                    onClick={() => { setIsMobileSearchOpen(false); setSearchValue('') }}
-                    className={`flex items-center gap-4 px-4 py-4 active:bg-[#92D0AA]/5 ${idx < searchResults.length - 1 ? 'border-b border-gray-50' : ''}`}
+                    onClick={() => { saveRecentSearch(searchValue.trim()); setIsMobileSearchOpen(false); setSearchValue('') }}
+                    className={`flex items-center gap-3 px-4 py-3.5 active:bg-gray-50 ${idx < searchResults.length - 1 ? 'border-b border-gray-50' : ''}`}
                   >
-                    <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-50 border border-gray-100 flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 border border-gray-100 flex-shrink-0">
                       {p.image ? (
                         <img src={p.image} alt={p.name} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
                       ) : (
-                        <div className="w-full h-full bg-[#92D0AA]/10 flex items-center justify-center">
-                          <Search size={16} className="text-[#92D0AA]/40" />
+                        <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                          <Search size={13} className="text-gray-300" />
                         </div>
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-gray-900 line-clamp-2 leading-snug">{p.name}</p>
+                      <p className="text-sm font-semibold text-gray-900 line-clamp-1">{p.name}</p>
                       <p className="text-xs text-gray-400 mt-0.5">{p.brand}</p>
                     </div>
                     <div className="text-right flex-shrink-0">
-                      <p className="text-sm font-bold text-[#92D0AA]">₺{Number(p.price).toFixed(0)}</p>
+                      <p className="text-sm font-bold text-gray-800">₺{Number(p.price).toFixed(0)}</p>
                       {p.originalPrice && p.originalPrice > p.price && (
                         <p className="text-xs text-gray-400 line-through">₺{Number(p.originalPrice).toFixed(0)}</p>
                       )}
                     </div>
                   </Link>
                 ))}
-                {/* CTA */}
-                <div className="p-4">
+                <div className="p-4 border-t border-gray-100">
                   <button
                     onClick={doSearch}
-                    className="w-full py-3.5 rounded-2xl bg-[#92D0AA] text-white text-sm font-semibold flex items-center justify-center gap-2 active:bg-[#7BC496] transition-colors"
+                    className="w-full py-3 rounded-xl bg-[#92D0AA] text-white text-sm font-semibold flex items-center justify-center gap-2 active:bg-[#7BC496] transition-colors"
                   >
                     <Search size={15} />
                     Tüm sonuçları gör
@@ -908,20 +978,42 @@ export default function Header() {
               </div>
             )}
 
-            {/* Empty state - show categories */}
+            {/* Empty state: recent searches + categories */}
             {!searchLoading && !searchValue.trim() && (
-              <div className="p-4">
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Kategoriler</p>
-                <div className="grid grid-cols-2 gap-2">
+              <div>
+                {recentSearches.length > 0 && (
+                  <div className="px-4 py-4 border-b border-gray-100">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Son Aramalar</p>
+                      <button onClick={clearRecentSearches} className="text-[11px] text-gray-400">Temizle</button>
+                    </div>
+                    {recentSearches.map((r) => (
+                      <button
+                        key={r}
+                        onClick={() => doRecentSearch(r)}
+                        className="flex items-center gap-3 w-full py-2.5 text-left"
+                      >
+                        <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+                          <Search size={14} className="text-gray-400" />
+                        </div>
+                        <span className="text-sm text-gray-700 font-medium">{r}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <div className="px-4 py-4">
+                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Kategoriler</p>
                   {categoryList.map((cat) => (
                     <Link
                       key={cat.slug}
                       href={`/shop/${cat.slug}`}
                       onClick={() => setIsMobileSearchOpen(false)}
-                      className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-xl text-sm font-medium text-gray-700 hover:bg-[#92D0AA]/10 hover:text-[#92D0AA] transition-colors"
+                      className="flex items-center gap-3 py-2.5 border-b border-gray-50 last:border-0"
                     >
-                      <span className="w-2 h-2 rounded-full bg-[#92D0AA] flex-shrink-0" />
-                      {cat.name}
+                      <div className="w-9 h-9 rounded-full bg-[#92D0AA]/10 flex items-center justify-center flex-shrink-0">
+                        <span className="text-[10px] font-bold text-[#92D0AA]">{cat.name.slice(0, 2).toUpperCase()}</span>
+                      </div>
+                      <span className="text-sm text-gray-700 font-medium">{cat.name}</span>
                     </Link>
                   ))}
                 </div>

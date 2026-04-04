@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 import { cookies } from 'next/headers'
+import { query } from '../../lib/db'
 
 const ORDERS_PATH = path.join(process.cwd(), 'data', 'orders.json')
 const USERS_PATH = path.join(process.cwd(), 'data', 'users.json')
@@ -95,8 +96,31 @@ export async function GET(request: NextRequest) {
     
     // En yeni siparişler önce
     userOrders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    
-    return NextResponse.json({ orders: userOrders })
+
+    // Enrich items with images from DB where missing
+    const enrichedOrders = await Promise.all(userOrders.map(async (order) => {
+      if (!order.items || order.items.length === 0) return order
+      const enrichedItems = await Promise.all(order.items.map(async (item: any) => {
+        if (item.image && item.image !== 'null' && item.image !== '') return item
+        try {
+          // Try to find product image from DB by name or barcode
+          const rows = await query<any[]>(
+            `SELECT pi.image_url FROM products p
+             LEFT JOIN product_images pi ON pi.product_id = p.id AND pi.is_primary = 1
+             WHERE p.name = ? OR p.barcode = ?
+             LIMIT 1`,
+            [item.name || '', item.barcode || item.id || '']
+          )
+          if (rows && rows.length > 0 && rows[0].image_url) {
+            return { ...item, image: rows[0].image_url }
+          }
+        } catch { /* ignore */ }
+        return item
+      }))
+      return { ...order, items: enrichedItems }
+    }))
+
+    return NextResponse.json({ orders: enrichedOrders })
   } catch (error) {
     console.error('Get orders error:', error)
     return NextResponse.json({ orders: [] })

@@ -3,24 +3,23 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { getProductsByCategory } from '../lib/products'
 import { useCart } from '../context/CartContext'
 
 function encodeImagePath(path: string): string {
   if (!path) return ''
-  // Split by / to handle each segment
-  return path.split('/').map(part => {
-    // If part contains #, we need to encode it, but encodeURIComponent encodes everything.
-    // However, for file system paths served via HTTP, we generally want standard URL encoding.
-    return encodeURIComponent(part)
-  }).join('/')
+  return path.split('/').map(part => encodeURIComponent(part)).join('/')
 }
 
 export default function KoreanMakeup() {
   const { addToCart } = useCart()
-  const [products] = useState(() =>
-    getProductsByCategory('makyaj').filter((p) => p.inStock !== false).slice(0, 12)
-  )
+  const [products, setProducts] = useState<any[]>([])
+
+  useEffect(() => {
+    fetch('/api/products/by-category?category=makyaj')
+      .then(r => r.json())
+      .then(d => { if (d.products) setProducts(d.products.filter((p: any) => p.inStock !== false).slice(0, 12)) })
+      .catch(() => {})
+  }, [])
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)

@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { getProductsByBrand } from '../lib/products'
 import { useCart } from '../context/CartContext'
 
 function encodeImagePath(path: string): string {
@@ -17,7 +16,14 @@ export default function Frankly() {
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
   const [progressPercentage, setProgressPercentage] = useState(0)
-  const [products] = useState(() => getProductsByBrand('Frankly').slice(0, 12))
+  const [products, setProducts] = useState<any[]>([])
+
+  useEffect(() => {
+    fetch('/api/products/by-brand?brand=Frankly')
+      .then(r => r.json())
+      .then(d => { if (d.products) setProducts(d.products.slice(0, 12)) })
+      .catch(() => {})
+  }, [])
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   
   useEffect(() => {
