@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -8,8 +8,38 @@ import Newsletter from '../components/Newsletter'
 import LiveChat from '../components/LiveChat'
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight, CheckCircle } from 'lucide-react'
 
+const TURNSTILE_SITE_KEY = '0x4AAAAAAC0gHEUeei8_bzqf'
+
 export default function SignupPage() {
   const router = useRouter()
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const turnstileRef = useRef<HTMLDivElement>(null)
+  const widgetIdRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    const scriptId = 'cf-turnstile-script'
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement('script')
+      script.id = scriptId
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
+      script.async = true
+      script.defer = true
+      document.head.appendChild(script)
+    }
+    const renderWidget = () => {
+      if (turnstileRef.current && (window as any).turnstile && !widgetIdRef.current) {
+        widgetIdRef.current = (window as any).turnstile.render(turnstileRef.current, {
+          sitekey: TURNSTILE_SITE_KEY,
+          callback: (token: string) => setTurnstileToken(token),
+          'expired-callback': () => setTurnstileToken(null),
+          'error-callback': () => setTurnstileToken(null),
+          theme: 'light',
+        })
+      }
+    }
+    const timer = setTimeout(renderWidget, 500)
+    return () => clearTimeout(timer)
+  }, [])
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -93,6 +123,12 @@ export default function SignupPage() {
     setIsLoading(true)
     
     try {
+      if (!turnstileToken) {
+        setErrors({ general: 'Lütfen robot olmadığınızı doğrulayın.' })
+        setIsLoading(false)
+        return
+      }
+
       const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -102,6 +138,7 @@ export default function SignupPage() {
           firstName: formData.firstName,
           lastName: formData.lastName,
           phone: formData.phone,
+          turnstileToken,
         }),
       })
 
@@ -113,8 +150,15 @@ export default function SignupPage() {
           setErrors({ password: 'Şifre en az 8 karakter olmalıdır.' })
         } else if (data?.error === 'MISSING_FIELDS') {
           setErrors({ general: 'Lütfen gerekli alanları doldurun.' })
+        } else if (data?.error === 'CAPTCHA_FAILED') {
+          setErrors({ general: 'Güvenlik doğrulaması başarısız. Lütfen sayfayı yenileyip tekrar deneyin.' })
         } else {
           setErrors({ general: 'Kayıt olurken bir hata oluştu. Lütfen tekrar deneyin.' })
+        }
+        // Turnstile'ı sıfırla
+        if (widgetIdRef.current && (window as any).turnstile) {
+          ;(window as any).turnstile.reset(widgetIdRef.current)
+          setTurnstileToken(null)
         }
         return
       }
@@ -407,10 +451,15 @@ export default function SignupPage() {
                   </label>
                 </div>
 
+                {/* Cloudflare Turnstile */}
+                <div className="flex justify-center">
+                  <div ref={turnstileRef}></div>
+                </div>
+
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  disabled={isLoading}
+                  disabled={isLoading || !turnstileToken}
                   className="w-full bg-accent text-white py-3 rounded-lg cs_fs_18 font-sf-pro font-semibold hover:bg-accent/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                 >
                   {isLoading ? (

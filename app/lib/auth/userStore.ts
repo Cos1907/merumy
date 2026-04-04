@@ -1,44 +1,26 @@
-import crypto from 'crypto'
-import fs from 'fs/promises'
-import path from 'path'
-import { hashPassword, type PasswordHash, verifyPassword } from './password'
+import bcrypt from 'bcryptjs'
+import { query, execute } from '../db'
 import type { SessionUser } from './session'
-
-export type StoredUser = SessionUser & {
-  password: PasswordHash
-}
-
-type DBShape = {
-  users: StoredUser[]
-}
-
-const DATA_DIR = path.join(process.cwd(), 'data')
-const USERS_FILE = path.join(DATA_DIR, 'users.json')
-
-async function ensureDataFile() {
-  await fs.mkdir(DATA_DIR, { recursive: true })
-  try {
-    await fs.access(USERS_FILE)
-  } catch {
-    const initial: DBShape = { users: [] }
-    await fs.writeFile(USERS_FILE, JSON.stringify(initial, null, 2), 'utf8')
-  }
-}
-
-async function readDB(): Promise<DBShape> {
-  await ensureDataFile()
-  const raw = await fs.readFile(USERS_FILE, 'utf8')
-  const parsed = JSON.parse(raw || '{}')
-  return { users: Array.isArray(parsed.users) ? parsed.users : [] }
-}
-
-async function writeDB(db: DBShape) {
-  await ensureDataFile()
-  await fs.writeFile(USERS_FILE, JSON.stringify(db, null, 2), 'utf8')
-}
 
 function normalizeEmail(email: string) {
   return email.trim().toLowerCase()
+}
+
+// DB kullanıcısından SessionUser'a çeviri
+function dbRowToSessionUser(row: any): SessionUser {
+  // DB'de name kolonu "Ad Soyad" olarak saklanıyor
+  const fullName = row.name || ''
+  const spaceIdx = fullName.indexOf(' ')
+  const firstName = spaceIdx > -1 ? fullName.slice(0, spaceIdx) : fullName
+  const lastName = spaceIdx > -1 ? fullName.slice(spaceIdx + 1) : ''
+  return {
+    id: row.uuid || String(row.id),
+    email: row.email,
+    firstName,
+    lastName,
+    phone: row.phone || '',
+    createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
+  }
 }
 
 export async function createUser(input: {
@@ -48,41 +30,73 @@ export async function createUser(input: {
   lastName: string
   phone?: string
 }): Promise<SessionUser> {
-  const db = await readDB()
   const email = normalizeEmail(input.email)
-  const exists = db.users.find((u) => normalizeEmail(u.email) === email)
-  if (exists) {
+
+  // Email zaten kayıtlı mı?
+  const existing = await query<any[]>(
+    'SELECT id FROM users WHERE email = ? LIMIT 1',
+    [email]
+  )
+  if (existing && existing.length > 0) {
     throw new Error('EMAIL_EXISTS')
   }
 
-  const user: StoredUser = {
-    id: crypto.randomUUID(),
-    email,
-    firstName: input.firstName.trim(),
-    lastName: input.lastName.trim(),
-    phone: input.phone?.trim() || '',
-    createdAt: new Date().toISOString(),
-    password: hashPassword(input.password),
-  }
+  const fullName = `${input.firstName.trim()} ${input.lastName.trim()}`
+  const passwordHash = await bcrypt.hash(input.password, 12)
+  const uuid = crypto.randomUUID()
 
-  db.users.push(user)
-  await writeDB(db)
+  await execute(
+    `INSERT INTO users (uuid, email, password_hash, name, phone, role, is_active, email_verified, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, 'customer', 1, 0, NOW(), NOW())`,
+    [uuid, email, passwordHash, fullName, input.phone?.trim() || null]
+  )
 
-  // return safe shape
-  const { password, ...safe } = user
-  return safe
+  // Eklenen kullanıcıyı geri al
+  const rows = await query<any[]>('SELECT * FROM users WHERE uuid = ? LIMIT 1', [uuid])
+  return dbRowToSessionUser(rows[0])
 }
 
 export async function authenticateUser(input: { email: string; password: string }): Promise<SessionUser> {
-  const db = await readDB()
   const email = normalizeEmail(input.email)
-  const user = db.users.find((u) => normalizeEmail(u.email) === email)
-  if (!user) throw new Error('INVALID_CREDENTIALS')
-  const ok = verifyPassword(input.password, user.password)
+
+  const rows = await query<any[]>(
+    'SELECT * FROM users WHERE email = ? AND is_active = 1 LIMIT 1',
+    [email]
+  )
+  if (!rows || rows.length === 0) throw new Error('INVALID_CREDENTIALS')
+
+  const user = rows[0]
+  const passwordHash: string = user.password_hash || ''
+
+  // bcrypt veya legacy PBKDF2 formatını destekle
+  let ok = false
+  if (passwordHash.startsWith('$2b$') || passwordHash.startsWith('$2a$') || passwordHash.startsWith('$2y$')) {
+    // bcrypt hash
+    ok = await bcrypt.compare(input.password, passwordHash)
+  } else {
+    // Bilinmeyen format - geçersiz
+    ok = false
+  }
+
   if (!ok) throw new Error('INVALID_CREDENTIALS')
-  const { password, ...safe } = user
-  return safe
+
+  // Last login güncelle
+  execute('UPDATE users SET last_login = NOW() WHERE id = ?', [user.id]).catch(() => {})
+
+  return dbRowToSessionUser(user)
 }
 
+// Şifre sıfırlama için kullanıcı ara
+export async function findUserByEmail(email: string): Promise<{ id: number; uuid: string; email: string; name: string } | null> {
+  const rows = await query<any[]>(
+    'SELECT id, uuid, email, name FROM users WHERE email = ? AND is_active = 1 LIMIT 1',
+    [normalizeEmail(email)]
+  )
+  return rows && rows.length > 0 ? rows[0] : null
+}
 
-
+// Şifre güncelle (reset sonrası)
+export async function updateUserPassword(userId: number, newPassword: string): Promise<void> {
+  const hash = await bcrypt.hash(newPassword, 12)
+  await execute('UPDATE users SET password_hash = ?, updated_at = NOW() WHERE id = ?', [hash, userId])
+}
