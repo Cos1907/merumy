@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getProductBySlug, getProductsByCategory, type Product } from '../../lib/products'
+import { getProductBySlug, type Product } from '../../lib/products'
 import { query } from '../../lib/db'
 import { notFound } from 'next/navigation'
 import Header from '../../components/Header'
@@ -145,22 +145,8 @@ export default async function ProductPage({ params }: { params: { slug: string }
     }
   }
 
-  // İlgili ürünler: önce JSON'dan aynı kategori/marka, eksik kalan için DB'den tamamla
-  const jsonRelated = getProductsByCategory(product!.category)
-    .filter((p) => p.id !== product!.id && p.inStock)
-    .sort((a, b) => (a.brand === product!.brand ? -1 : 0) - (b.brand === product!.brand ? -1 : 0))
-    .slice(0, 4)
-
-  let relatedProducts: Product[] = jsonRelated
-
-  if (jsonRelated.length < 4) {
-    const existingIds = new Set(jsonRelated.map((p) => p.id))
-    const dbRelated = await getRelatedFromDB(product!.id, product!.category, product!.brand)
-    const extra = dbRelated
-      .filter((p) => !existingIds.has(p.id))
-      .slice(0, 4 - jsonRelated.length)
-    relatedProducts = [...jsonRelated, ...extra]
-  }
+  // İlgili ürünler: tamamı DB'den çek (aynı marka veya kategori)
+  const relatedProducts: Product[] = await getRelatedFromDB(product!.id, product!.category, product!.brand)
 
   return (
     <main className="min-h-screen bg-white">
