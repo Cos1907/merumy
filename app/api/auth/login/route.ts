@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { authenticateUser } from '../../../lib/auth/userStore'
 import { createSession } from '../../../lib/auth/session'
-import { CART_COOKIE_NAME, getCartKey, readCart, addQuantity } from '../../../lib/cart/store'
+import { CART_COOKIE_NAME, getGuestCartKey, getUserCartKey, readCart, addQuantity, clearCart } from '../../../lib/cart/store'
 
 const TURNSTILE_SECRET = '0x4AAAAAAC0gHMKrCpLcA1ExsjVubUZZhUY'
 
@@ -43,19 +43,17 @@ export async function POST(req: Request) {
     // Session oluştur (kullanıcı artık giriş yapmış)
     createSession(user)
 
-    // Misafir sepetini kullanıcı sepetine aktar
+    // Misafir sepetini kullanıcı hesap sepetine aktar
     if (cartId) {
       try {
-        const guestKey = `${cartId}:guest`
-        const userKey = `${cartId}:user:${user.id}`
+        const guestKey = getGuestCartKey(cartId)
+        const userKey = getUserCartKey(user.id)
         const guestCart = readCart(guestKey)
 
         if (guestCart.lines.length > 0) {
           for (const line of guestCart.lines) {
             addQuantity(userKey, line.productId, line.quantity, line.productSnapshot)
           }
-          // Misafir sepetini temizle
-          const { clearCart } = await import('../../../lib/cart/store')
           clearCart(guestKey)
         }
       } catch (mergeErr) {

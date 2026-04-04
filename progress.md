@@ -218,6 +218,49 @@
 
 ---
 
+### 🔐 Sosyal Giriş & Hesap Bazlı Sepet (4 Nisan 2026 — Gece)
+
+#### Google ile Giriş (OAuth 2.0)
+- [x] **`/api/auth/google`** — Google OAuth consent ekranına yönlendirme (state cookie ile CSRF koruması)
+- [x] **`/api/auth/google/callback`** — Token değişimi, kullanıcı bilgisi çekme, DB'de eşleştirme
+  - **E-posta eşleştirme:** Aynı e-posta zaten kayıtlıysa (şifre ile kayıt vs. Google) mevcut hesaba otomatik giriş yapılır — **çift kayıt oluşmaz**
+  - Yeni kullanıcıysa `is_active=1, email_verified=1`, `password_hash=''` olarak oluşturulur
+  - Misafir sepeti kullanıcı hesabına aktarılır
+- [x] **`/api/auth/google/callback`** için Google Cloud Console'da `redirect_uri` güncellenmeli:
+  ```
+  https://merumy.com/api/auth/google/callback
+  ```
+  > ⚠️ Google Console → Credentials → OAuth 2.0 Client → "Authorized redirect URIs" bölümüne eklenmelidir.
+
+#### Facebook ile Giriş (OAuth 2.0)
+- [x] **`/api/auth/facebook`** — Facebook OAuth dialog'una yönlendirme
+- [x] **`/api/auth/facebook/callback`** — Token değişimi, kullanıcı bilgisi, DB eşleştirme
+  - Aynı e-posta kontrolü (Google ile girmiş ama Facebook ile denenirse → aynı hesaba giriş)
+  - **Facebook App'te ayarlanması gereken Callback URL:**
+    ```
+    https://merumy.com/api/auth/facebook/callback
+    ```
+  > ⚠️ Facebook Developer Console → App → Facebook Login → Settings → "Valid OAuth Redirect URIs" bölümüne eklenmelidir.
+- [x] **Credentials:**
+  - App ID: `1480189673750604`
+  - Callback URL: `https://merumy.com/api/auth/facebook/callback`
+
+#### Giriş / Kayıt Sayfası Güncellemeleri
+- [x] **`/login`** — "Google ile Giriş Yap" ve "Facebook ile Giriş Yap" butonları aktif edildi (eski `disabled` kaldırıldı)
+- [x] **`/signup`** — "Google ile Kayıt Ol" ve "Facebook ile Kayıt Ol" butonları eklendi
+
+#### Hesap Bazlı Sepet (Cross-Device)
+- [x] **`app/lib/cart/store.ts`** — `getCartKey()` değiştirildi:
+  - Giriş yapmış kullanıcı: `user:{userId}` (cihazdan bağımsız, hesaba bağlı)
+  - Misafir: `guest:{cartId}` (tarayıcıya özel)
+- [x] **Çoklu cihaz desteği:** Telefondan eklenen ürünler PC'de de görünür (aynı hesap, aynı anahtar)
+- [x] **Çıkış yapınca sepet sıfırlanır:** Session temizlenir → misafir sepeti boş → kullanıcı farklı biri sepeti göremez
+- [x] **Tekrar girişte sepet geri gelir:** Kullanıcı hesabının sepeti `user:{userId}` altında saklanmaya devam eder
+- [x] **`app/api/auth/login/route.ts`** — Giriş sırasında misafir sepeti hesap sepetine birleştirme güncellendi
+- [x] **`app/api/auth/update-profile/route.ts`** — SHA256 yerine bcrypt ile şifre doğrulama; OAuth kullanıcıları için şifre değişikliği engellendi
+
+---
+
 ## 🔄 Şu Anki Durum
 
 ### Aktif Mod: **Coming Soon**

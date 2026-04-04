@@ -71,21 +71,21 @@ export function createCartId() {
 export function getCartKey(cartId: string) {
   const user = getSessionUser()
   if (user?.id) {
-    // Giriş yapmış kullanıcı → kullanıcı ID'sine özel sepet (cihazdan bağımsız, kalıcı)
-    return `${cartId}:user:${user.id}`
+    // Giriş yapmış kullanıcı → sadece userId bazlı (cihazdan bağımsız, hesaba bağlı)
+    return `user:${user.id}`
   }
   // Misafir → tarayıcıya özel sepet
-  return `${cartId}:guest`
+  return `guest:${cartId}`
 }
 
 // Misafir cart key'i direkt al (login sırasında merge için)
 export function getGuestCartKey(cartId: string) {
-  return `${cartId}:guest`
+  return `guest:${cartId}`
 }
 
-// Kullanıcı cart key'i direkt al
-export function getUserCartKey(cartId: string, userId: string) {
-  return `${cartId}:user:${userId}`
+// Kullanıcı cart key'i direkt al (herhangi bir cihazdan erişilebilir)
+export function getUserCartKey(userId: string) {
+  return `user:${userId}`
 }
 
 function pruneExpired(lines: CartLine[]) {
