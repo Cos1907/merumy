@@ -7,7 +7,7 @@ const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'https://merumy.com/api/
 export const dynamic = 'force-dynamic'
 
 // State: timestamp + random → base64url (cookie gerekmez, CSRF için zaman damgası yeterli)
-export function generateState(): string {
+function generateState(): string {
   const obj = { ts: Date.now(), r: crypto.randomBytes(8).toString('hex') }
   return Buffer.from(JSON.stringify(obj)).toString('base64url')
 }

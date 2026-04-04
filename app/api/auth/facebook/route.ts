@@ -6,7 +6,7 @@ const REDIRECT_URI = process.env.FACEBOOK_REDIRECT_URI || 'https://merumy.com/ap
 
 export const dynamic = 'force-dynamic'
 
-export function generateState(): string {
+function generateState(): string {
   const obj = { ts: Date.now(), r: crypto.randomBytes(8).toString('hex') }
   return Buffer.from(JSON.stringify(obj)).toString('base64url')
 }
