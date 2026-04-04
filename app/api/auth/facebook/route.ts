@@ -12,7 +12,7 @@ export async function GET() {
   const params = new URLSearchParams({
     client_id: FACEBOOK_APP_ID,
     redirect_uri: REDIRECT_URI,
-    scope: 'email,public_profile',
+    scope: 'email',
     response_type: 'code',
     state,
   })

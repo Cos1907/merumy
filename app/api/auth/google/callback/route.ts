@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import crypto from 'crypto'
-import { createSession } from '../../../../lib/auth/session'
+import { createSessionToken, SESSION_COOKIE_OPTIONS } from '../../../../lib/auth/session'
 import { query, execute } from '../../../../lib/db'
 import { CART_COOKIE_NAME, getGuestCartKey, getUserCartKey, readCart, addQuantity, clearCart } from '../../../../lib/cart/store'
 
@@ -15,16 +15,11 @@ async function findOrCreateUser(email: string, name: string): Promise<any> {
   const rows = await query<any[]>('SELECT * FROM users WHERE email = ? LIMIT 1', [email.toLowerCase()])
 
   if (rows && rows.length > 0) {
-    // Kullanıcı zaten var → last_login güncelle
     execute('UPDATE users SET last_login = NOW() WHERE id = ?', [rows[0].id]).catch(() => {})
     return rows[0]
   }
 
-  // Yeni kullanıcı oluştur (OAuth → şifre yok)
   const uuid = crypto.randomUUID()
-  const spaceIdx = name.indexOf(' ')
-  // name DB'de tek kolonda saklanıyor
-
   await execute(
     `INSERT INTO users (uuid, email, password_hash, name, role, is_active, email_verified, created_at, updated_at)
      VALUES (?, ?, '', ?, 'customer', 1, 1, NOW(), NOW())`,
@@ -54,19 +49,21 @@ export async function GET(request: NextRequest) {
   const state = searchParams.get('state')
   const error = searchParams.get('error')
 
+  const BASE_URL = 'https://merumy.com'
+
   if (error || !code) {
-    return NextResponse.redirect(new URL('/login?error=google_cancelled', 'https://merumy.com'))
+    return NextResponse.redirect(new URL('/login?error=google_cancelled', BASE_URL))
   }
 
   // State doğrula
   const cookieStore = cookies()
   const savedState = cookieStore.get('oauth_state')?.value
   if (!savedState || savedState !== state) {
-    return NextResponse.redirect(new URL('/login?error=invalid_state', 'https://merumy.com'))
+    return NextResponse.redirect(new URL('/login?error=invalid_state', BASE_URL))
   }
 
   try {
-    // Code → token
+    // Code → access token
     const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -80,7 +77,8 @@ export async function GET(request: NextRequest) {
     })
     const tokenData = await tokenRes.json()
     if (!tokenData.access_token) {
-      return NextResponse.redirect(new URL('/login?error=google_token_failed', 'https://merumy.com'))
+      console.error('Google token error:', tokenData)
+      return NextResponse.redirect(new URL('/login?error=google_token_failed', BASE_URL))
     }
 
     // Kullanıcı bilgilerini al
@@ -90,14 +88,14 @@ export async function GET(request: NextRequest) {
     const googleUser = await userRes.json()
 
     if (!googleUser.email) {
-      return NextResponse.redirect(new URL('/login?error=no_email', 'https://merumy.com'))
+      return NextResponse.redirect(new URL('/login?error=no_email', BASE_URL))
     }
 
-    // DB'de kullanıcıyı bul veya oluştur (email eşleşmesi)
+    // DB'de bul veya oluştur
     const dbUser = await findOrCreateUser(googleUser.email, googleUser.name || googleUser.email)
     const sessionUser = dbRowToSessionUser(dbUser)
 
-    // Misafir sepetini kullanıcı sepetine aktar
+    // Misafir sepetini hesap sepetine aktar
     const cartId = cookieStore.get(CART_COOKIE_NAME)?.value
     if (cartId) {
       try {
@@ -113,15 +111,19 @@ export async function GET(request: NextRequest) {
       } catch {}
     }
 
-    // Session oluştur
-    createSession(sessionUser)
+    // Token oluştur (cookie set etme — redirect response'a direkt yazacağız)
+    const sessionToken = createSessionToken(sessionUser)
 
-    // State cookie'yi temizle
-    const res = NextResponse.redirect(new URL('/', 'https://merumy.com'))
+    // Redirect + cookie'yi aynı response üzerine set et
+    const res = NextResponse.redirect(new URL('/', BASE_URL))
+    res.cookies.set({
+      ...SESSION_COOKIE_OPTIONS,
+      value: sessionToken,
+    })
     res.cookies.set('oauth_state', '', { maxAge: 0, path: '/' })
     return res
   } catch (err) {
     console.error('Google callback error:', err)
-    return NextResponse.redirect(new URL('/login?error=google_error', 'https://merumy.com'))
+    return NextResponse.redirect(new URL('/login?error=google_error', BASE_URL))
   }
 }

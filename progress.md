@@ -261,6 +261,17 @@
 
 ---
 
+### 🐛 Çözülen Hatalar (4 Nisan 2026 — Gece / OAuth Düzeltmeleri)
+
+| Hata | Neden | Çözüm |
+|---|---|---|
+| Google ile giriş sonrası tekrar `/login`'e dönüyor | `createSession()` cookie'yi `cookies().set()` ile set ediyor, ardından `NextResponse.redirect()` farklı bir response objesi oluşturduğu için cookie aktarılmıyordu | `createSessionToken()` fonksiyonu eklendi; token döner, cookie set etmez. Cookie doğrudan `res.cookies.set()` ile redirect response'a yazılıyor |
+| Facebook: `Invalid Scopes: email` | `scope: 'email,public_profile'` — `public_profile` bazı app konfigürasyonlarında geçersiz scope hatası veriyor | Scope `email` olarak sadeleştirildi; `public_profile` default permission olduğu için zaten geliyor |
+| Facebook: "Bu içeriğe şu anda ulaşılamıyor" | Facebook App'te app domain ve redirect URI eklenmemişti | Kullanıcı Facebook Developer Console'dan `merumy.com` domain + callback URL ekledi |
+| Google: `redirect_uri_mismatch` | Eski credential "installed app" tipindeydi; redirect URI sadece `http://localhost` kabul ediyordu | Yeni "Web Application" tipinde credential oluşturuldu, `https://merumy.com/api/auth/google/callback` eklendi |
+
+---
+
 ## 🔄 Şu Anki Durum
 
 ### Aktif Mod: **Coming Soon**

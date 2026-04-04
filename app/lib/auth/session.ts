@@ -89,6 +89,25 @@ export function createSession(user: SessionUser) {
   })
 }
 
+// OAuth callback'lerinde kullanmak için: token döner, cookie set ETMEz
+// Cookie'yi doğrudan NextResponse.redirect() üzerine set edebilmek için
+export function createSessionToken(user: SessionUser): string {
+  sessionStore = loadSessions()
+  const token = crypto.randomBytes(32).toString('hex')
+  sessionStore.set(token, { token, user, createdAt: Date.now() })
+  saveSessions(sessionStore)
+  return token
+}
+
+export const SESSION_COOKIE_OPTIONS = {
+  name: SESSION_COOKIE_NAME,
+  httpOnly: true,
+  sameSite: 'lax' as const,
+  secure: process.env.NODE_ENV === 'production',
+  path: '/',
+  maxAge: 60 * 60 * 24 * 30,
+}
+
 export function clearSession() {
   // Reload sessions before clearing
   sessionStore = loadSessions()

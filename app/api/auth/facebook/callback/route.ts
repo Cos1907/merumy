@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import crypto from 'crypto'
-import { createSession } from '../../../../lib/auth/session'
+import { createSessionToken, SESSION_COOKIE_OPTIONS } from '../../../../lib/auth/session'
 import { query, execute } from '../../../../lib/db'
 import { CART_COOKIE_NAME, getGuestCartKey, getUserCartKey, readCart, addQuantity, clearCart } from '../../../../lib/cart/store'
 
@@ -19,7 +19,6 @@ async function findOrCreateUser(email: string, name: string): Promise<any> {
     return rows[0]
   }
 
-  // Yeni kullanıcı oluştur (OAuth → şifre yok)
   const uuid = crypto.randomUUID()
   await execute(
     `INSERT INTO users (uuid, email, password_hash, name, role, is_active, email_verified, created_at, updated_at)
@@ -50,19 +49,21 @@ export async function GET(request: NextRequest) {
   const state = searchParams.get('state')
   const error = searchParams.get('error')
 
+  const BASE_URL = 'https://merumy.com'
+
   if (error || !code) {
-    return NextResponse.redirect(new URL('/login?error=facebook_cancelled', 'https://merumy.com'))
+    return NextResponse.redirect(new URL('/login?error=facebook_cancelled', BASE_URL))
   }
 
   // State doğrula
   const cookieStore = cookies()
   const savedState = cookieStore.get('oauth_state')?.value
   if (!savedState || savedState !== state) {
-    return NextResponse.redirect(new URL('/login?error=invalid_state', 'https://merumy.com'))
+    return NextResponse.redirect(new URL('/login?error=invalid_state', BASE_URL))
   }
 
   try {
-    // Code → token
+    // Code → access token
     const tokenParams = new URLSearchParams({
       client_id: FACEBOOK_APP_ID,
       client_secret: FACEBOOK_APP_SECRET,
@@ -73,25 +74,26 @@ export async function GET(request: NextRequest) {
     const tokenData = await tokenRes.json()
 
     if (!tokenData.access_token) {
-      return NextResponse.redirect(new URL('/login?error=facebook_token_failed', 'https://merumy.com'))
+      console.error('Facebook token error:', tokenData)
+      return NextResponse.redirect(new URL('/login?error=facebook_token_failed', BASE_URL))
     }
 
-    // Kullanıcı bilgilerini al
+    // Kullanıcı bilgilerini al (name + email)
     const userRes = await fetch(
-      `https://graph.facebook.com/me?fields=id,name,email&access_token=${tokenData.access_token}`
+      `https://graph.facebook.com/v19.0/me?fields=id,name,email&access_token=${tokenData.access_token}`
     )
     const fbUser = await userRes.json()
 
+    // Facebook email vermeyebilir (telefon numarasıyla kayıtlı hesaplar)
     if (!fbUser.email) {
-      // Facebook bazı hesaplarda email vermeyebilir
-      return NextResponse.redirect(new URL('/login?error=facebook_no_email', 'https://merumy.com'))
+      return NextResponse.redirect(new URL('/login?error=facebook_no_email', BASE_URL))
     }
 
-    // DB'de kullanıcıyı bul veya oluştur (email eşleşmesi — çift kayıt önlenir)
+    // DB'de bul veya oluştur (email eşleşmesi → çift kayıt önlenir)
     const dbUser = await findOrCreateUser(fbUser.email, fbUser.name || fbUser.email)
     const sessionUser = dbRowToSessionUser(dbUser)
 
-    // Misafir sepetini kullanıcı sepetine aktar
+    // Misafir sepetini hesap sepetine aktar
     const cartId = cookieStore.get(CART_COOKIE_NAME)?.value
     if (cartId) {
       try {
@@ -107,13 +109,18 @@ export async function GET(request: NextRequest) {
       } catch {}
     }
 
-    createSession(sessionUser)
+    // Token oluştur + redirect response'a direkt cookie set et
+    const sessionToken = createSessionToken(sessionUser)
 
-    const res = NextResponse.redirect(new URL('/', 'https://merumy.com'))
+    const res = NextResponse.redirect(new URL('/', BASE_URL))
+    res.cookies.set({
+      ...SESSION_COOKIE_OPTIONS,
+      value: sessionToken,
+    })
     res.cookies.set('oauth_state', '', { maxAge: 0, path: '/' })
     return res
   } catch (err) {
     console.error('Facebook callback error:', err)
-    return NextResponse.redirect(new URL('/login?error=facebook_error', 'https://merumy.com'))
+    return NextResponse.redirect(new URL('/login?error=facebook_error', BASE_URL))
   }
 }
