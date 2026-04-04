@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import crypto from 'crypto'
-import { createSessionToken, SESSION_COOKIE_OPTIONS } from '../../../../../lib/auth/session'
-import { query, execute } from '../../../../../lib/db'
-import { CART_COOKIE_NAME, getGuestCartKey, getUserCartKey, readCart, addQuantity, clearCart } from '../../../../../lib/cart/store'
+import { createSessionToken, SESSION_COOKIE_OPTIONS } from '../../../../lib/auth/session'
+import { query, execute } from '../../../../lib/db'
+import { CART_COOKIE_NAME, getGuestCartKey, getUserCartKey, readCart, addQuantity, clearCart } from '../../../../lib/cart/store'
 
 export const dynamic = 'force-dynamic'
 
