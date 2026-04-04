@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getProductBySlug, type Product } from '../../lib/products'
+import { type Product } from '../../lib/products'
 import { query } from '../../lib/db'
 import { notFound } from 'next/navigation'
 import Header from '../../components/Header'
@@ -18,10 +18,13 @@ async function getProductFromDB(slug: string): Promise<Product | null> {
          COALESCE(p.barcode, '') AS barcode,
          COALESCE(p.category, '') AS category,
          COALESCE(b.name, '') AS brand,
-         COALESCE(pi.image_url, '') AS image
+         COALESCE(
+           (SELECT pi2.image_url FROM product_images pi2 WHERE pi2.product_id = p.id AND pi2.is_primary = 1 LIMIT 1),
+           (SELECT pi3.image_url FROM product_images pi3 WHERE pi3.product_id = p.id LIMIT 1),
+           ''
+         ) AS image
        FROM products p
        LEFT JOIN brands b ON p.brand_id = b.id
-       LEFT JOIN product_images pi ON pi.product_id = p.id AND pi.is_primary = 1
        WHERE p.slug = ?
        LIMIT 1`,
       [slug]
@@ -52,7 +55,7 @@ async function getProductFromDB(slug: string): Promise<Product | null> {
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const { slug } = params
-  const product = (getProductBySlug(slug) ?? null) || (await getProductFromDB(slug))
+  const product = await getProductFromDB(slug)
   if (!product) return { title: 'Ürün Bulunamadı | Merumy' }
 
   const title = product.name
@@ -95,10 +98,13 @@ async function getRelatedFromDB(productId: string, category: string, brand: stri
          p.stock_status,
          COALESCE(p.category, '') AS category,
          COALESCE(b.name, '') AS brand,
-         COALESCE(pi.image_url, '') AS image
+         COALESCE(
+           (SELECT pi2.image_url FROM product_images pi2 WHERE pi2.product_id = p.id AND pi2.is_primary = 1 LIMIT 1),
+           (SELECT pi3.image_url FROM product_images pi3 WHERE pi3.product_id = p.id LIMIT 1),
+           ''
+         ) AS image
        FROM products p
        LEFT JOIN brands b ON p.brand_id = b.id
-       LEFT JOIN product_images pi ON pi.product_id = p.id AND pi.is_primary = 1
        WHERE p.id != ?
          AND p.stock_status = 'in_stock'
          AND (
@@ -134,15 +140,10 @@ async function getRelatedFromDB(productId: string, category: string, brand: stri
 export default async function ProductPage({ params }: { params: { slug: string } }) {
   const { slug } = params
 
-  // 1. Her zaman önce DB'den çek (güncel fiyat ve bilgiler için)
-  let product: Product | null = await getProductFromDB(slug)
-
-  // 2. DB'de yoksa JSON'dan dene (eski ürünler için fallback)
+  // Her zaman DB'den çek - JSON fallback yok
+  const product: Product | null = await getProductFromDB(slug)
   if (!product) {
-    product = getProductBySlug(slug) ?? null
-    if (!product) {
-      notFound()
-    }
+    notFound()
   }
 
   // İlgili ürünler: tamamı DB'den çek (aynı marka veya kategori)

@@ -26,8 +26,12 @@ const FALLBACK_SLIDES: readonly HeroSlide[] = [
 ]
 
 export default function Hero({ initialSlides }: HeroProps) {
-  // DB'den gelen slides kullan; yoksa fallback
-  const HERO_SLIDES = (initialSlides && initialSlides.length > 0) ? initialSlides : FALLBACK_SLIDES
+  // Her zaman API'den taze veri çek (cache'i bypass et)
+  const [slides, setSlides] = useState<HeroSlide[]>(
+    (initialSlides && initialSlides.length > 0) ? initialSlides : [...FALLBACK_SLIDES]
+  )
+
+  const HERO_SLIDES = slides.length > 0 ? slides : FALLBACK_SLIDES
   const TOTAL_SLIDES = HERO_SLIDES.length
 
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -39,6 +43,23 @@ export default function Hero({ initialSlides }: HeroProps) {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const minSwipeDistance = 50
+
+  // Client-side fetch - her zaman anlık DB verisini al (cache yok)
+  useEffect(() => {
+    fetch(`/api/hero?t=${Date.now()}`, { cache: 'no-store' })
+      .then(r => r.json())
+      .then(d => {
+        if (d.slides && d.slides.length > 0) {
+          setSlides(d.slides.map((s: any) => ({
+            id: s.id,
+            desktopImage: s.desktopImage || '',
+            mobileImage: s.mobileImage || '',
+            link: s.link ? s.link.replace(/^https?:\/\/merumy\.com/, '') : null,
+          })))
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   useEffect(() => {
     const handleResize = () => {

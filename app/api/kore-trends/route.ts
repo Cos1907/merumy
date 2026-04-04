@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
        JOIN products p ON k.product_id = p.id AND p.is_active = 1
        LEFT JOIN brands b ON b.id = p.brand_id
        WHERE k.section = ?
-       ORDER BY CASE WHEN p.stock_status = 'out_of_stock' THEN 1 ELSE 0 END ASC, k.added_at DESC
+       ORDER BY CASE WHEN p.stock_status = 'out_of_stock' THEN 1 ELSE 0 END ASC, RAND()
        LIMIT ${limit}`,
       [dbSection]
     )

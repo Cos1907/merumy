@@ -4422,7 +4422,7 @@ export default function AdminDashboard() {
 
       {/* ── ADMIN USERS TAB ── */}
       {activeTab === 'admin-users' && (
-        <div className="p-4 md:p-6 space-y-6 max-w-5xl mx-auto">
+        <div className="space-y-6">
           <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
             <div className="flex items-center justify-between mb-4">
               <div>
@@ -4611,7 +4611,7 @@ export default function AdminDashboard() {
 
       {/* ── COUPONS TAB ── */}
       {activeTab === 'coupons' && (
-        <div className="p-4 md:p-6 space-y-6 max-w-5xl mx-auto">
+        <div className="space-y-6">
           <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
             <div className="flex items-center justify-between mb-4">
               <div>
