@@ -4719,7 +4719,7 @@ export default function AdminDashboard() {
                           </div>
                           <p className="text-slate-400 text-xs mt-1">{c.description || '-'}</p>
                           <div className="flex flex-wrap gap-3 mt-2 text-xs text-slate-400">
-                            <span>💰 {(c.type || c.discount_type) === 'fixed' ? `₺${Number(c.value ?? c.discount_value ?? 0).toFixed(0)} indirim` : `%${c.value ?? c.discount_value ?? 0} indirim`}</span>
+                            <span>💰 {c.discount_type === 'fixed' ? `₺${Number(c.discount_value || 0).toFixed(0)} indirim` : `%${Number(c.discount_value || 0)} indirim`}</span>
                             {c.min_order_amount && <span>🛒 Min ₺{Number(c.min_order_amount).toFixed(0)}</span>}
                             {c.usage_limit && <span>📊 {c.used_count || 0}/{c.usage_limit} kullanım</span>}
                             {c.expires_at && <span>📅 {new Date(c.expires_at).toLocaleDateString('tr-TR')}</span>}

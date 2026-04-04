@@ -275,6 +275,22 @@
 
 ---
 
+### 🐛 Çözülen Hatalar (4 Nisan 2026 — Gece / Kupon & Admin Layout Düzeltmeleri)
+
+| Hata | Neden | Çözüm |
+|---|---|---|
+| Google GSI popup kapanmıyordu | `ux_mode: 'popup'` ve `cancel_on_tap_outside: true` `google.accounts.id.initialize()`'a geçersiz parametrelerdi; popup kapatma davranışını bozuyordu | Bu iki parametre kaldırıldı; GSI `renderButton` kendi popup/session yönetimini yapar, callback tetiklenince otomatik kapanır |
+| Admin panelinde `👤 Admin Kullanıcılar` ve `🎟️ İndirim Kodları` sekmeleri PC'de sağa kayıyordu | Bu iki sekme `</main>` etiketinin **dışına** çıkmıştı; dış flex container'da sidebar'ın yanında ayrı flex eleman olarak render oluyordu | `</div></main>` kapanış etiketleri coupons sekmesinin hemen ardına taşındı; her iki sekme artık `<main>` içinde, diğer sekmelerle aynı layout container'da |
+| Sepette promosyon kodu "Geçersiz" hatası veriyordu (`6JRHVZZJ` gibi aktif kodlar dahil) | Validate endpoint önce `discount_codes` tablosunu sorguluyordu; bu tabloda `brand_id` kolonu olmadığından SQL hatası fırlatılıyor, `coupons` tablosuna hiç gelinmiyordu. Admin paneli `coupons` tablosunu yönetiyorken validate `discount_codes` tablosuna bakıyordu | Validate endpoint sadece `coupons` tablosuna bakacak şekilde yeniden yazıldı; `discount_codes` referansı tamamen kaldırıldı; sadece admin panelindeki kodlar geçerli |
+| Admin panel coupon listesinde `%30` yerine `%0` görünüyordu | `c.type \|\| c.discount_type` ifadesi `discount_codes` tablosu için yazılmıştı; `coupons` tablosu `discount_type` / `discount_value` kullanıyor | Display kodu `c.discount_type` ve `c.discount_value` doğrudan kullanacak şekilde düzeltildi |
+
+#### Kupon Sistemi Mimari Netleştirme
+- **`coupons` tablosu**: Admin paneli `🎟️ İndirim Kodu Yönetimi` → `/api/admin/coupons` → `coupons` — **geçerli ve doğru tablo**
+- **`discount_codes` tablosu**: Eski sistem kalıntısı; admin paneli tarafından yönetilmiyor; validate endpoint artık bu tabloya bakmıyor
+- **Sonuç**: Sadece admin panelinden eklenen/yönetilen kuponlar sepette çalışır
+
+---
+
 ## 🔄 Şu Anki Durum
 
 ### Aktif Mod: **Coming Soon**
