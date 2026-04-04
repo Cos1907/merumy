@@ -3899,9 +3899,6 @@ export default function AdminDashboard() {
             </div>
           )}
 
-        </div>
-      </main>
-
       {/* Order Detail Modal */}
       {selectedOrder && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
@@ -4722,7 +4719,7 @@ export default function AdminDashboard() {
                           </div>
                           <p className="text-slate-400 text-xs mt-1">{c.description || '-'}</p>
                           <div className="flex flex-wrap gap-3 mt-2 text-xs text-slate-400">
-                            <span>💰 {c.discount_type === 'fixed' ? `₺${Number(c.discount_value).toFixed(0)} indirim` : `%${c.discount_value} indirim`}</span>
+                            <span>💰 {(c.type || c.discount_type) === 'fixed' ? `₺${Number(c.value ?? c.discount_value ?? 0).toFixed(0)} indirim` : `%${c.value ?? c.discount_value ?? 0} indirim`}</span>
                             {c.min_order_amount && <span>🛒 Min ₺{Number(c.min_order_amount).toFixed(0)}</span>}
                             {c.usage_limit && <span>📊 {c.used_count || 0}/{c.usage_limit} kullanım</span>}
                             {c.expires_at && <span>📅 {new Date(c.expires_at).toLocaleDateString('tr-TR')}</span>}
@@ -4744,6 +4741,9 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+
+        </div>
+      </main>
 
       {/* ── MUST CHANGE PASSWORD MODAL ── */}
       {mustChangePassword && (

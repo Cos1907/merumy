@@ -53,8 +53,6 @@ export default function SignupPage() {
             setGoogleLoading(false)
           }
         },
-        ux_mode: 'popup',
-        cancel_on_tap_outside: true,
       })
 
       if (googleBtnRef.current) {

@@ -90,8 +90,6 @@ export default function LoginPage() {
             setGoogleLoading(false)
           }
         },
-        ux_mode: 'popup',
-        cancel_on_tap_outside: true,
       })
 
       if (googleBtnRef.current) {
