@@ -1,6 +1,6 @@
 # 📋 Merumy — Geliştirme İlerleme Raporu
 
-> Son güncelleme: Nisan 2026
+> Son güncelleme: 4 Nisan 2026
 
 ---
 
@@ -119,10 +119,63 @@
   - CSV olarak indir (UTF-8 BOM, Excel uyumlu)
   - Kullanıcı tablosu: ad, e-posta, telefon, sipariş sayısı, toplam harcama, kayıt tarihi
 
-### 🐛 Çözülen Hatalar
+### 🔐 Admin Kullanıcı Yönetimi (Nisan 2026)
+
+- [x] **Admin kullanıcı yönetimi API** — `app/api/admin/admin-users/route.ts` (CRUD)
+  - Kullanıcı oluşturma, güncelleme, silme
+  - bcrypt şifre hashleme
+  - Bölüm bazlı erişim kontrolü (`allowed_sections` JSON kolonu)
+  - `must_change_password` ilk giriş akışı
+- [x] **İndirim kuponu yönetimi API** — `app/api/admin/coupons/route.ts` (CRUD)
+  - Sabit tutar / yüzde indirim tipleri
+  - Min sipariş tutarı, maks indirim tutarı
+  - Marka & kullanıcıya özel kuponlar
+  - Kullanım limiti, geçerlilik tarihi
+- [x] **Kupon doğrulama API** — `app/api/coupon/validate/route.ts`
+- [x] **Admin dashboard güncellemeleri**
+  - Admin Kullanıcılar sekmesi (sadece super_admin erişebilir)
+  - İndirim Kodları sekmesi (duygu, buse, serap, sena erişebilir)
+  - Kore Trendleri yönetiminde yeni bölümler: Bestsellers, Exclusive, Korean Make Up
+  - Şifre değiştirme modalı (ilk giriş zorunluluğu)
+- [x] **Başlangıç admin kullanıcıları oluşturuldu**
+  - devrim, duygu, serap, huseyin — varsayılan şifre: Merumy2026
+  - Erişim seviyeleri konfigüre edildi
+- [x] **50 adet kupon kodu** — 1000 TL indirim, 5000 TL min sepet tutarı
+
+---
+
+### 🏠 Ana Sayfa & Koleksiyon Güncellemeleri (Nisan 2026)
+
+- [x] **Ürün verileri DB'den çekiliyor** — Tüm ana sayfa komponentleri JSON yerine API kullanıyor
+  - `KoreTrendleri` → `/api/kore-trends?section=kore_trend`
+  - `Bestsellers` → `/api/kore-trends?section=bestsellers`
+  - `MerumyExclusive` → `/api/kore-trends?section=exclusive`
+  - `KoreanMakeup` → `/api/kore-trends?section=makeup`
+  - `Frankly` → `/api/products/by-brand`
+- [x] **Koleksiyon sayfaları** — En Çok Satanlar, Merumy.com'a Özel, Kore Trendleri admin panelinden yönetiliyor
+- [x] **Korean Make Up "Tümünü Gör"** — `/shop/makyaj` bağlantısı doğrulandı
+- [x] **Blur + scroll okları** — KORE TRENDLERİ, EN ÇOK SATANLAR, MERUMY.COM'A ÖZEL, KOREAN MAKE UP carousel'larına eklendi
+
+---
+
+### 🔍 Arama Çubuğu Güncellemeleri (Nisan 2026)
+
+- [x] **Mac ⌘/ ikonu kaldırıldı** — Arama çubuğundaki kısayol göstergesi silindi
+- [x] **"Son Aramalar" bölümü** — localStorage'dan çekiliyor
+- [x] **Fiyat "0" sorunu** — `price` ve `originalPrice` her zaman `Number()` ile dönüştürülüyor
+- [x] **Kategori dropdown** — Marka logoları kaldırıldı, sadece isimler gösteriliyor
+
+---
+
+### 🐛 Çözülen Hatalar (4 Nisan 2026)
 
 | Tarih | Hata | Çözüm |
 |---|---|---|
+| 4 Nisan 2026 | `TypeError: e.product.price.toFixed is not a function` sepet hatası | `Frankly.tsx`, `SpecialOffers.tsx`, `NewInStore.tsx`, `ProductClient.tsx`, `siparislerim/page.tsx` — tüm `.toFixed()` çağrıları `Number()` ile sarıldı |
+| 4 Nisan 2026 | Admin paneli mobil tablolar uyumsuz | Tüm tablolara `min-w-[600px-800px]` sınıfı eklendi, `overflow-x-auto` korundu |
+| 4 Nisan 2026 | Yeni siparişler DB'ye yazılmıyordu | `payment/callback/route.ts` — JSON yanı sıra `orders` ve `order_items` tablolarına da yazılıyor |
+| 4 Nisan 2026 | Kullanıcı siparişleri sadece JSON'dan çekiliyordu | `app/api/orders/route.ts` GET — JSON + DB merge, email ile DB'den de sorgulama |
+| 4 Nisan 2026 | İletişim formu sadece `info@merumy.com`'a gidiyordu | `huseyinkulekci0@gmail.com` da alıcılara eklendi |
 | Nisan 2026 | Admin login "Geçersiz e-posta veya şifre" hatası | SHA256 yerine bcrypt ile şifre doğrulama; tüm admin şifreleri sıfırlandı (`Merumy2026`) |
 | Nisan 2026 | Admin login sayfasında mağaza UI komponentleri görünüyordu | `CookieConsent`, `CartToast`, `WhatsAppButton`, `AccessibilityWidget` — `/admin` path kontrolü eklendi |
 | Nisan 2026 | Coming soon sayfası istenmedik zamanda aktifti | Nginx config güncellendi, API route'ları çalışmaya devam etti |
