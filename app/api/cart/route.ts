@@ -13,7 +13,7 @@ import {
   setPromo,
   setQuantity,
 } from '../../lib/cart/store'
-import { query } from '../../lib/db'
+import { query, queryOne } from '../../lib/db'
 
 // Override cart item prices with live DB prices so admin updates reflect immediately
 async function applyLivePrices(payload: any): Promise<any> {
@@ -97,12 +97,36 @@ export async function POST(req: Request) {
   if (type === 'clear') {
     clearCart(cartKey)
   } else if (type === 'setPromo') {
-    const code = String(body?.code || '')
-    try {
-      setPromo(cartKey, code)
-    } catch {
+    const code = String(body?.code || '').trim().toUpperCase()
+    if (!code) return NextResponse.json({ error: 'INVALID_PROMO' }, { status: 400 })
+
+    // DB'den kupon doğrula (admin panelinin yönettiği coupons tablosu)
+    const coupon = await queryOne<any>(
+      `SELECT id, code, discount_type, discount_value, min_order_amount, max_discount_amount,
+              usage_limit, used_count, is_active, expires_at
+       FROM coupons
+       WHERE UPPER(code) = ? AND is_active = 1
+         AND (expires_at IS NULL OR expires_at > NOW())`,
+      [code]
+    ).catch(() => null)
+
+    if (!coupon) {
       return NextResponse.json({ error: 'INVALID_PROMO' }, { status: 400 })
     }
+
+    // Kullanım limiti kontrolü
+    const usageLimit = coupon.usage_limit ?? null
+    const usedCount = coupon.used_count ?? 0
+    if (usageLimit !== null && usedCount >= Number(usageLimit)) {
+      return NextResponse.json({ error: 'INVALID_PROMO' }, { status: 400 })
+    }
+
+    // DB'den gelen bilgilerle promo detaylarını oluştur
+    const discountType = coupon.discount_type === 'percentage' ? 'percent' : 'amount'
+    const discountValue = Number(coupon.discount_value || 0)
+    const minOrderAmount = coupon.min_order_amount ? Number(coupon.min_order_amount) : undefined
+
+    setPromo(cartKey, code, { type: discountType, value: discountValue, minAmount: minOrderAmount })
   } else if (type === 'clearPromo') {
     clearPromo(cartKey)
   } else if (type === 'remove') {

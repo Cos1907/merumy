@@ -19,6 +19,10 @@ export type Cart = {
   key: string
   lines: CartLine[]
   promoCode?: string
+  // DB'den gelen kupon detayları (hardcode'dan kurtulmak için)
+  promoType?: 'amount' | 'percent'
+  promoValue?: number    // fixed indirim TL veya yüzde değeri
+  promoMinAmount?: number // minimum sepet tutarı
 }
 
 const TTL_MS = 30 * 24 * 60 * 60 * 1000 // 30 gün (süresiz)
@@ -125,32 +129,37 @@ export function removeLine(cartKey: string, productId: string) {
   saveCarts(carts)
 }
 
-type Promo =
-  | { code: string; type: 'amount'; amount: number; minAmount?: number }
-  | { code: string; type: 'percent'; percent: number; minAmount?: number }
-
-function normalizePromo(code: string): Promo | null {
-  const c = code.trim().toUpperCase()
-  if (c === 'MERUMY250') return { code: 'MERUMY250', type: 'amount', amount: 250 }
-  if (c === 'MERUMY10') return { code: 'MERUMY10', type: 'percent', percent: 10 }
-  if (c === 'HOSGELDIN10') return { code: 'HOSGELDIN10', type: 'percent', percent: 10, minAmount: 200 }
-  // Bulk codes: 5000 TL minimum, 1000 TL discount
-  const BULK_CODES = new Set(['3HJM1D3E', 'DGZPEO5V', 'CFHYLKGY', 'YL7A90MW', 'GXE8OH2Q', '18KAB4H7', 'PL5VJ9M7', '6YIG4SVZ', '3C6FM50B', '8AENQUBX', 'ORXJIWTI', 'O2DTQYHP', 'ONFIEHDX', 'H8BQCHBF', 'KYTLIYTG', 'LR2C3ZNK', 'BDKWWXF4', 'FLK2CHO7', 'HJ1I7K2T', '4PSWWDMD', 'NRZGCWR2', 'QVFOJXIN', 'JVKUNU3U', 'FSEFICVI', 'AYSO0FPK', 'S8XGHBEK', 'Z6K8IBGH', 'W2OZY4MD', 'Z9I5TPWK', 'O6POP5TC', 'UGCX3QXK', 'CIOVRSZY', 'LTF3P9W9', 'QCIQPM8G', 'RELOU5DD', 'ZNMLCJ74', 'OQVIOQK8', '3SCG954I', 'YKKO2JLQ', 'I5LDQ4VA', '6VW4GHEM', 'H8SCLZTW', 'DBUNML7E', 'M3R5AQSI', 'ZCGT819B', 'O7I4KRTC', '8TY268ML', '5UZW4UPB', 'BLB4K31C', 'GSWP45FF'])
-  if (BULK_CODES.has(c)) return { code: c, type: 'amount', amount: 1000, minAmount: 5000 }
-  return null
+export type PromoDetails = {
+  type: 'amount' | 'percent'
+  value: number
+  minAmount?: number
 }
 
-export function setPromo(cartKey: string, code: string) {
+/**
+ * DB'den doğrulanmış kupon detaylarıyla promo set eder.
+ * Artık hardcoded liste yok — cart/route.ts DB'den doğrular ve buraya gönderir.
+ */
+export function setPromo(cartKey: string, code: string, details: PromoDetails) {
   const cart = readCart(cartKey)
-  const promo = normalizePromo(code)
-  if (!promo) throw new Error('INVALID_PROMO')
-  carts.set(cartKey, { ...cart, promoCode: promo.code })
+  carts.set(cartKey, {
+    ...cart,
+    promoCode: code.toUpperCase(),
+    promoType: details.type,
+    promoValue: details.value,
+    promoMinAmount: details.minAmount,
+  })
   saveCarts(carts)
 }
 
 export function clearPromo(cartKey: string) {
   const cart = readCart(cartKey)
-  carts.set(cartKey, { ...cart, promoCode: undefined })
+  carts.set(cartKey, {
+    ...cart,
+    promoCode: undefined,
+    promoType: undefined,
+    promoValue: undefined,
+    promoMinAmount: undefined,
+  })
   saveCarts(carts)
 }
 
@@ -209,21 +218,29 @@ export function hydrateCart(cart: Cart) {
     return sum + (op - i.product.price) * i.quantity
   }, 0)
 
-  const promo = cart.promoCode ? normalizePromo(cart.promoCode) : null
   let promoDiscount = 0
-  if (promo) {
-    // Minimum tutar kontrolü
-    if ('minAmount' in promo && promo.minAmount && subtotal < promo.minAmount) {
+  if (cart.promoCode && cart.promoType && cart.promoValue !== undefined) {
+    const minAmt = cart.promoMinAmount || 0
+    if (minAmt && subtotal < minAmt) {
       promoDiscount = 0 // Minimum tutarın altındaysa indirim uygulanmaz
-    } else {
-      promoDiscount = promo.type === 'amount' ? promo.amount : Math.round((subtotal * promo.percent) / 100)
-      promoDiscount = Math.max(0, Math.min(promoDiscount, subtotal))
+    } else if (cart.promoType === 'amount') {
+      promoDiscount = cart.promoValue
+    } else if (cart.promoType === 'percent') {
+      promoDiscount = Math.round((subtotal * cart.promoValue) / 100)
     }
+    promoDiscount = Math.max(0, Math.min(promoDiscount, subtotal))
   }
+
   const total = Math.max(0, subtotal - promoDiscount)
   const count = detailed.reduce((sum, i) => sum + i.quantity, 0)
 
-  return { items: detailed, subtotal, discountFromOriginal, promoCode: promo?.code || null, promoDiscount, total, count }
+  return {
+    items: detailed,
+    subtotal,
+    discountFromOriginal,
+    promoCode: cart.promoCode || null,
+    promoDiscount,
+    total,
+    count,
+  }
 }
-
-

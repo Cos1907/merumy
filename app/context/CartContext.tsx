@@ -119,10 +119,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const cartCount = items.reduce((total, item) => total + item.quantity, 0)
 
-  // HOSGELDIN10 gibi minimum tutarlı promolar için
-  const BULK_PROMO_CODES_CTX = new Set(['3HJM1D3E','DGZPEO5V','CFHYLKGY','YL7A90MW','GXE8OH2Q','18KAB4H7','PL5VJ9M7','6YIG4SVZ','3C6FM50B','8AENQUBX','ORXJIWTI','O2DTQYHP','ONFIEHDX','H8BQCHBF','KYTLIYTG','LR2C3ZNK','BDKWWXF4','FLK2CHO7','HJ1I7K2T','4PSWWDMD','NRZGCWR2','QVFOJXIN','JVKUNU3U','FSEFICVI','AYSO0FPK','S8XGHBEK','Z6K8IBGH','W2OZY4MD','Z9I5TPWK','O6POP5TC','UGCX3QXK','CIOVRSZY','LTF3P9W9','QCIQPM8G','RELOU5DD','ZNMLCJ74','OQVIOQK8','3SCG954I','YKKO2JLQ','I5LDQ4VA','6VW4GHEM','H8SCLZTW','DBUNML7E','M3R5AQSI','ZCGT819B','O7I4KRTC','8TY268ML','5UZW4UPB','BLB4K31C','GSWP45FF'])
-  const promoMinAmount = promoCode === 'HOSGELDIN10' ? 200 : BULK_PROMO_CODES_CTX.has(promoCode?.toUpperCase() || '') ? 5000 : 0
-  const promoMinNotMet = promoMinAmount > 0 && cartSubtotal < promoMinAmount
+  // Minimum tutar sunucu tarafında kontrol ediliyor (DB'den), burada 0 döndür
+  const promoMinAmount = 0
+  const promoMinNotMet = false
   // 500 TL üzeri ücretsiz kargo
   const freeShipping = cartSubtotal >= 1000
   // cartTotal is server-computed (includes promo). Kept name for compatibility.

@@ -289,6 +289,15 @@
 - **`discount_codes` tablosu**: Eski sistem kalıntısı; admin paneli tarafından yönetilmiyor; validate endpoint artık bu tabloya bakmıyor
 - **Sonuç**: Sadece admin panelinden eklenen/yönetilen kuponlar sepette çalışır
 
+### 🐛 Çözülen Hatalar (4 Nisan 2026 — Gece 2 / Kupon Sistem Yeniden Yazımı)
+
+| Hata | Neden | Çözüm |
+|---|---|---|
+| `6JRHVZZJ` admin panelinde aktif olmasına rağmen "Promosyon kodu geçersiz" hatası | `store.ts`'deki `normalizePromo` tamamen hardcoded bir liste kullanıyordu; `coupons` DB tablosuna hiç bakılmıyordu; yeni eklenen kodlar çalışmıyordu | `store.ts`'deki `normalizePromo` kaldırıldı; `Cart` tipi `promoType/promoValue/promoMinAmount` alanlarıyla genişletildi; `setPromo` DB detaylarını kabul eder; `hydrateCart` stored detayları kullanır |
+| `MERUMY250` gibi hardcoded kodlar admin panelinde olmamasına rağmen çalışıyordu | `normalizePromo`'da `MERUMY250`, `MERUMY10`, `HOSGELDIN10` ve 50 adet bulk kod elle yazılmıştı | Tüm hardcoded kodlar kaldırıldı |
+| `/api/cart` (setPromo) `coupons` DB'ye bakmıyordu | `cart/route.ts` sadece `normalizePromo` üzerinden doğrulama yapıyordu | `cart/route.ts` setPromo handler'ında `coupons` tablosuna `queryOne` ile bakılıyor; DB'den gelen `discount_type`/`discount_value` bilgileriyle `setPromo` çağrılıyor |
+| `CartContext` hardcoded minimum tutar listesi tutuyordu | `BULK_PROMO_CODES_CTX` seti ve koşullu `promoMinAmount` hesabı frontend'de hardcode'du | `CartContext`'ten kaldırıldı; minimum tutar artık sunucu tarafında DB'den kontrol ediliyor |
+
 ---
 
 ## 🔄 Şu Anki Durum
