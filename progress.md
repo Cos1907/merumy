@@ -269,6 +269,9 @@
 | Facebook: `Invalid Scopes: email` | `scope: 'email,public_profile'` — `public_profile` bazı app konfigürasyonlarında geçersiz scope hatası veriyor | Scope `email` olarak sadeleştirildi; `public_profile` default permission olduğu için zaten geliyor |
 | Facebook: "Bu içeriğe şu anda ulaşılamıyor" | Facebook App'te app domain ve redirect URI eklenmemişti | Kullanıcı Facebook Developer Console'dan `merumy.com` domain + callback URL ekledi |
 | Google: `redirect_uri_mismatch` | Eski credential "installed app" tipindeydi; redirect URI sadece `http://localhost` kabul ediyordu | Yeni "Web Application" tipinde credential oluşturuldu, `https://merumy.com/api/auth/google/callback` eklendi |
+| Google/Facebook: `invalid_state` hatası | `sameSite: lax` cookie, Cloudflare proxy arkasında callback sırasında iletilmiyordu | Cookie yerine **time-based state** uygulandı: state = base64url(`{ts, r}`) → callback'te sadece timestamp kontrolü (10 dk) yapılıyor, cookie gerektirmiyor |
+| Marka sayfası bulunamıyor: `/marka/pyunkang-yul` | DB'de slug `pkunkang-yul` (yazım hatası) olarak kaydedilmişti | Sunucuda `UPDATE brands SET slug='pyunkang-yul' WHERE slug='pkunkang-yul'` çalıştırıldı |
+| Tüm Ürünler sayfasında Marka/Kategori filtresi kapanmıyor | Header her zaman açık durumdaydı, toggle yoktu | `brandOpen` / `categoryOpen` state eklendi; başlığa tıklayınca açılır/kapanır; ChevronDown ikonu ile animasyonlu |
 
 ---
 

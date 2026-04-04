@@ -11,6 +11,17 @@ const REDIRECT_URI = process.env.FACEBOOK_REDIRECT_URI || 'https://merumy.com/ap
 
 export const dynamic = 'force-dynamic'
 
+function validateState(state: string | null): boolean {
+  if (!state) return false
+  try {
+    const obj = JSON.parse(Buffer.from(state, 'base64url').toString())
+    const age = Date.now() - (obj.ts || 0)
+    return typeof obj.r === 'string' && age < 10 * 60 * 1000
+  } catch {
+    return false
+  }
+}
+
 async function findOrCreateUser(email: string, name: string): Promise<any> {
   const rows = await query<any[]>('SELECT * FROM users WHERE email = ? LIMIT 1', [email.toLowerCase()])
 
@@ -55,12 +66,12 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL('/login?error=facebook_cancelled', BASE_URL))
   }
 
-  // State doğrula
-  const cookieStore = cookies()
-  const savedState = cookieStore.get('oauth_state')?.value
-  if (!savedState || savedState !== state) {
+  // State doğrula (time-based)
+  if (!validateState(state)) {
     return NextResponse.redirect(new URL('/login?error=invalid_state', BASE_URL))
   }
+
+  const cookieStore = cookies()
 
   try {
     // Code → access token
@@ -113,11 +124,7 @@ export async function GET(request: NextRequest) {
     const sessionToken = createSessionToken(sessionUser)
 
     const res = NextResponse.redirect(new URL('/', BASE_URL))
-    res.cookies.set({
-      ...SESSION_COOKIE_OPTIONS,
-      value: sessionToken,
-    })
-    res.cookies.set('oauth_state', '', { maxAge: 0, path: '/' })
+    res.cookies.set({ ...SESSION_COOKIE_OPTIONS, value: sessionToken })
     return res
   } catch (err) {
     console.error('Facebook callback error:', err)

@@ -6,8 +6,14 @@ const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'https://merumy.com/api/
 
 export const dynamic = 'force-dynamic'
 
+// State: timestamp + random → base64url (cookie gerekmez, CSRF için zaman damgası yeterli)
+export function generateState(): string {
+  const obj = { ts: Date.now(), r: crypto.randomBytes(8).toString('hex') }
+  return Buffer.from(JSON.stringify(obj)).toString('base64url')
+}
+
 export async function GET() {
-  const state = crypto.randomBytes(16).toString('hex')
+  const state = generateState()
 
   const params = new URLSearchParams({
     client_id: GOOGLE_CLIENT_ID,
@@ -20,16 +26,5 @@ export async function GET() {
   })
 
   const url = `https://accounts.google.com/o/oauth2/v2/auth?${params}`
-
-  const res = NextResponse.redirect(url)
-  // State'i cookie'de sakla (CSRF koruması)
-  res.cookies.set('oauth_state', state, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 60 * 10, // 10 dakika
-    path: '/',
-  })
-
-  return res
+  return NextResponse.redirect(url)
 }

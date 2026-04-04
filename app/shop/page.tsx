@@ -8,7 +8,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ProductCardModern from '../components/ProductCardModern'
 import type { Product } from '../lib/products'
-import { Search, X } from 'lucide-react'
+import { Search, X, ChevronDown } from 'lucide-react'
 
 const PRODUCTS_PER_PAGE = 20
 
@@ -25,6 +25,8 @@ export default function ShopPage() {
   const [headerHeight, setHeaderHeight] = useState(typeof window !== 'undefined' && window.innerWidth >= 1024 ? 80 : 64)
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [brandOpen, setBrandOpen] = useState(true)
+  const [categoryOpen, setCategoryOpen] = useState(true)
   const [products, setProducts] = useState<any[]>([])
   const [brands, setBrands] = useState<any[]>([])
   const [fetchLoading, setFetchLoading] = useState(true)
@@ -202,49 +204,65 @@ export default function ShopPage() {
             <aside className="space-y-4 lg:sticky lg:top-36 h-fit">
               {/* Brand Filter with logos */}
               <div className="rounded-2xl border border-[#92D0AA]/40 overflow-hidden bg-white">
-                <div className="px-4 py-2 font-bold uppercase text-sm text-white" style={{ backgroundColor: '#92D0AA' }}>MARKA</div>
-                <div className="p-3 max-h-[360px] overflow-auto">
-                  <button onClick={() => { setSelectedBrand(null); router.push(searchQuery ? `/shop?q=${encodeURIComponent(searchQuery)}` : '/shop', { scroll: false }) }}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${!selectedBrand ? 'bg-[#92D0AA]/20 text-[#92D0AA] font-medium' : 'hover:bg-gray-50'}`}>
-                    Tüm Markalar
-                  </button>
-                  {brandList.map(({ brand: b, count }) => {
-                    const logo = getBrandLogo(b)
-                    return (
-                      <button key={b} onClick={() => { setSelectedBrand(b); setSelectedCategory(null) }}
-                        className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 ${selectedBrand === b ? 'bg-[#92D0AA]/20 text-[#92D0AA] font-medium' : 'hover:bg-gray-50'}`}>
-                        {logo ? (
-                          <img src={logo} alt={b} className="w-8 h-6 object-contain flex-shrink-0"
-                            onError={(e) => { e.currentTarget.style.display = 'none' }} />
-                        ) : (
-                          <div className="w-8 h-6 flex-shrink-0" />
-                        )}
-                        <span className="flex-1 truncate">{b}</span>
-                        <span className="text-xs text-gray-400">({count})</span>
-                      </button>
-                    )
-                  })}
-                </div>
+                <button
+                  onClick={() => setBrandOpen(!brandOpen)}
+                  className="w-full flex items-center justify-between px-4 py-3 font-bold uppercase text-sm text-white"
+                  style={{ backgroundColor: '#92D0AA' }}>
+                  <span>MARKA</span>
+                  <ChevronDown size={16} className={`transition-transform duration-200 ${brandOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {brandOpen && (
+                  <div className="p-3 max-h-[360px] overflow-auto">
+                    <button onClick={() => { setSelectedBrand(null); router.push(searchQuery ? `/shop?q=${encodeURIComponent(searchQuery)}` : '/shop', { scroll: false }) }}
+                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${!selectedBrand ? 'bg-[#92D0AA]/20 text-[#92D0AA] font-medium' : 'hover:bg-gray-50'}`}>
+                      Tüm Markalar
+                    </button>
+                    {brandList.map(({ brand: b, count }) => {
+                      const logo = getBrandLogo(b)
+                      return (
+                        <button key={b} onClick={() => { setSelectedBrand(b); setSelectedCategory(null) }}
+                          className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 ${selectedBrand === b ? 'bg-[#92D0AA]/20 text-[#92D0AA] font-medium' : 'hover:bg-gray-50'}`}>
+                          {logo ? (
+                            <img src={logo} alt={b} className="w-8 h-6 object-contain flex-shrink-0"
+                              onError={(e) => { e.currentTarget.style.display = 'none' }} />
+                          ) : (
+                            <div className="w-8 h-6 flex-shrink-0" />
+                          )}
+                          <span className="flex-1 truncate">{b}</span>
+                          <span className="text-xs text-gray-400">({count})</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
 
               {/* Category Filter */}
               <div className="rounded-2xl border border-[#92D0AA]/40 overflow-hidden bg-white">
-                <div className="px-4 py-2 font-bold uppercase text-sm text-white" style={{ backgroundColor: '#92D0AA' }}>KATEGORİ</div>
-                <div className="p-3">
-                  <button onClick={() => setSelectedCategory(null)}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${!selectedCategory ? 'bg-[#92D0AA]/20 text-[#92D0AA] font-medium' : 'hover:bg-gray-50'}`}>
-                    Tüm Kategoriler
-                  </button>
-                  {CATEGORIES.map((c) => (
-                    <button
-                      key={c.slug}
-                      onClick={() => setSelectedCategory(c.name)}
-                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${selectedCategory === c.name ? 'bg-[#92D0AA]/20 text-[#92D0AA] font-medium' : 'hover:bg-gray-50'}`}
-                    >
-                      {c.name}
+                <button
+                  onClick={() => setCategoryOpen(!categoryOpen)}
+                  className="w-full flex items-center justify-between px-4 py-3 font-bold uppercase text-sm text-white"
+                  style={{ backgroundColor: '#92D0AA' }}>
+                  <span>KATEGORİ</span>
+                  <ChevronDown size={16} className={`transition-transform duration-200 ${categoryOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {categoryOpen && (
+                  <div className="p-3">
+                    <button onClick={() => setSelectedCategory(null)}
+                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${!selectedCategory ? 'bg-[#92D0AA]/20 text-[#92D0AA] font-medium' : 'hover:bg-gray-50'}`}>
+                      Tüm Kategoriler
                     </button>
-                  ))}
-                </div>
+                    {CATEGORIES.map((c) => (
+                      <button
+                        key={c.slug}
+                        onClick={() => setSelectedCategory(c.name)}
+                        className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${selectedCategory === c.name ? 'bg-[#92D0AA]/20 text-[#92D0AA] font-medium' : 'hover:bg-gray-50'}`}
+                      >
+                        {c.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {(selectedBrand || selectedCategory) && (
